@@ -1,0 +1,399 @@
+{% extends 'manager/base.html' %}
+{% block title %}Mappool Manangement{% endblock title %}
+{% block actions %}
+<button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add-map-modal">
+    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="44" height="44"
+        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round"
+        stroke-linejoin="round">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+        <line x1="12" y1="5" x2="12" y2="19" />
+        <line x1="5" y1="12" x2="19" y2="12" />
+    </svg>
+    Add Map
+</button>
+{% endblock actions %}
+{% block content %}
+<div class="row mb-3">
+    <div class="col">
+        <div class="input-group  flex-nowrap">
+            <span class="input-group-text">Round</span>
+            <select class="form-select" name="round" id="select-round">
+                {% for r in rounds %}
+                {% set rid = '{}'.format(r.id) %}
+                <option value="{{r.id}}" {% if rid==request.view_args.round_id %}selected{% endif %}>{{r.name}}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="table-responsive mb-0">
+        <table class="table card-table table-vcenter text-center text-nowrap" id="main-table">
+            <thead>
+                <tr>
+                    <th>Song</th>
+                    <th>CS</th>
+                    <th>AR</th>
+                    <th>HP</th>
+                    <th>OD</th>
+                    <th>Stars</th>
+                    <th>BPM</th>
+                    <th>Length</th>
+                    <th>Mods</th>
+                    <th>Add by</th>
+                    <th>Note</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if mappool %}
+                {% for m in mappool %}
+                <tr class="hover-dark">
+                    <td class="p-0">
+                        <div class="card song-banner"
+                            style="background-image: url(https://assets.ppy.sh/beatmaps/{{m.info.beatmapset_id}}/covers/cover.jpg); background-size:cover; background-clip: content-box;">
+                            <div class="card-body" style="background-color: rgba(0, 0, 0, 0.3);">
+                                <a href="https://osu.ppy.sh/b/{{m.beatmap_id}}" class="text-white">{{m.info.artist}} -
+                                    {{m.info.title}} [{{m.info.version}}]</a>
+                            </div>
+                        </div>
+                    </td>
+                    <td>{{m.info.diff_size}}</td>
+                    <td>{{m.info.diff_approach}}</td>
+                    <td>{{m.info.diff_drain}}</td>
+                    <td>{{m.info.diff_overall}}</td>
+                    <td>{{m.info.difficultyrating | floatfix}}</td>
+                    <td>{{m.info.bpm}}</td>
+                    <td>{{m.info.total_length | timef}}</td>
+                    <td><span class="badge bg-{{ m.colour.badge | default('none') }} w-4">{{m.mods}}{{m.code}}</span>
+                    </td>
+                    <td>{{m.nominator.username}}</td>
+                    <td class="text-start">{{m.note}}</td>
+                    <td>
+                        <div class="text-end">
+                            <button type="button" class="btn dropdown-toggle align-text-top" id="menu"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                <span>
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                        class="icon icon-tabler icon-tabler-adjustments-horizontal" width="44"
+                                        height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                        fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <circle cx="14" cy="6" r="2"></circle>
+                                        <line x1="4" y1="6" x2="12" y2="6"></line>
+                                        <line x1="16" y1="6" x2="20" y2="6"></line>
+                                        <circle cx="8" cy="12" r="2"></circle>
+                                        <line x1="4" y1="12" x2="6" y2="12"></line>
+                                        <line x1="10" y1="12" x2="20" y2="12"></line>
+                                        <circle cx="17" cy="18" r="2"></circle>
+                                        <line x1="4" y1="18" x2="15" y2="18"></line>
+                                        <line x1="19" y1="18" x2="20" y2="18"></line>
+                                    </svg>
+                                </span>
+                                <span>Options</span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end" data-id="32" aria-labelledby="menu">
+                                <li><button class="dropdown-item text-primary ubtn" type="button" data-bs-toggle="modal"
+                                        data-bs-target="#update-round-modal" data-id="{{m.id}}">Edit</button></li>
+                                <li><button class="dropdown-item text-danger dbtn" type="button" data-bs-toggle="modal"
+                                        data-bs-target="#del-map-modal" data-id="{{m.id}}">Delete</button></li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="modal fade" tabindex="-1" id="add-map-modal" aria-labelledby="add-map-modal-label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="add-map-modal-label">Add map</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="card song-banner mb-3" id="a-mapbg"
+                    style="background-size:cover; background-clip: content-box;">
+                    <div class="card-body" style="background-color: rgba(0, 0, 0, 0.3);">
+                        <div class="d-flex">
+                            <a href="#" class="text-white text-truncate song-banner-title" id="a-mapt">??? - ???
+                                [???]</a>
+                            <span class="ms-auto badge w-4 song-banner-mods" id="a-mapm">???</span>
+                            <div class="ms-1 spinner-border spinner-border-sm" role="status" style="display: none;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <form id="add-map-form" method="POST" action="./{{ request.view_args.round_id }}/add">
+                    <div class="mb-3">
+                        <label for="add-map-id" class="col-form-label">Map ID</label>
+                        <div class="input-icon mb-3">
+                            <input type="text" name="id" class="form-control" id="add-map-id" autocomplete="off"
+                                pattern="[0-9]{0:10}" required>
+                            <span class="input-icon-addon" style="display: none;">
+                                <div class="spinner-border spinner-border-sm text-muted" role="status"></div>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="add-map-mods" class="col-form-label">Mods</label>
+                        <select type="text" name="mods" class="form-select" id="add-map-mods" autocomplete="off"
+                            required>
+                            <option value=""></option>
+                            {% for g in map_groups %}
+                            <option value="{{ g.name }}">{{ g.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="add-map-note" class="col-form-label">Note<small class="text-muted ms-1">(max 50
+                                char.)</small></label>
+                        <textarea name="note" class="form-control" id="add-map-note" maxlength="50"
+                            data-bs-toggle="autosize"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Post</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" tabindex="-1" id="update-round-modal" aria-labelledby="update-round-label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="update-round-label">Update Map</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="card song-banner mb-3" id="u-mapbg"
+                    style="background-size:cover; background-clip: content-box;">
+                    <div class="card-body" style="background-color: rgba(0, 0, 0, 0.3);">
+                        <div class="d-flex">
+                            <a href="#" class="text-white text-truncate song-banner-title" id="u-mapt">??? - ???
+                                [???]</a>
+                            <span class="ms-auto badge bg-azure w-4 song-banner-mods" id="u-mapm">???</span>
+                            <div class="ms-1 spinner-border spinner-border-sm" role="status" style="display: none;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <form method="POST" action="./{{ request.view_args.round_id }}/update" id="uform">
+                    <input type="hidden" id="u-id" name="id">
+                    <div class="mb-3">
+                        <label for="update-map-id" class="col-form-label">Map ID</label>
+                        <div class="input-icon mb-3">
+                            <input type="text" name="id" class="form-control" id="update-map-id" autocomplete="off" required>
+                            <span class="input-icon-addon" style="display: none;">
+                                <div class="spinner-border spinner-border-sm text-muted" role="status"></div>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <span class="form-label">Mods</span>
+                        <select name="mods" id="u-mods" class="form-select">
+                            <option value=""></option>
+                            {% for g in map_groups %}
+                            <option value="{{ g.name }}">{{ g.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <span class="form-label">Note<small class="text-muted ms-1">(max 50 char.)</small></span>
+                        <textarea type="text" name="note" id="u-note" class="form-control" data-bs-toggle="autosize"
+                            maxlength="50"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" form="uform" id="u-submit" disabled>Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Delete Mappool Modal -->
+<div class="modal modal-blur fade" id="del-map-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-status bg-danger"></div>
+            <div class="modal-body text-center py-4">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    class="icon icon-tabler icon-tabler-alert-triangle mb-2 text-danger icon-lg" width="44" height="44"
+                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M12 9v2m0 4v.01" />
+                    <path
+                        d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75" />
+                </svg>
+                <h3 id="del-map-modal-title">
+                    <div class="spinner-border"></div>
+                </h3>
+                <div class="text-muted" id="del-map-modal-text">Loading...</div>
+                <form action="" method="post" id="del-map-form"></form>
+            </div>
+            <div class="modal-footer">
+                <div class="w-100">
+                    <div class="row">
+                        <div class="col">
+                            <button type="button" class="btn btn-white w-100 align-bottom"
+                                data-bs-dismiss="modal">Cancel</button>
+                        </div>
+                        <div class="col text-nowrap text-center" style="display: none;">
+                            <button type="button" id="del-submit" form="del-map-form" class="btn btn-danger w-100"
+                                disabled>Confirm</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+{% block script %}
+<script>
+    {{ mappool | tojson }}
+</script>
+<script>
+    var map_groups = {{ map_groups | tojson }};
+</script>
+<script>
+    $(document).ready(function () {
+        $('#select-round').change(function () {
+            location.href = $(this).val();
+        });
+
+        $("#add-map-id").change(function () {
+            var id = $(this).val();
+            $("#add-map-id").next().show();
+            $("#a-mapbg").addClass('loading');
+            $.getJSON(`/api/web/get_beatmaps?b=${id}`, function (data) {
+                var artist = data[0].artist;
+                var title = data[0].title;
+                var version = data[0].version;
+                $("#a-mapt").text(`${artist} - ${title} [${version}]`);
+                $("#a-mapt").attr("href", `https://osu.ppy.sh/b/${data[0].beatmap_id}`);
+                $("#a-mapbg").css("background-image", `url(https://assets.ppy.sh/beatmaps/${data[0].beatmapset_id}/covers/cover.jpg)`);
+                $("#a-mapbg").removeClass('loading');
+            }).always(function () {
+                $("#add-map-id").next().hide();
+            });
+        });
+
+        $("#add-map-mods").change(function () {
+            $("#a-mapm").attr("class", "ms-auto badge w-4");
+            var value = $(this).val();
+            var i;
+            for (i = 0; map_groups.length > i; i++) {
+                if (map_groups[i].name == value) {
+                    $("#a-mapm").text(map_groups[i].name);
+                    $("#a-mapm").addClass("bg-" + map_groups[i].badge_color);
+                    break;
+                } else {
+                    $("#a-mapm").text("???");
+                    $("#a-mapm").attr("class", "ms-auto badge w-4 song-banner-mods");
+                }
+            }
+        });
+
+        $(".dbtn").click(function(){
+            var id = $(this).data('id');
+            var this_el = $(this);
+            $.getJSON(`/api/check_map?id=${id}`).done(function(data){
+                if (data.map_count != 0 && data.map_id == id) {
+                    $.getJSON(`/api/data/mappool/${id}`).done(function(data){
+                        $("#del-map-modal-title").text("Are you sure?");
+                        $("#del-map-modal-text").html(`
+                        Are you sure you want to delete ${data.data.beatmap_id} (ID: ${data.data.id}) [${data.data.mods}]?<br>
+                        After deletion, the map of that round will be deleted as well.<br>
+                        After confirmation, there will be no recovery!
+                        `)
+                        $("#del-map-form")[0].action = `./${data.data.round_id}/${id}/del`;
+                        $("#del-submit").attr("type", "submit");
+                        $("#del-submit").removeAttr('disabled');
+                        $("#del-submit").parent().show();
+                    });
+                } else {
+                    $("#del-submit").parent().hide();
+                    $("#del-submit").attr("disabled", "true");
+                    $("#del-submit").attr("type", "button");
+                    $("#del-map-modal-title").text("Sorry");
+                    if (data.pool_publish > 0) {
+                        $("#del-map-modal-text").text("The round is locked and cannot be deleted!");
+                    } else if (data.match_count > 0) {
+                        $("#del-map-modal-text").text("This round contains sessions and cannot be deleted!");
+                    }
+                }
+            }).fail(function(){
+                $("#del-map-modal-title").text("Error");
+                $("#del-map-modal-text").text("An error occurred, please try again.");
+            });
+        });
+
+        $(".ubtn").click(function () {
+            $("#u-mapm").next().show();
+            var id = $(this).data("id");
+            $.getJSON(`/api/maps/${id}`, function (data) {
+                var artist = data.info.artist;
+                var title = data.info.title;
+                var version = data.info.version;
+                $("#u-id").val(id);
+                $("#u-mapbg").css("background-image", `url(https://assets.ppy.sh/beatmaps/${data.info.beatmapset_id}/covers/cover.jpg)`)
+                $("#u-mapt").text(`${artist} - ${title} [${version}]`);
+                $("#u-mapm").text(data.mods + data.code);
+                $("#u-mapm").addClass("bg-" + data.colour.badge);
+                $("#u-mods").val(data.mods);
+                $("#u-note").val(data.note);
+                $("#update-map-id").val(data.beatmap_id);
+                $("#u-submit").removeAttr("disabled");
+            }).always(function () {
+                $("#u-mapm").next().hide();
+            });
+        });
+
+        $("#update-map-id").change(function () {
+            var id = $(this).val();
+            $("#update-map-id").next().show();
+            $("#u-mapbg").addClass('loading');
+            $.getJSON(`/api/web/get_beatmaps?b=${id}`, function (data) {
+                var artist = data[0].artist;
+                var title = data[0].title;
+                var version = data[0].version;
+                $("#u-mapt").text(`${artist} - ${title} [${version}]`);
+                $("#u-mapbg").css("background-image", `url(https://assets.ppy.sh/beatmaps/${data[0].beatmapset_id}/covers/cover.jpg)`)
+                $("#u-mapbg").removeClass('loading');
+            }).always(function () {
+                $("#update-map-id").next().hide();
+            });
+        });
+
+        $(".modal").on("hidden.bs.modal", function () {
+            $(this).children(".modal-dialog").children(".modal-content").children(".modal-body").children("form")[0].reset();
+            $(".modal .song-banner").css("background-image", "");
+            $(".modal .song-banner .song-banner-title").text("??? - ??? [???]");
+            $(".modal .song-banner .song-banner-mods").text("???");
+            $(".modal .song-banner .song-banner-mods").attr("class", "ms-auto badge w-4 song-banner-mods");
+
+            if (this.id == "update-round-modal") {
+                $("#u-submit").attr("disabled", "True");
+            }
+        });
+
+        $("#del-map-modal").on("hidden.bs.modal", function(){
+            $("#del-map-form")[0].action = '';
+            $("#del-map-modal-title").html('<div class="spinner-border"></div>');
+            $("#del-map-modal-text").text("Loading...");
+            $("#del-submit").parent().hide();
+            $("#del-submit").attr("disabled", "true");
+            $("#del-submit").attr("type", "button");
+        })
+    });
+</script>
+{% endblock script %}

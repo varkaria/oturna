@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500&display=swap');
+
+body {
+    font-family: 'Quicksand';
+}
+
+.avatar {
+    width: 100px;
+    height: 100px;
+}
+
+.avatar-min {
+    width: 60px;
+    height: 60px;
+}
+
+.toggle-top {
+    display: none;
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    border-radius: 50px;
+    background-color: white;
+    opacity:0.5;
+    cursor: pointer; 
+  }
+
+.toggle-top:hover {
+    background-color: #555;
+}
+
+.dark-background {
+    background-color: rgb(0,0,0,0.4);
+    transition: background-color 160ms;
+}
+
+.dark-background:hover {
+    background-color: rgb(0,0,0,0.6);
+}
+
+.map-card {
+    background-position: center !important;
+    background-size: cover !important;
+    height: 90px !important;
+    border: 0px;
+    user-select: none;
+}
+
+
+.mod-icon {
+    position: absolute;
+    pointer-events: none;
+    right: 10px;
+    width: 60px;
+    height: 60px;
+}
+
+header.py-5 {
+    background: #99002D;
+    margin-bottom: -40px;
+}
+
+h1.bd-title {
+    color: white;
+}
+
+body {
+    color: #fff;
+    background-color: #2c2d2c;
+}
+
+.main-block {
+    padding: 35px 40px;
+    background: hsl(0,0%,23%);
+}
+
+.loading {
+    opacity: 0.6;
+}

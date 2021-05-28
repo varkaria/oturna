@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %}Mappools{% endblock title %}
+{% block main %}
+<div class="row justify-content-center mb-3">
+    <div class="col-auto">
+        <div id="rounds-btn-group" class="btn-group">
+            {% for r in active_rounds %}
+            <a id="r{{r.id}}" href="{{r.id}}" class="btn btn-primary {% if pool_id | int == r.id %}active{% endif %}">{{r.name}}</a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% if mappool == None %}
+<div class="row mb-3">
+    <div class="col text-center">
+        <h1>Can't find the mappool!</h1>
+        <p>Perhaps the stage of the mappool has not yet been announced, or simply do not have the mappool of this stage!</p>
+    </div>
+</div>
+{% endif %}
+<div class="row mb-2 pt-3">
+    {% for mod in mappool.mappool %}
+    <div class="col-12">
+        <div class="row px-2 justify-content-center">
+        {% for map in mappool.mappool[mod] %}
+            <div class="col-lg-6 p-2 pt-0 pb-3">
+                <div class="card bg-dark map-card text-start" style="background: url(https://assets.ppy.sh/beatmaps/{{map.info.beatmapset_id}}/covers/cover.jpg);">
+                    <a class="text-light" href="https://osu.ppy.sh/b/{{map.beatmap_id}}" target="_blank">
+                        <div class="card-img-overlay dark-background">
+                            <img class="mod-icon" src="/static/img/mods/{{mod}}.png">
+                            <div class="text-truncate">
+                                <h4 class="card-title fw-bold">{{map.info.title}} [{{map.info.version}}]</h5>
+                                <p class="card-text">{{map.info.artist}} || MAPPER: {{map.info.creator}}</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock main %}
+{% block scripts %}
+<script>
+    $(document).ready(function(){
+        
+    });
+</script>
+{% endblock scripts %}

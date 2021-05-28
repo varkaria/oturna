@@ -1,0 +1,210 @@
+{% extends 'manager/base.html' %}
+{% block title %}Home{% endblock title %}
+{% block page_title %}
+<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-list-check" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+    <path d="M3.5 5.5l1.5 1.5l2.5 -2.5" />
+    <path d="M3.5 11.5l1.5 1.5l2.5 -2.5" />
+    <path d="M3.5 17.5l1.5 1.5l2.5 -2.5" />
+    <line x1="11" y1="6" x2="20" y2="6" />
+    <line x1="11" y1="12" x2="20" y2="12" />
+    <line x1="11" y1="18" x2="20" y2="18" />
+</svg>
+TO-DO:
+{% endblock page_title %}
+{% block content %}
+{% set uncheck  %}
+<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+    <rect x="4" y="4" width="16" height="16" rx="2" />
+</svg>
+{% endset %}
+{% set checked %}
+<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-checkbox" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#00b341" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+    <polyline points="9 11 12 14 20 6" />
+    <path d="M20 12v6a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h9" />
+</svg>
+{% endset %}
+{% set doing %}
+<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brush" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffbf00" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+    <path d="M3 21v-4a4 4 0 1 1 4 4h-4" />
+    <path d="M21 3a16 16 0 0 0 -12.8 10.2" />
+    <path d="M21 3a16 16 0 0 1 -10.2 12.8" />
+    <path d="M10.6 9a9 9 0 0 1 4.4 4.4" />
+  </svg>
+{% endset %}
+
+<div>
+    <ul>
+        <li>
+            {{ uncheck }}
+            Dashboard (dashboard) <span class="badge ms-2 bg-yellow-lt">STAFF</span>
+            <ul>
+                <li>
+                    {{ uncheck }}
+                    Number of applicants
+                </li>
+                <li>
+                    {{ uncheck }}
+                    Before / After Registration Countdown
+                </li>
+                <li>
+                    {{ uncheck }}
+                    Current Competition Process Progress
+                </li>
+                <li>
+                    {{ uncheck }}
+                    Overview of Recently Closed Sessions 
+                </li>
+                <li>
+                    {{ uncheck }}
+                    Upcoming Session Overview
+                </li>
+                <li>
+                    {{ uncheck }}
+                    Data Analysis
+                </li>
+            </ul>
+        </li>
+        <li>
+            {{ checked }}
+            Management (Round) <span class="badge ms-2 bg-red-lt">ADMIN</span>
+            <ul>
+                <li>
+                    {{ checked }}
+                    Add
+                </li>
+                <li>
+                    {{ checked }}
+                    Modification
+                </li>
+                <li>
+                    {{ checked }}
+                    Delete
+                </li>
+            </ul>
+        </li>
+        <li>
+            {{ uncheck }}
+            Management (Mappool) <span class="badge ms-2 bg-purple-lt">MAPPOOLER</span>
+            <ul>
+                <li>
+                    {{ checked }}
+                    Add
+                </li>
+                <li>
+                    {{ doing }}
+                    Modification
+                </li>
+                <li>
+                    {{ checked }}
+                    Delete
+                </li>
+            </ul>
+        </li>
+        <li>
+            {{ checked }}
+            Management (Staff) <span class="badge ms-2 bg-red-lt">ADMIN</span>
+            <ul>
+                <li>
+                    {{ checked }}
+                    Add
+                </li>
+                <li>
+                    {{ checked }}
+                    Modification
+                </li>
+                <li>
+                    {{ checked }}
+                    Delete
+                </li>
+            </ul>
+        </li>
+        <li>
+            {{ checked }}
+            Management (Schedule) <span class="badge ms-2 bg-yellow-lt">STAFF</span>
+            <ul>
+                <li>
+                    {{ checked }}
+                    Pick-up work
+                    <span class="badge ms-2 bg-orange-lt">judgement</span>
+                    <span class="badge ms-2 bg-green-lt">direct seeding</span>
+                    <span class="badge ms-2 bg-blue-lt">dice</span>
+                </li>
+                <li>
+                    {{ checked }}
+                    Add 
+                    <span class="badge ms-2 bg-red-lt">ADMIN</span>
+                </li>
+                <li>
+                    {{ checked }}
+                    Modification <span class="badge ms-2 bg-red-lt">ADMIN</span>
+                </li>
+                <li>
+                    {{ checked }}
+                    Delete <span class="badge ms-2 bg-red-lt">ADMIN</span>
+                </li>
+            </ul>
+        </li>
+        <li>
+            {{ checked }}
+            Basic Settings (Settings) <span class="badge ms-2 bg-azure-lt">HOST</span>
+            <ul>
+                <li>
+                    {{ checked }}
+                    Modification
+                </li>
+            </ul>
+        </li>
+        <li>
+            {{ uncheck }}
+            Team Management (Team) <span class="badge ms-2 bg-red-lt">ADMIN</span>
+            <ul>
+                <li>
+                    {{ uncheck }}
+                    New
+                </li>
+                <li>
+                    {{ checked }}
+                    Modification
+                </li>
+                <li>
+                    {{ uncheck }}
+                    Delete
+                </li>
+                <li>
+                    {{ uncheck }}
+                    Player Audit
+                </li>
+            </ul>
+        </li>
+        <li>
+            {{ uncheck }}
+            Referee Tools
+            <span class="badge ms-2 bg-yellow-lt">STAFF</span>
+        </li>
+        <li>
+            {{ uncheck }}
+            Live Streaming Overlay 
+            <span class="badge ms-2 bg-yellow-lt">STAFF</span>
+        </li>
+        <li>
+            {{ uncheck }}
+            Discord Bot 
+            <span class="badge ms-2 bg-cyan-lt">EVERYONE</span>
+        </li>
+        <li>
+            {{ uncheck }}
+            Installation process 
+            <span class="badge ms-2 bg-dark-lt">OWNER</span>
+        </li>
+        <li>
+            {{ uncheck }}
+            Commentator Preduction
+            <span class="badge ms-2 bg-yellow-lt">COMMENTATOR</span>
+        </li>
+    </ul>
+</div>
+{% endblock content %}

@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title %}Staff{% endblock title %}
+{% block main %}
+{% for s in staff %}
+    <div class="row bg-dark rounded m-2 py-2 text-nowrap">
+        <div class="col-12 ms-1">
+            <h2 class="border-bottom">{{s}}</h2>
+        </div>
+        <div class="col-12">
+            <div class="row px-3">
+            {% for ss in staff[s] %}
+                <div class="col-12 col-md-6 col-lg-4 px-0">
+                    <div class="card m-1">
+                        <div class="row g-0">
+                            <div class="col-auto">
+                                <img src="https://a.ppy.sh/{{ss.user_id}}" class="avatar rounded">
+                            </div>
+                            <div class="col-auto">
+                                <div class="card-body pe-0">
+                                    <h3 class="card-title">{{ss.username}}</h3>
+                                    <p class="card-text">
+                                        <a href="https://osu.ppy.sh/users/{{ss.user_id}}" class="text-decoration-none" target="_blank">UserPage</a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endfor %}
+{% endblock main %}

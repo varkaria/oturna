@@ -1,0 +1,21 @@
+from os import getenv
+class Config(object):
+    ENV = getenv('FLASK_ENV','')
+    DEBUG = getenv('DEBUG',False)
+    SECRET_KEY = getenv('SECRET_KEY','')
+    JSON_SORT_KEYS = getenv('JSON_SORT_KEYS',False)
+    
+    MYSQL_HOST = getenv('DB_HOST','')
+    MYSQL_PORT = int(getenv('DB_PORT',0))
+    MYSQL_USER = getenv('DB_USER','')
+    MYSQL_PASSWORD = getenv('DB_PASS','')
+    MYSQL_DB = getenv('DB_DEFAULT','')
+
+    OSU_API_KEY = getenv('OSU_API_KEY','')
+    OSU_CLIENT_ID = getenv('OSU_CLIENT_ID','')
+    OSU_CLIENT_SCERET = getenv('OSU_CLIENT_SCERET','')
+    OSU_REDIRECT_URL = getenv('OSU_REDIRECT_URL','')
+
+    HOST=getenv('HOST','')
+    PORT=int(getenv('PORT',0))
+    SSL=getenv('SSL','')
