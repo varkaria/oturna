@@ -358,7 +358,7 @@ INSERT INTO `team` (`id`, `full_name`, `flag_name`, `acronym`, `status`) VALUES
 
 -- Dumping structure for table tourney.tourney
 CREATE TABLE IF NOT EXISTS `tourney` (
-  `id` int NOT NULL AUTO_INCREMENT COMMENT '比賽 ID',
+  `id` int NOT NULL AUTO_INCREMENT COMMENT 'Match ID',
   `full_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'Full name',
   `acronym` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'Specialty',
   `register_start_date` datetime DEFAULT NULL COMMENT 'Game registration start time',
