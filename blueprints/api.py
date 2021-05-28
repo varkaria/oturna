@@ -99,7 +99,7 @@ def osuapiv1(p):
             )
 
         result = req.json()
-        if len(result):
+        if result:
             return jsonify(result)
         else:
             return 'no context', 400
