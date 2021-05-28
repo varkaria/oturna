@@ -112,7 +112,7 @@ def callback():
                 login(sql)
                 return redirect(url_for('tourney.dashboard'))
             else:
-                flash('看來你不是工作人員，請回吧')
+                flash('It seems that you are not a staff, please go back.')
                 log.debug(user)
                 return redirect(url_for('index'))
         except Exception as e:
@@ -154,7 +154,7 @@ def matchs_add():
 
     try:
         db.query('Insert into `match` (`round_id`, `code`, `team1`, `team2`, `date`, `loser`) values (%s, %s, %s, %s, %s, %s)', (round_id, code, team1_id, team2_id, date, loser))
-        flash('%s 新增成功' % code, 'success')
+        flash('%s added successfully' % code, 'success')
         return redirect(url_for('tourney.matchs'))
     except Exception as e:
         flash(e, 'danger')
@@ -187,11 +187,11 @@ def match_update(id):
 
     try:
         db.update('match', ('id', id), **dict_cmp(cmatch,match))
-        flash('MathId: %s 已更新' % id, 'success')
+        flash('MathId: %s updated' % id, 'success')
         return redirect(url_for('tourney.matchs'))
     except IntegrityError as e:
         if e.args[0] == 1062 and re.match(r"Duplicate entry '(.+)' for key 'code'",e.args[1]):
-            flash('你要修改的 Code 已經存在', 'danger')
+            flash('You have to modify code already exists', 'danger')
         else:
             flash(e, 'danger')
         return redirect(url_for('tourney.matchs'))
@@ -205,7 +205,7 @@ def match_update(id):
 def match_delete(id):
     try:
         db.query("DELETE FROM `match` WHERE id = %s;", [id])
-        flash('MathId: %s 已刪除' % id, 'success')
+        flash('MathId: %s deleted' % id, 'success')
         return redirect(url_for('tourney.matchs'))
     except Exception as e:
         flash(e, 'danger')
@@ -230,7 +230,7 @@ def matchs_job():
             finally:
                 return redirect(url_for('tourney.matchs'))
         else:
-            flash('你沒有 %s 權限' % privilege.name, 'danger')
+            flash('you have not %s Authority' % privilege.name, 'danger')
             return redirect(url_for('tourney.matchs'))
 
     if match:
@@ -241,37 +241,37 @@ def matchs_job():
                 success_msg = ''
                 if job == 'ref':
                     update_query = update_query.replace('$x', 'referee = %d' % uid)
-                    success_msg='你已接下場次 %d 的裁判工作' % mid
+                    success_msg='You have next time %d Referee work' % mid
                     privilege = Staff.REFEREE
                 elif job == 'stream':
                     update_query = update_query.replace('$x', 'streamer = %d' % uid)
-                    success_msg='你已接下場次 %d 的直播工作' % mid
+                    success_msg='You have next time %d Live work' % mid
                     privilege = Staff.STREAMER
                 elif job == 'comm':
                     if match['commentator']:
                         update_query = update_query.replace('$x', 'commentator2 = %d' % uid)
-                        success_msg='你已接下場次 %d 的賽評工作' % mid
+                        success_msg='You have next time %d Review work' % mid
                         privilege = Staff.COMMENTATOR
                     elif match['commentator'] and match['commentator2']:
-                        flash('該場次已經塞不下更多的賽評了!', 'danger')
+                        flash('The scene has already depressed more!', 'danger')
                         return redirect(url_for('tourney.matchs'))
                     else:
                         update_query = update_query.replace('$x', 'commentator = %d' % uid)
-                        success_msg='你已接下場次 %d 的賽評工作' % mid
+                        success_msg='You have next time %d Review work' % mid
                         privilege = Staff.COMMENTATOR
                 else:
-                    flash('job的值"%s"不是有效的值' % job, 'danger')
+                    flash('job Value "%s" Not a valid value' % job, 'danger')
                     return redirect(url_for('tourney.matchs'))
                 return update(uid, privilege, update_query, success_msg=success_msg)
             elif action == 'remove':
                 success_msg = ''
                 privilege = Staff.STAFF
                 if job == 'ref' and match['referee'] == uid:
-                    success_msg = '你已解除場次 %d 的裁判工作' % mid
+                    success_msg = 'You have already released %d Referee work' % mid
                     update_query = update_query.replace('$x', 'referee = NULL')
                     privilege = Staff.REFEREE
                 elif job == 'stream' and match['streamer'] == uid:
-                    success_msg = '你已解除場次 %d 的直播工作' % mid
+                    success_msg = 'You have already released %d Live work' % mid
                     update_query = update_query.replace('$x', 'streamer = NULL')
                     privilege = Staff.STREAMER
                 elif job == 'comm':
@@ -279,25 +279,25 @@ def matchs_job():
                         update_query = update_query.replace('$x', 'commentator = NULL')
                     elif match['commentator2'] == uid:
                         update_query = update_query.replace('$x', 'commentator2 = NULL')
-                    success_msg = '你已解除場次 %d 的賽評工作' % mid
+                    success_msg = 'You have already released %d Review work' % mid
                     privilege = Staff.COMMENTATOR
                 else:
                     if job not in ('ref', 'stream', 'comm'):
-                        flash('job 的值"%s"不是有效的值' % job, 'danger')
+                        flash('job Value "%s" Not a valid value' % job, 'danger')
                         return redirect(url_for('tourney.matchs'))
                     else:
-                        flash('你沒有接過該場次的工作', 'danger')
+                        flash('You have not taken the work of this', 'danger')
                         return redirect(url_for('tourney.matchs'))
                         
                 return update(uid, privilege, update_query, success_msg=success_msg)
             else:
-                flash('action 的值"%s"不是有效的值' % action, 'danger')
+                flash('action Value "%s" Not a valid value' % action, 'danger')
                 return redirect(url_for('tourney.matchs'))
         else:
-            flash('match_id: %d 改場次已結束!' % mid, 'danger')
+            flash('match_id: %d The transformation has ended!' % mid, 'danger')
             return redirect(url_for('tourney.matchs'))
     else:
-        flash('match_id: %d 找不到對應的場次!' % mid, 'danger')
+        flash("match_id: %d Can't find the corresponding scene!" % mid, 'danger')
         return redirect(url_for('tourney.matchs'))
 
 @tourney.route('/team/')
@@ -323,19 +323,19 @@ def team_update(team_id):
     c_players = request.form.getlist("player[]", int)
 
     try:
-        # 檢查更新Team基本訊息
+        # Check update Team basic message
         diff_var = dict_cmp(c_team, s_team)
         if diff_var:
             db.update('team', ('id', team_id), **diff_var)
 
-        # 檢查更新TeamLeader
+        # Check update Teamleader
         diff_leader = {c_leader}-{s_leader}
         new_leader = None
         if diff_leader:
             new_leader = list(diff_leader)[0]
             db.query("UPDATE player SET leader = 1 WHERE team = %s AND user_id = %s", (team_id, new_leader))
 
-        # 檢查TeamPlayers
+        # Check for TeamPlayers
         diff_players = set(c_players) ^ set(s_players)
         if diff_players:
             for player in diff_players:
@@ -350,10 +350,10 @@ def team_update(team_id):
                 else: 
                     db.query("DELETE FROM player WHERE team = %s AND user_id = %s", (team_id, player))
 
-        flash('TeamID: {} 已更新'.format(team_id), 'success')
+        flash('TeamID: {} updated'.format(team_id), 'success')
         return redirect(url_for('tourney.teams'))
     except Exception as e:
-        flash('發生錯誤: {}'.format(e.args), 'danger')
+        flash('An error occurred: {}'.format(e.args), 'danger')
         return redirect(url_for('tourney.teams'))
 
 
@@ -362,10 +362,10 @@ def team_update(team_id):
 def team_delete(id):
     try:
         db.query("DELETE FROM `team` WHERE id = %s;", [id])
-        flash('TeamID: {} 已刪除'.format(id), 'success')
+        flash('TeamID: {} deleted'.format(id), 'success')
         return redirect(url_for('tourney.teams'))
     except Exception as e:
-        flash('發生錯誤: {}'.format(e.args), 'danger')
+        flash('An error occurred: {}'.format(e.args), 'danger')
         return redirect(url_for('tourney.teams'))
 
 
@@ -414,10 +414,10 @@ def rounds():
         )
         try:
             db.query("INSERT INTO `round` (name, description, best_of, start_date) VALUES (%s, %s, %s, %s)", values)
-            flash('Round: {} 新增成功'.format(values[0]), 'success')
+            flash('Round: {} added successfully'.format(values[0]), 'success')
             return redirect(url_for('tourney.rounds'))
         except Exception as e:
-            flash('發生錯誤: {}'.format(e.args), 'danger')
+            flash('An error occurred: {}'.format(e.args), 'danger')
             return redirect(url_for('tourney.rounds'))
 
 @tourney.route('/rounds/<round_id>/update', methods=['POST'])
@@ -436,10 +436,10 @@ def rounds_update(round_id):
 
     try:
         db.update('round', ('id', round_id), **dict_cmp(c_round, s_round))
-        flash('RoundID: {} 已更新'.format(round_id), 'success')
+        flash('RoundID: {} updated'.format(round_id), 'success')
         return redirect(url_for('tourney.rounds'))
     except Exception as e:
-        flash('發生錯誤: {}'.format(e.args), 'danger')
+        flash('An error occurred: {}'.format(e.args), 'danger')
         return redirect(url_for('tourney.rounds'))
 
 @tourney.route('/rounds/<round_id>/delete', methods=['POST'])
@@ -448,10 +448,10 @@ def rounds_update(round_id):
 def rounds_delete(round_id):
     try:
         db.query("DELETE FROM `round` WHERE id = %s;", [round_id])
-        flash('RoundID: {} 已刪除'.format(round_id), 'success')
+        flash('RoundID: {} deleted'.format(round_id), 'success')
         return redirect(url_for('tourney.rounds'))
     except Exception as e:
-        flash('發生錯誤: {}'.format(e.args), 'danger')
+        flash('An error occurred: {}'.format(e.args), 'danger')
         return redirect(url_for('tourney.rounds'))
 
 @tourney.route('/staff/', methods=['GET', 'POST'])
@@ -524,24 +524,24 @@ def mappool(round_id):
 @need_privilege(Staff.MAPPOOLER)
 def mappool_add(round):
     try:
-        # request.form 取得的訊息
-        beatmap_id:str = request.form['id']     # 圖譜Id
+        # Request.form gets the message obtained
+        beatmap_id:str = request.form['id']     # 图 谱 i
         if not beatmap_id.isdigit(): 
-            raise ValueError('beatmap_id 必須是數字')
+            raise ValueError('beatmap_id Must be a number')
         group = request.form['mods']           # MODS
-        note = request.form.get('note',None)    # 備註
+        note = request.form.get('note',None)    # Note
 
-        # session 取得的訊息
-        poster = int(session['id'])          # 提名人Id
+        # SESSION gets the message
+        poster = int(session['id'])          # Nominator ID
 
-        # sql 取得的訊息
-        round_info = db.query_one('select * from round where id = %s', (round,)) # Round 資料
+        # SQL's message
+        round_info = db.query_one('select * from round where id = %s', (round,)) # Round information
         if round_info['pool_publish'] == 1:
-            raise Exception('此階段圖池已公布，無法進行變動!')
+            raise Exception('This phase of the pool has been announced and cannot be changed!')
 
-        modcount = db.query_one('SELECT mods, COUNT(*) AS `count` FROM mappool WHERE round_id = 1 and mods = %s', (group,)) # 取得該 group 計數
+        modcount = db.query_one('SELECT mods, COUNT(*) AS `count` FROM mappool WHERE round_id = 1 and mods = %s', (group,)) # Take the group count
         mods = db.query_one("SELECT enabled_mods FROM map_group WHERE name = %s", (group,))
-        # 判斷是否為會改變難度的mods
+        # Judging whether it will change the difficulty MODS
         if mods['enabled_mods'] in ('TB', 'FM') :
             request_mods = 0
         elif Mods(int(mods['enabled_mods'])) in (Mods.Easy | Mods.HalfTime | Mods.HardRock | Mods.DoubleTime | Mods.Nightcore):
@@ -549,20 +549,20 @@ def mappool_add(round):
         else : 
             request_mods = 0
 
-        # api 取得的訊息
+        # API's message
         beatmap = osuapi.get(osuapi.V1Path.get_beatmaps, b=request.form['id'], m=0, mods=request_mods)[0]
-        # 將 api 的資料轉換成正確的類型
+        # Convert the API's data into the correct type
         for k in beatmap:
             beatmap[k] = osuapi.todata(beatmap[k])
 
         # debug
         log.debug(dict(request.form))
-        # 圖譜插入至SQL
+        # The map is inserted into SQL
         db.query('insert into `mappool` (`round_id`, `beatmap_id`, `code`, `mods`, `info`, `note`, `nominator`) values (%s, %s, %s, %s, %s, %s, %s)',
             (int(round), int(beatmap_id), modcount['count']+1, group, json.dumps(beatmap), note, poster))
             
-        # 成功訊息
-        info = '%s - %s [%s] (%s) 已新增至 %s' % (beatmap['artist'], beatmap['title'], beatmap['version'], group, round_info['name'])
+        # Successful message
+        info = '%s - %s [%s] (%s) Has been added %s' % (beatmap['artist'], beatmap['title'], beatmap['version'], group, round_info['name'])
         flash(info, 'success')
     except Exception as e:
         flash(e.args[0], 'danger')
