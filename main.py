@@ -48,23 +48,14 @@ def authorize():
 
 @app.route('/')
 def index():
-    """
-    比賽官網的首頁，中間LOGO或者公告欄、註冊報名等連結，下方放相關連結，如osu!forums、discord、sheets等
-    """
     return render_template('index.html')
     
 @app.route('/info/')
 def info():
-    """
-    比賽資訊文檔
-    """
     return render_template('info.html')
 
 @app.route('/rules/')
 def rules():
-    """
-    比賽規則文檔
-    """
     return render_template('rules.html')
 
 @app.route('/schedule/')
@@ -74,24 +65,15 @@ def schedule(round_id=sql.current_round['id']):
 
 @app.route('/matchs/<match_id>')
 def matchs(match=None):
-    """
-    查看比賽最近的賽程，歷史紀錄
-    """
     return render_template('matchs.html', match=match)
 
 @app.route('/registeredlist/')
 def registeredlist():
-    """
-    顯示已報名的名單
-    """
     return render_template('registeredlist.html', players=sql.get_players())
 
 
 @app.route('/player/<user_id>')
 def player(user_id=None):
-    """
-    顯示玩家資訊
-    """
     return render_template('player.html', user=user_id)
 
 # @app.route('/teams/')
@@ -105,18 +87,12 @@ def player(user_id=None):
 @app.route('/mappools/')
 @app.route('/mappools/<pool_id>')
 def mappools(pool_id=sql.current_round['id']):
-    """
-    顯示圖譜資訊
-    """
     mappool = sql.get_mappool(pool_id)
     if request.args.get('json'): return jsonify(mappool)
     return render_template('mappools.html', mappool=mappool, pool_id=pool_id)
 
 @app.route('/staff/')
 def staff():
-    """
-    列出本比賽所有工作人員
-    """
     return render_template('staff.html', staff=sql.get_staff())
 
 @app.route('/meow')
