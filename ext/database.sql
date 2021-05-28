@@ -395,14 +395,14 @@ CREATE TABLE `view_mappool` (
 	`badge_color` CHAR(50) NULL COLLATE 'utf8_general_ci',
 	`hex_color` CHAR(8) NULL COLLATE 'utf8_general_ci',
 	`code` VARCHAR(6) NULL COMMENT 'Photo code' COLLATE 'utf8_general_ci',
-	`mods` VARCHAR(50) NULL COMMENT '使用Mod(s)' COLLATE 'utf8_general_ci',
-	`info` JSON NULL COMMENT '圖譜資訊',
-	`note` VARCHAR(50) NULL COMMENT '備註' COLLATE 'utf8_general_ci',
+	`mods` VARCHAR(50) NULL COMMENT 'Use mod (s)' COLLATE 'utf8_general_ci',
+	`info` JSON NULL COMMENT 'Magepoint information',
+	`note` VARCHAR(50) NULL COMMENT 'Note' COLLATE 'utf8_general_ci',
 	`add_date` DATETIME NOT NULL,
-	`nominator_id` INT(10) NULL COMMENT '工作人員 ID',
+	`nominator_id` INT(10) NULL COMMENT 'Staff ID',
 	`nominator_uid` INT(10) NULL COMMENT 'OSU ID',
-	`nominator_gid` INT(10) NULL COMMENT '群組 ID',
-	`nominator_name` VARCHAR(16) NULL COMMENT 'OSU 用戶名' COLLATE 'utf8_general_ci'
+	`nominator_gid` INT(10) NULL COMMENT 'Group ID',
+	`nominator_name` VARCHAR(16) NULL COMMENT 'OSU username' COLLATE 'utf8_general_ci'
 ) ENGINE=MyISAM;
 
 -- Dumping structure for view tourney.view_staff
