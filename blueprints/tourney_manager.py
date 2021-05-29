@@ -186,7 +186,7 @@ def match_update(id):
 
     try:
         db.update('match', ('id', id), **dict_cmp(cmatch,match))
-        flash('MathId: %s updated' % id, 'success')
+        flash('MathId: %s updated successfully' % id, 'success')
         return redirect(url_for('tourney.matchs'))
     except IntegrityError as e:
         if e.args[0] == 1062 and re.match(r"Duplicate entry '(.+)' for key 'code'",e.args[1]):
@@ -204,7 +204,7 @@ def match_update(id):
 def match_delete(id):
     try:
         db.query("DELETE FROM `match` WHERE id = %s;", [id])
-        flash('MathId: %s deleted' % id, 'success')
+        flash('MathId: %s deleted successfully' % id, 'success')
         return redirect(url_for('tourney.matchs'))
     except Exception as e:
         flash(e, 'danger')
@@ -229,7 +229,7 @@ def matchs_job():
             finally:
                 return redirect(url_for('tourney.matchs'))
         else:
-            flash('you have not %s Authority' % privilege.name, 'danger')
+            flash('You have not %s authority' % privilege.name, 'danger')
             return redirect(url_for('tourney.matchs'))
 
     if match:
@@ -349,7 +349,7 @@ def team_update(team_id):
                 else: 
                     db.query("DELETE FROM player WHERE team = %s AND user_id = %s", (team_id, player))
 
-        flash('TeamID: {} updated'.format(team_id), 'success')
+        flash('TeamID: {} updated successfully'.format(team_id), 'success')
         return redirect(url_for('tourney.teams'))
     except Exception as e:
         flash('An error occurred: {}'.format(e.args), 'danger')
@@ -361,7 +361,7 @@ def team_update(team_id):
 def team_delete(id):
     try:
         db.query("DELETE FROM `team` WHERE id = %s;", [id])
-        flash('TeamID: {} deleted'.format(id), 'success')
+        flash('TeamID: {} deleted successfully'.format(id), 'success')
         return redirect(url_for('tourney.teams'))
     except Exception as e:
         flash('An error occurred: {}'.format(e.args), 'danger')
@@ -435,7 +435,7 @@ def rounds_update(round_id):
 
     try:
         db.update('round', ('id', round_id), **dict_cmp(c_round, s_round))
-        flash('RoundID: {} updated'.format(round_id), 'success')
+        flash('RoundID: {} updated successfully'.format(round_id), 'success')
         return redirect(url_for('tourney.rounds'))
     except Exception as e:
         flash('An error occurred: {}'.format(e.args), 'danger')
@@ -447,7 +447,7 @@ def rounds_update(round_id):
 def rounds_delete(round_id):
     try:
         db.query("DELETE FROM `round` WHERE id = %s;", [round_id])
-        flash('RoundID: {} deleted'.format(round_id), 'success')
+        flash('RoundID: {} deleted successfully'.format(round_id), 'success')
         return redirect(url_for('tourney.rounds'))
     except Exception as e:
         flash('An error occurred: {}'.format(e.args), 'danger')
