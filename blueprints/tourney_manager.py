@@ -491,7 +491,7 @@ def staff():
 @need_privilege(Staff.HOST)
 def settings():
     if request.method == 'POST':
-        if len(request.form):
+        if request.form:
             update_text = ''
             for k, v in request.form.items():
                 if v.isdigit():
