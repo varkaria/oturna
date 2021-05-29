@@ -1,10 +1,9 @@
 from config import Config
 from flag import Staff
 from flask.json import JSONEncoder
-from flask import Flask, render_template, url_for, redirect, send_from_directory, jsonify, request, session
+from flask import Flask, render_template, send_from_directory, jsonify, request
 from blueprints import tourney, api
-from logger import log
-from datetime import date, datetime
+from datetime import datetime
 import re, os, mysql, osuapi
 
 class CustomJSONEncoder(JSONEncoder):
@@ -21,7 +20,7 @@ class CustomJSONEncoder(JSONEncoder):
 
 sql = mysql.DB()
 app = Flask(__name__, instance_relative_config=True)
-app.config.from_object('config.Config')
+app.config.from_object(Config)
 app.register_blueprint(tourney, url_prefix='/manager')
 app.register_blueprint(api, url_prefix='/api')
 app.json_encoder = CustomJSONEncoder

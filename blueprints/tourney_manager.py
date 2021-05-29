@@ -1,4 +1,3 @@
-import os
 from config import Config
 from pymysql.err import *
 from blueprints.api import getdata

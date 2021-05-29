@@ -1,5 +1,4 @@
-import requests, os
-from logger import log
+import requests
 from config import Config
 
 CLIENT_ID = Config.OSU_CLIENT_ID

@@ -1,8 +1,6 @@
-import os
 from config import Config
 from functools import wraps
-from types import resolve_bases
-from flask import Blueprint, render_template, jsonify, Response, abort, session, request, redirect, url_for
+from flask import Blueprint, jsonify, abort, session, request
 from werkzeug.exceptions import HTTPException
 from pymysql.err import *
 import mysql, json, requests

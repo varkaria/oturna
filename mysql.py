@@ -1,5 +1,4 @@
-import pymysql, os, json
-from datetime import datetime
+import pymysql, json
 from pymysql.cursors import DictCursor
 from config import Config
 class DB(object):
