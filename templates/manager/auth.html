@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>登入</title>
+    <title>Redirecting to Login</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
     <style>
         html, body {
@@ -50,12 +50,11 @@
     </style>
 </head>
 <body class="text-center">
-    <main class="form-signin">
-        <img class="mb-4" src="/static/img/PENGUINWORRIED.png" alt=":PENGUINWORRIED:">
-        <h1>Welcome to Manager</h1>
-        <a href="{{ authorize }}" class="btn btn-lg btn-primary">Login with osu!</a>
-    </main>
-    
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+    <script>
+        let login = '{{ authorize }}';
+        let href = login.replace(/&amp;/g, '&')
+        
+        window.location.href = href;
+    </script>
 </body>
 </html>
