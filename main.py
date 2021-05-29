@@ -78,9 +78,6 @@ def player(user_id=None):
 # @app.route('/teams/')
 # @app.route('/teams/<team_id>')
 # def teams(team=None):
-#     """
-#     列出本比賽所有參賽隊伍
-#     """
 #     return render_template('teams.html', team=team)
 
 @app.route('/mappools/')
