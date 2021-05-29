@@ -90,11 +90,7 @@ def mappools(pool_id=sql.current_round['id']):
 @app.route('/staff/')
 def staff():
     return render_template('staff.html', staff=sql.get_staff())
-
-@app.route('/meow')
-def crasher():
-    return render_template('crasher.html')
-
+    
 @app.template_filter('num')
 def num_filter(num):
     if type(num) == int:
