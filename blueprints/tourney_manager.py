@@ -65,7 +65,7 @@ def need_privilege(privilege: Staff):
                 return redirect(url_for('tourney.gologin'))
             user_privilege = Staff(user['privileges'])
             if privilege not in user_privilege:
-                flash(f'你沒有 {privilege.name} 權限!', 'danger')
+                flash(f"You don't have {privilege.name} authority!", 'danger')
                 return redirect(url_for('tourney.dashboard'))
             return f(*args, **kwargs)
         return decorated_function
@@ -137,7 +137,7 @@ def matchs():
             if not staffs.get(a):
                 staffs[a] = []
             staffs[a].append(s)
-
+    
     return render_template('manager/schedule.html', matchs=db.get_matchs(), isadmin=isadmin, teams=teams, staffs=staffs)
 
 @tourney.route('/schedule/match/', methods=['POST'])
