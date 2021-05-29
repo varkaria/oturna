@@ -541,11 +541,11 @@ def mappool_add(round):
         modcount = db.query_one('SELECT mods, COUNT(*) AS `count` FROM mappool WHERE round_id = 1 and mods = %s', (group,)) # Take the group count
         mods = db.query_one("SELECT enabled_mods FROM map_group WHERE name = %s", (group,))
         # Judging whether it will change the difficulty MODS
-        if mods['enabled_mods'] in ('TB', 'FM') :
+        if mods['enabled_mods'] in ('TB', 'FM'):
             request_mods = 0
         elif Mods(int(mods['enabled_mods'])) in (Mods.Easy | Mods.HalfTime | Mods.HardRock | Mods.DoubleTime | Mods.Nightcore):
             request_mods = mods['enabled_mods']
-        else : 
+        else: 
             request_mods = 0
 
         # API's message
@@ -576,10 +576,30 @@ def mappool_update(round):
     try:
         cm = request.form.to_dict()
         id = cm['id']; cm.pop('id')
-        sm = db.query_one("select mods, note from mappool where round_id = %s and id = %s", (round, id))
+        sm = db.query_one("select mods, note, beatmap_id, info from mappool where round_id = %s and id = %s", (round, id))
+
+        mods = db.query_one("SELECT enabled_mods FROM map_group WHERE name = %s", (cm['mods']))
+        # Judging whether it will change the difficulty MODS
+        if mods['enabled_mods'] in ('TB', 'FM'):
+            request_mods = 0
+        elif Mods(int(mods['enabled_mods'])) in (Mods.Easy | Mods.HalfTime | Mods.HardRock | Mods.DoubleTime | Mods.Nightcore):
+            request_mods = mods['enabled_mods']
+        else: 
+            request_mods = 0
+
+        # API's message
+        beatmap = osuapi.get(osuapi.V1Path.get_beatmaps, b=cm['beatmap_id'], mods=request_mods)[0]
+        # Convert the API's data into the correct type
+        for k in beatmap:
+            beatmap[k] = osuapi.todata(beatmap[k])
+
+        cm['info'] = json.dumps(beatmap)
 
         db.update('mappool', ('id', id), **dict_cmp(cm, sm))
-        flash('success', 'success')
+
+        # Successful message
+        info = '%s - %s [%s] (%s) Has been changed' % (beatmap['artist'], beatmap['title'], beatmap['version'], cm['mods'])
+        flash(info, 'success')
     except Exception as e:
         flash(e.args, 'danger')
         log.exception(e)
