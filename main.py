@@ -3,7 +3,7 @@ from objects.flag import Staff
 from flask.json import JSONEncoder
 from flask import Flask, send_from_directory
 from datetime import datetime
-from objects import osuapi
+from objects import osuapi, mysql
 import re, os
 
 class CustomJSONEncoder(JSONEncoder):
@@ -24,12 +24,12 @@ app.config.from_object(Config)
 
 from blueprints.stream import stream
 app.register_blueprint(stream, url_prefix='/stream')
-# from blueprints.backend import backend
-# app.register_blueprint(backend, url_prefix='/manager')
-# from blueprints.api import api
-# app.register_blueprint(api, url_prefix='/api')
-# from blueprints.frontend import frontend
-# app.register_blueprint(frontend, url_prefix='/')
+from blueprints.backend import backend
+app.register_blueprint(backend, url_prefix='/manager')
+from blueprints.api import api
+app.register_blueprint(api, url_prefix='/api')
+from blueprints.frontend import frontend
+app.register_blueprint(frontend, url_prefix='/')
 
 app.json_encoder = CustomJSONEncoder
 
