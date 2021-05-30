@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request, render_template
 from objects import mysql
+import markdown2
 
 db = mysql.DB()
 frontend = Blueprint('frontend', __name__)
@@ -7,14 +8,11 @@ frontend = Blueprint('frontend', __name__)
 @frontend.route('/')
 def index():
     return render_template('index.html')
-    
-@frontend.route('/info/')
-def info():
-    return render_template('info.html')
 
 @frontend.route('/rules/')
 def rules():
-    return render_template('rules.html')
+    markdown = markdown2.markdown_path('docs/rules.md')
+    return render_template('rules.html', doc=markdown)
 
 @frontend.route('/schedule/')
 @frontend.route('/schedule/<round_id>')
