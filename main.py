@@ -18,7 +18,7 @@ class CustomJSONEncoder(JSONEncoder):
             return list(iterable)
         return JSONEncoder.default(self, obj)
 
-# sql = mysql.DB()
+sql = mysql.DB()
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_object(Config)
 
