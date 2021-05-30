@@ -2,13 +2,14 @@ from config import Config
 from pymysql.err import *
 from blueprints.api import getdata
 from flask import Blueprint, render_template, redirect, url_for, flash, session, request, jsonify
-from logger import log
-from flag import Staff, Mods
+from objects.logger import log
+from objects.flag import Staff, Mods
 from rich.console import Console
 from functools import wraps
-import osuapi, mysql, json, re, requests
+from objects import osuapi, mysql
+import json, re, requests
 
-tourney = Blueprint('tourney', __name__)
+backend = Blueprint('backend', __name__)
 db = mysql.DB()
 console = Console()
 
@@ -34,7 +35,7 @@ def conv(x):
     elif type(x) == list:
         return [c(a) for a in x]
 
-@tourney.context_processor
+@backend.context_processor
 def context():
     if session == {}:
         user = None
@@ -51,7 +52,7 @@ def login_required(f):
     def decorated_function(*args, **kwargs):
         console.log(dict(session))
         if session == {}:
-            return redirect(url_for('tourney.gologin'))
+            return redirect(url_for('backend.gologin'))
         return f(*args, **kwargs)
     return decorated_function
 
@@ -62,11 +63,11 @@ def need_privilege(privilege: Staff):
         def decorated_function(*args, **kwargs):
             user = db.get_staff(user_id=session['user_id'])
             if user == None:
-                return redirect(url_for('tourney.gologin'))
+                return redirect(url_for('backend.gologin'))
             user_privilege = Staff(user['privileges'])
             if privilege not in user_privilege:
                 flash(f"You don't have {privilege.name} authority!", 'danger')
-                return redirect(url_for('tourney.dashboard'))
+                return redirect(url_for('backend.dashboard'))
             return f(*args, **kwargs)
         return decorated_function
     return decorator
@@ -77,17 +78,17 @@ def check_privilege(id, privilege: Staff):
     user_privilege = Staff(user['privileges'])
     return bool(privilege in user_privilege)
 
-@tourney.route('/base')
+@backend.route('/base')
 def base():
     return render_template('/manager/base.html')
 
-@tourney.route('/')
+@backend.route('/')
 @login_required
 def dashboard():
     return render_template('manager/dashboard.html')
 
 
-@tourney.route('/login')
+@backend.route('/login')
 def gologin():
     return render_template('manager/auth.html')
 
@@ -100,7 +101,7 @@ def login(user):
     session['username'] = user['username']
 
 
-@tourney.route('/callback')
+@backend.route('/callback')
 def callback():
     if request.args.get('state') == 'login':
         u = osuapi.get_token(request.args['code'])
@@ -109,7 +110,7 @@ def callback():
             sql = db.get_staff(user_id=user['id'])
             if sql:
                 login(sql)
-                return redirect(url_for('tourney.dashboard'))
+                return redirect(url_for('backend.dashboard'))
             else:
                 flash('It seems that you are not a staff, please go back.')
                 log.debug(user)
@@ -119,12 +120,12 @@ def callback():
     return redirect(url_for('index'))
 
 
-@tourney.route('/logout')
+@backend.route('/logout')
 def logout():
     session.clear()
     return redirect(url_for('index'))
 
-@tourney.route('/schedule/')
+@backend.route('/schedule/')
 @login_required
 def matchs():
     teams = db.query_all('select * from team')
@@ -140,7 +141,7 @@ def matchs():
     
     return render_template('manager/schedule.html', matchs=db.get_matchs(), isadmin=isadmin, teams=teams, staffs=staffs)
 
-@tourney.route('/schedule/match/', methods=['POST'])
+@backend.route('/schedule/match/', methods=['POST'])
 @login_required
 @need_privilege(Staff.ADMIN)
 def matchs_add():
@@ -154,12 +155,12 @@ def matchs_add():
     try:
         db.query('Insert into `match` (`round_id`, `code`, `team1`, `team2`, `date`, `loser`) values (%s, %s, %s, %s, %s, %s)', (round_id, code, team1_id, team2_id, date, loser))
         flash('%s added successfully' % code, 'success')
-        return redirect(url_for('tourney.matchs'))
+        return redirect(url_for('backend.matchs'))
     except Exception as e:
         flash(e, 'danger')
-        return redirect(url_for('tourney.matchs'))
+        return redirect(url_for('backend.matchs'))
 
-@tourney.route('/schedule/match/<id>/update', methods=['POST'])
+@backend.route('/schedule/match/<id>/update', methods=['POST'])
 @login_required
 @need_privilege(Staff.ADMIN)
 def match_update(id):
@@ -187,30 +188,30 @@ def match_update(id):
     try:
         db.update('match', ('id', id), **dict_cmp(cmatch,match))
         flash('MathId: %s updated successfully' % id, 'success')
-        return redirect(url_for('tourney.matchs'))
+        return redirect(url_for('backend.matchs'))
     except IntegrityError as e:
         if e.args[0] == 1062 and re.match(r"Duplicate entry '(.+)' for key 'code'",e.args[1]):
             flash('You have to modify code already exists', 'danger')
         else:
             flash(e, 'danger')
-        return redirect(url_for('tourney.matchs'))
+        return redirect(url_for('backend.matchs'))
     except Exception as e:
         flash(e, 'danger')
-        return redirect(url_for('tourney.matchs'))
+        return redirect(url_for('backend.matchs'))
 
-@tourney.route('/schedule/match/<id>/delete', methods=['POST'])
+@backend.route('/schedule/match/<id>/delete', methods=['POST'])
 @login_required
 @need_privilege(Staff.ADMIN)
 def match_delete(id):
     try:
         db.query("DELETE FROM `match` WHERE id = %s;", [id])
         flash('MathId: %s deleted successfully' % id, 'success')
-        return redirect(url_for('tourney.matchs'))
+        return redirect(url_for('backend.matchs'))
     except Exception as e:
         flash(e, 'danger')
-        return redirect(url_for('tourney.matchs'))
+        return redirect(url_for('backend.matchs'))
 
-@tourney.route('/schedule/job', methods=['POST'])
+@backend.route('/schedule/job', methods=['POST'])
 @login_required
 def matchs_job():
     mid = int(request.form['id'])
@@ -227,10 +228,10 @@ def matchs_job():
             except Exception as e:
                 flash(e, 'danger')
             finally:
-                return redirect(url_for('tourney.matchs'))
+                return redirect(url_for('backend.matchs'))
         else:
             flash('You have not %s authority' % privilege.name, 'danger')
-            return redirect(url_for('tourney.matchs'))
+            return redirect(url_for('backend.matchs'))
 
     if match:
         if match['stats'] == 0:
@@ -253,14 +254,14 @@ def matchs_job():
                         privilege = Staff.COMMENTATOR
                     elif match['commentator'] and match['commentator2']:
                         flash('The scene has already depressed more!', 'danger')
-                        return redirect(url_for('tourney.matchs'))
+                        return redirect(url_for('backend.matchs'))
                     else:
                         update_query = update_query.replace('$x', 'commentator = %d' % uid)
                         success_msg='You have next time %d Review work' % mid
                         privilege = Staff.COMMENTATOR
                 else:
                     flash('job Value "%s" Not a valid value' % job, 'danger')
-                    return redirect(url_for('tourney.matchs'))
+                    return redirect(url_for('backend.matchs'))
                 return update(uid, privilege, update_query, success_msg=success_msg)
             elif action == 'remove':
                 success_msg = ''
@@ -283,30 +284,30 @@ def matchs_job():
                 else:
                     if job not in ('ref', 'stream', 'comm'):
                         flash('job Value "%s" Not a valid value' % job, 'danger')
-                        return redirect(url_for('tourney.matchs'))
+                        return redirect(url_for('backend.matchs'))
                     else:
                         flash('You have not taken the work of this', 'danger')
-                        return redirect(url_for('tourney.matchs'))
+                        return redirect(url_for('backend.matchs'))
                         
                 return update(uid, privilege, update_query, success_msg=success_msg)
             else:
                 flash('action Value "%s" Not a valid value' % action, 'danger')
-                return redirect(url_for('tourney.matchs'))
+                return redirect(url_for('backend.matchs'))
         else:
             flash('match_id: %d The transformation has ended!' % mid, 'danger')
-            return redirect(url_for('tourney.matchs'))
+            return redirect(url_for('backend.matchs'))
     else:
         flash("match_id: %d Can't find the corresponding scene!" % mid, 'danger')
-        return redirect(url_for('tourney.matchs'))
+        return redirect(url_for('backend.matchs'))
 
-@tourney.route('/team/')
+@backend.route('/team/')
 @login_required
 def teams():
     teams = db.query_one("SELECT JSON_ARRAYAGG(json) json FROM json_team")['json']
 
     return render_template('manager/team.html', teams=json.loads(teams))
 
-@tourney.route('/team/<team_id>/update', methods=['POST'])
+@backend.route('/team/<team_id>/update', methods=['POST'])
 @login_required
 def team_update(team_id):
     s_team = db.query_one("SELECT id, full_name, flag_name, acronym FROM team WHERE id = %s", (team_id,))
@@ -350,40 +351,40 @@ def team_update(team_id):
                     db.query("DELETE FROM player WHERE team = %s AND user_id = %s", (team_id, player))
 
         flash('TeamID: {} updated successfully'.format(team_id), 'success')
-        return redirect(url_for('tourney.teams'))
+        return redirect(url_for('backend.teams'))
     except Exception as e:
         flash('An error occurred: {}'.format(e.args), 'danger')
-        return redirect(url_for('tourney.teams'))
+        return redirect(url_for('backend.teams'))
 
 
-@tourney.route('/team/<id>/delete', methods=['POST'])
+@backend.route('/team/<id>/delete', methods=['POST'])
 @login_required
 def team_delete(id):
     try:
         db.query("DELETE FROM `team` WHERE id = %s;", [id])
         flash('TeamID: {} deleted successfully'.format(id), 'success')
-        return redirect(url_for('tourney.teams'))
+        return redirect(url_for('backend.teams'))
     except Exception as e:
         flash('An error occurred: {}'.format(e.args), 'danger')
-        return redirect(url_for('tourney.teams'))
+        return redirect(url_for('backend.teams'))
 
 
-@tourney.route('/team/<id>/players/add', methods=['POST'])
+@backend.route('/team/<id>/players/add', methods=['POST'])
 @login_required
 def team_players_add(id):
     return '', 200
 
-@tourney.route('/team/<id>/players/<uid>/delete', methods=['POST'])
+@backend.route('/team/<id>/players/<uid>/delete', methods=['POST'])
 @login_required
 def team_players_update(id, uid):
     return '', 200
 
-@tourney.route('/team/<id>/players/<uid>/update', methods=['POST'])
+@backend.route('/team/<id>/players/<uid>/update', methods=['POST'])
 @login_required
 def team_players_delete(id):
     return '', 200
 
-@tourney.route('/rounds/', methods=['GET', 'POST'])
+@backend.route('/rounds/', methods=['GET', 'POST'])
 @login_required
 @need_privilege(Staff.ADMIN)
 def rounds():
@@ -414,12 +415,12 @@ def rounds():
         try:
             db.query("INSERT INTO `round` (name, description, best_of, start_date) VALUES (%s, %s, %s, %s)", values)
             flash('Round: {} added successfully'.format(values[0]), 'success')
-            return redirect(url_for('tourney.rounds'))
+            return redirect(url_for('backend.rounds'))
         except Exception as e:
             flash('An error occurred: {}'.format(e.args), 'danger')
-            return redirect(url_for('tourney.rounds'))
+            return redirect(url_for('backend.rounds'))
 
-@tourney.route('/rounds/<round_id>/update', methods=['POST'])
+@backend.route('/rounds/<round_id>/update', methods=['POST'])
 @login_required
 @need_privilege(Staff.ADMIN)
 def rounds_update(round_id):
@@ -436,24 +437,24 @@ def rounds_update(round_id):
     try:
         db.update('round', ('id', round_id), **dict_cmp(c_round, s_round))
         flash('RoundID: {} updated successfully'.format(round_id), 'success')
-        return redirect(url_for('tourney.rounds'))
+        return redirect(url_for('backend.rounds'))
     except Exception as e:
         flash('An error occurred: {}'.format(e.args), 'danger')
-        return redirect(url_for('tourney.rounds'))
+        return redirect(url_for('backend.rounds'))
 
-@tourney.route('/rounds/<round_id>/delete', methods=['POST'])
+@backend.route('/rounds/<round_id>/delete', methods=['POST'])
 @login_required
 @need_privilege(Staff.ADMIN)
 def rounds_delete(round_id):
     try:
         db.query("DELETE FROM `round` WHERE id = %s;", [round_id])
         flash('RoundID: {} deleted successfully'.format(round_id), 'success')
-        return redirect(url_for('tourney.rounds'))
+        return redirect(url_for('backend.rounds'))
     except Exception as e:
         flash('An error occurred: {}'.format(e.args), 'danger')
-        return redirect(url_for('tourney.rounds'))
+        return redirect(url_for('backend.rounds'))
 
-@tourney.route('/staff/', methods=['GET', 'POST'])
+@backend.route('/staff/', methods=['GET', 'POST'])
 @login_required
 @need_privilege(Staff.ADMIN)
 def staff():
@@ -481,12 +482,12 @@ def staff():
             flash(e.args[0], 'danger')
             log.exception(e)
         finally:
-            return redirect(url_for('tourney.staff'))
+            return redirect(url_for('backend.staff'))
 
     return render_template('manager/staff.html', staff=get('view_staff', '*'))
 
 
-@tourney.route('/settings/', methods=['GET', 'POST'])
+@backend.route('/settings/', methods=['GET', 'POST'])
 @login_required
 @need_privilege(Staff.HOST)
 def settings():
@@ -499,14 +500,14 @@ def settings():
                 else:
                     update_text += f"{k}='{v}',"
             
-            db.query(f"UPDATE tourney SET {update_text[:-1]} WHERE id = 1")
+            db.query(f"UPDATE backend SET {update_text[:-1]} WHERE id = 1")
             flash('Save Success', 'success')
-            return redirect(url_for('tourney.settings'))
-    return render_template('manager/settings.html', settings=db.query_one('select * from tourney where id = 1'))
+            return redirect(url_for('backend.settings'))
+    return render_template('manager/settings.html', settings=db.query_one('select * from backend where id = 1'))
 
 # view
-@tourney.route('/mappool/', defaults={'round_id': '1'})
-@tourney.route('/mappool/<round_id>')
+@backend.route('/mappool/', defaults={'round_id': '1'})
+@backend.route('/mappool/<round_id>')
 @login_required
 @need_privilege(Staff.MAPPOOLER)
 def mappool(round_id):
@@ -518,7 +519,7 @@ def mappool(round_id):
     return render_template('manager/mappool.html', mappool=mappool, map_groups=group_info)
 
 # action
-@tourney.route('/mappool/<round>/add', methods=['POST'])
+@backend.route('/mappool/<round>/add', methods=['POST'])
 @login_required
 @need_privilege(Staff.MAPPOOLER)
 def mappool_add(round):
@@ -567,9 +568,9 @@ def mappool_add(round):
         flash(e.args[0], 'danger')
         log.exception(e)
     finally:
-        return redirect(url_for('tourney.mappool', round_id=round))
+        return redirect(url_for('backend.mappool', round_id=round))
             
-@tourney.route('/mappool/<round>/update', methods=['POST'])
+@backend.route('/mappool/<round>/update', methods=['POST'])
 @login_required
 @need_privilege(Staff.MAPPOOLER)
 def mappool_update(round):
@@ -604,9 +605,9 @@ def mappool_update(round):
         flash(e.args, 'danger')
         log.exception(e)
     finally:
-        return redirect(url_for('tourney.mappool', round_id=round))
+        return redirect(url_for('backend.mappool', round_id=round))
 
-@tourney.route('/mappool/<round>/<id>/del', methods=['POST'])
+@backend.route('/mappool/<round>/<id>/del', methods=['POST'])
 @login_required
 @need_privilege(Staff.MAPPOOLER)
 def mappool_del(id, round):
@@ -617,4 +618,4 @@ def mappool_del(id, round):
         flash(e.args[0], 'danger')
         log.exception(e)
     finally:
-        return redirect(url_for('tourney.mappool', round_id=round))
+        return redirect(url_for('backend.mappool', round_id=round))

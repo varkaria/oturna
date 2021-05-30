@@ -1,10 +1,10 @@
 from config import Config
-from flag import Staff
+from objects.flag import Staff
 from flask.json import JSONEncoder
-from flask import Flask, render_template, send_from_directory, jsonify, request
-from blueprints import tourney, api
+from flask import Flask, send_from_directory
 from datetime import datetime
-import re, os, mysql, osuapi
+from objects import osuapi
+import re, os
 
 class CustomJSONEncoder(JSONEncoder):
     def default(self, obj):
@@ -18,11 +18,19 @@ class CustomJSONEncoder(JSONEncoder):
             return list(iterable)
         return JSONEncoder.default(self, obj)
 
-sql = mysql.DB()
+# sql = mysql.DB()
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_object(Config)
-app.register_blueprint(tourney, url_prefix='/manager')
-app.register_blueprint(api, url_prefix='/api')
+
+from blueprints.stream import stream
+app.register_blueprint(stream, url_prefix='/stream')
+# from blueprints.backend import backend
+# app.register_blueprint(backend, url_prefix='/manager')
+# from blueprints.api import api
+# app.register_blueprint(api, url_prefix='/api')
+# from blueprints.frontend import frontend
+# app.register_blueprint(frontend, url_prefix='/')
+
 app.json_encoder = CustomJSONEncoder
 
 @app.route('/favicon.ico')
@@ -44,52 +52,6 @@ def tourney_info():
 @app.context_processor
 def authorize():
     return dict(authorize=osuapi.authorize('login','identify'))
-
-@app.route('/')
-def index():
-    return render_template('index.html')
-    
-@app.route('/info/')
-def info():
-    return render_template('info.html')
-
-@app.route('/rules/')
-def rules():
-    return render_template('rules.html')
-
-@app.route('/schedule/')
-@app.route('/schedule/<round_id>')
-def schedule(round_id=sql.current_round['id']):
-    return render_template('schedule.html', matchs=sql.get_matchs(round_id), round_id=round_id)
-
-@app.route('/matchs/<match_id>')
-def matchs(match=None):
-    return render_template('matchs.html', match=match)
-
-@app.route('/registeredlist/')
-def registeredlist():
-    return render_template('registeredlist.html', players=sql.get_players())
-
-
-@app.route('/player/<user_id>')
-def player(user_id=None):
-    return render_template('player.html', user=user_id)
-
-# @app.route('/teams/')
-# @app.route('/teams/<team_id>')
-# def teams(team=None):
-#     return render_template('teams.html', team=team)
-
-@app.route('/mappools/')
-@app.route('/mappools/<pool_id>')
-def mappools(pool_id=sql.current_round['id']):
-    mappool = sql.get_mappool(pool_id)
-    if request.args.get('json'): return jsonify(mappool)
-    return render_template('mappools.html', mappool=mappool, pool_id=pool_id)
-
-@app.route('/staff/')
-def staff():
-    return render_template('staff.html', staff=sql.get_staff())
     
 @app.template_filter('num')
 def num_filter(num):
@@ -137,6 +99,6 @@ def page_not_foubd(error):
 
 if __name__ == '__main__':
     app.run(
-        host='0.0.0.0',
+        host='127.0.0.1',
         port=int(os.environ.get('PORT', 5000))
     )

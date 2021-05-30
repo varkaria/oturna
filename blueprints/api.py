@@ -3,7 +3,8 @@ from functools import wraps
 from flask import Blueprint, jsonify, abort, session, request
 from werkzeug.exceptions import HTTPException
 from pymysql.err import *
-import mysql, json, requests
+from objects import mysql
+import json, requests
 
 db = mysql.DB()
 api = Blueprint('api', __name__)

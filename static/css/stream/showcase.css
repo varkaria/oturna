@@ -1,0 +1,298 @@
+body {
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+   overflow: hidden;
+   width: 1366px;
+   height: 768px;
+   position: absolute;
+   color: white;
+   font-family: "DB Helvethaica X";
+}
+
+section {
+   position: absolute;
+   width: 1366px;
+   height: 768px;
+   overflow: hidden;
+   background: url(/static/img/stream/showcase-layout.png)
+}
+
+section .wave {
+   position: absolute;
+   bottom: 0;
+   left: 0;
+   width: 100%;
+   height: 130px;
+   background: url(/static/img/stream/wave.svg);
+}
+
+section .wave {
+   animation: animate-wave-1 30s linear infinite;
+   opacity: 1;
+   animation-delay: 0s;
+   bottom: 0;
+}
+
+@keyframes animate-wave-1 {
+   0% {
+      background-position-x: 0;
+   }
+   100% {
+      background-position-x: 1600px;
+   }
+}
+
+.song-display {
+   position: absolute;
+   width: 1237px;
+   height: 50px;
+   left: 64px;
+   top: 672px;
+   z-index: 5;
+}
+
+.song-display .title {
+   position: absolute;
+   width: 1237px;
+   height: 22px;
+   left: 0px;
+   top: 0px;
+   font-family: "DB Helvethaica X";
+   font-style: normal;
+   font-weight: 500;
+   font-size: 18px;
+   line-height: 22px;
+   /* identical to box height */
+   text-align: left;
+   color: #DBDBDB;
+   z-index: 5;
+}
+
+.song-display .song-data {
+   position: absolute;
+   width: 1237px;
+   height: 37px;
+   left: 0px;
+   top: 13px;
+   font-family: "DB Helvethaica X";
+   font-style: normal;
+   font-weight: 500;
+   font-size: 31px;
+   line-height: 37px;
+   color: #FFFFFF;
+   z-index: 5;
+}
+
+.title-sub {
+   position: absolute;
+   right: 64px;
+   top: 45px;
+   z-index: 300;
+   display: flex;
+   align-content: center;
+   align-items: center;
+}
+
+.title-sub .title {
+   width: 441px;
+   height: 82px;
+   font-family: "DB Helvethaica X";
+   font-style: normal;
+   font-weight: 500;
+   font-size: 72px;
+   line-height: 86px;
+   letter-spacing: -0.011em;
+   color: #FFFFFF;
+   text-align: right;
+}
+
+.title-sub .subtitle {
+   width: 441px;
+   height: 36px;
+   font-family: "DB Helvethaica X";
+   font-style: normal;
+   font-weight: normal;
+   font-size: 31px;
+   line-height: 2px;
+   letter-spacing: -0.011em;
+   color: #FFFFFF;
+   text-align: right;
+}
+
+#particles-js {
+   position: absolute;
+   width: 1366px;
+   height: 768px;
+   background-image: url("");
+   background-repeat: no-repeat;
+   background-size: cover;
+   background-position: 50% 50%;
+}
+
+/* ---- stats.js ---- */
+
+.count-particles {
+   background: #000022;
+   position: absolute;
+   top: 48px;
+   left: 0;
+   width: 80px;
+   color: #13E8E9;
+   font-size: .8em;
+   text-align: left;
+   text-indent: 4px;
+   line-height: 14px;
+   padding-bottom: 2px;
+   font-weight: bold;
+}
+
+.js-count-particles {
+   font-size: 1.1em;
+}
+
+#stats, .count-particles {
+   margin-top: 5px;
+   margin-left: 5px;
+}
+
+#stats {
+   border-radius: 3px 3px 0 0;
+   overflow: hidden;
+}
+
+.count-particles {
+   border-radius: 0 0 3px 3px;
+}
+
+.logo {
+   width: 120px;
+   height: 80px;
+}
+
+.song-list {
+   display: flex;
+   flex-direction: column;
+   align-items: flex-start;
+   padding: 0px;
+   position: absolute;
+   width: 325px;
+   height: 458px;
+   left: 65px;
+   top: 156px;
+   gap: 12px;
+}
+
+.song-list .song {
+   position: relative;
+   width: 305px;
+   height: 61px;
+   left: 0px;
+   top: 0px;
+   border-radius: 12px;
+   display: flex;
+   padding: 20px 20px;
+   overflow: hidden;
+}
+
+.pre-animation {
+   animation: appear 1000ms;
+   animation-direction: alternate;
+}
+
+@keyframes appear {
+   0% {
+     opacity: 0;
+     transform: translateY(5px)
+   }
+   100% {
+     opacity: 1;
+     transform: translateY(0px)
+   }
+ }
+
+.song .l-side {
+   display: block;
+   width: 70%;
+   z-index: 20;
+}
+
+.song .r-side {
+   display: flex;
+   width: 30%;
+   z-index: 20;
+}
+
+.song .song-stats {
+   font-size: 18px;
+   margin-top: 6px;
+}
+
+.song .artist {
+   font-style: normal;
+   font-weight: normal;
+   font-size: 22px;
+   line-height: 17px;
+   letter-spacing: -0.011em;
+}
+
+.song .song-meta {
+   font-style: normal;
+   display: block;
+   font-weight: 900;
+   font-size: 24px;
+   line-height: 24px;
+   width: 322px;
+   letter-spacing: -0.011em;
+   color: #FFFFFF;
+   overflow: hidden !important;
+}
+
+.song .r-side .stage {
+   display: flex;
+   flex-direction: row;
+   align-items: flex-start;
+   justify-content: center;
+   text-align: center;
+   padding: 0px 10px;
+   position: absolute;
+   width: 53px;
+   height: 17px;
+   left: 256px;
+   top: 12px;
+   background: #C02642;
+   border-radius: 35px;
+}
+
+.song .r-side .type {
+   position: absolute;
+   width: 65px;
+   height: 58px;
+   left: 259px;
+   top: 30px;
+   font-style: normal;
+   font-weight: 500;
+   font-size: 60px;
+   line-height: 58px;
+   /* identical to box height */
+   text-align: center;
+   letter-spacing: -0.011em;
+   color: #FFFFFF;
+}
+
+img.map-bg {
+   position: absolute;
+   width: 99%;
+   top: 0;
+   left: 0;
+}
+
+.map-darker {
+   background: #60222dd6;
+   position: absolute;
+   width: 3000px;
+   HEIGHT: 3000px;
+   top: 0;
+   left: 0;
+   z-index: 5;
+}

@@ -1,6 +1,7 @@
 import pymysql, json
 from pymysql.cursors import DictCursor
 from config import Config
+
 class DB(object):
     def __init__(self):
         self.connect = pymysql.connect(
