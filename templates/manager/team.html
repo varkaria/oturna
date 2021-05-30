@@ -57,7 +57,7 @@
 </button>
 <label class="form-selectgroup-item">
     <input type="checkbox" id="view-all" class="form-selectgroup-input">
-    <span class="form-selectgroup-label">顯示已停用的隊伍</span>
+    <span class="form-selectgroup-label">Show failed teams</span>
 </label>
 {% endblock actions %}
 {% block content %}
@@ -66,9 +66,9 @@
         <table class="table card-table table-vcenter" id="main-table">
             <thead>
                 <tr>
-                    <th>隊伍</th>
-                    <th>成員</th>
-                    <th>狀態</th>
+                    <th>Teams</th>
+                    <th>Members</th>
+                    <th>Status</th>
                     <th></th>
                 </tr>
             </thead>
@@ -122,13 +122,13 @@
                                     </svg>
                                 </span>
                                 <span>
-                                    選項
+                                    Options
                                 </span>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="menu">
                                 <li>
                                     <button class="dropdown-item ubtn" data-bs-toggle="modal"
-                                        data-bs-target="#update-modal" data-id="{{ t.id }}">編輯</button>
+                                        data-bs-target="#update-modal" data-id="{{ t.id }}">Edit</button>
                                 </li>
                                 <li>
                                     <button class="dropdown-item text-danger dbtn" data-bs-toggle="modal"
@@ -159,16 +159,16 @@
                 <form action="" method="post" id="update-form" autocomplete="off">
                     <input type="hidden" name="id" id="u-id">
                     <div class="mb-3">
-                        <label class="form-label required">隊伍全名</label>
+                        <label class="form-label required">Team name</label>
                         <input type="text" class="form-control" id="u-fullname" name="full_name" maxlength="50"
                             placeholder="full_name" required>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">隊名縮寫</label>
+                        <label class="form-label">Short name</label>
                         <input type="text" class="form-control" id="u-acronym" name="acronym">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">旗幟/頭像</label>
+                        <label class="form-label">Flags / Avatars</label>
                         <div class="input-group">
                             <select name="flag_type" id="u-flagtype" class="form-select-g">
                                 <option value="avatar">Avatar</option>
@@ -179,20 +179,20 @@
                                 aria-label="Text input with dropdown button">
                         </div>
                         <ul class="mt-2">
-                            <li>Avatar: 輸入Osu! User ID</li>
-                            <li>URL: 輸入圖片網址</li>
-                            <li>Local: 上傳圖片</li>
+                            <li>Avatar: Enter osu! User ID</li>
+                            <li>URL: Enter image URL</li>
+                            <li>Local: Upload images</li>
                         </ul>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label vcenter">隊員 <a class="btn btn-sm btn-icon"
+                        <label class="form-label vcenter">Team members<a class="btn btn-sm btn-icon"
                                 id="add-player-item">+</a></label>
                         <div id="u-player-aria"></div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="reset" form="update-form" class="btn me-auto" data-bs-dismiss="modal">取消</button>
+                <button type="reset" form="update-form" class="btn me-auto" data-bs-dismiss="modal">Cancel</button>
                 <button type="submit" form="update-form" class="btn btn-primary">Edit</button>
             </div>
         </div>
@@ -215,8 +215,8 @@
                 </svg>
                 <h3>Are you sure?</h3>
                 <div class="text-muted">
-                    你確定要Delete <span id="del-name"></span> (ID:<span id="del-id"></span>) 嗎?<br>
-                    確認之後將無法復原!
+                    Are you sure you want to delete <span id="del-name"></span> (ID:<span id="del-id"></span>) this team?<br>
+                    This process will be unrecoverable!
                 </div>
                 <form action="" method="post" id="del-form"></form>
             </div>
@@ -224,11 +224,11 @@
                 <div class="w-100">
                     <div class="row">
                         <div class="col">
-                            <button type="button" class="btn btn-white w-100" data-bs-dismiss="modal">取消</button>
+                            <button type="button" class="btn btn-white w-100" data-bs-dismiss="modal">Cancel</button>
                         </div>
                         <div class="col">
                             <button type="submit" id="del-submit" form="del-form" class="btn btn-danger w-100"
-                                disabled>確認Delete</button>
+                                disabled>Delete</button>
                         </div>
                     </div>
                 </div>
@@ -296,7 +296,7 @@
                 pi_isle.attr("value", data[0].user_id);
                 pi_usid.val(data[0].user_id);
             }).fail(function () {
-                pi_name.text("Unknow");
+                pi_name.text("Unknown");
                 pi_avat.css("background-image", null);
                 pi_isle.attr("value", null);
                 pi_isle.attr("checked", null);
@@ -306,10 +306,10 @@
     var playerItem = `
     <div class="input-group mb-2">
         <span class="avatar input-group-text pinput-avatar"></span>
-        <span class="input-group-text form-control pinput-username">Unknow</span>
+        <span class="input-group-text form-control pinput-username">Unknown</span>
         <input type="text" name="player[]" class="form-control pinput-userid" placeholder="id or name">
         <span class="input-group-text pinput-isleader">
-            <input class="form-check-input pinput-isleader" name="leader" type="radio"> 隊長
+            <input class="form-check-input pinput-isleader" name="leader" type="radio"> Leader
         </span>
         <a class="btn btn-outline-danger" id="del-player-list-btn">X</a>
     </div>`

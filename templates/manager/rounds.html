@@ -1,9 +1,9 @@
 {% extends 'manager/base.html' %}
-{% block title %}階段設定{% endblock title %}
+{% block title %}Rounds Setup{% endblock title %}
 {% block actions %}
 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-round-modal">
     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-    新增階段
+    New Round
 </button>
 {% endblock actions %}
 {% block content %}
@@ -59,7 +59,7 @@
                                         <line x1="19" y1="18" x2="20" y2="18"></line>
                                     </svg>
                                 </span>
-                                <span>選項</span>
+                                <span>Rounds</span>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end" data-id="{{r.id}}">
                                 <li><button class="dropdown-item text-primary ubtn" type="button" data-bs-toggle="modal" data-bs-target="#update-round-modal" data-id="{{r.id}}">Edit</button></li>
@@ -73,37 +73,37 @@
         </table>
     </div>
 </div>
-<!-- 新增 Round Modal -->
+<!-- Round Modal -->
 <div class="modal modal-blur fade" id="add-round-modal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">新增 Round</h5>
+                <h5 class="modal-title">New Round</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form action="." method="post" id="add-round-form" autocomplete="off">
                     <div class="mb-3">
-                        <label class="form-label required">Round 名字</label>
-                        <input type="text" class="form-control" name="name" maxlength="50" placeholder="給Round一個名字 (例: 決賽)" required>
+                        <label class="form-label required">Round Name</label>
+                        <input type="text" class="form-control" name="name" maxlength="50" placeholder="Give a name to Round (Example : Final)" required>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">簡述</label>
-                        <input type="text" class="form-control" name="description" maxlength="50" placeholder="(可選) 簡單備註">
+                        <label class="form-label">Short description</label>
+                        <input type="text" class="form-control" name="description" maxlength="50" placeholder="(Optional) Simple Remarks">
                     </div>
                     <div class="mb-3">
                         <label class="form-label required">Best Of</label>
                         <input type="number" class="form-control" name="best_of" min="0" value="9" required>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label required">開始時間</label>
+                        <label class="form-label required">Starting time</label>
                         <input type="datetime-local" class="form-control" name="start_date" step="1" required>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="reset" form="add-round-form" class="btn me-auto" data-bs-dismiss="modal">取消</button>
-                <button type="submit" form="add-round-form" class="btn btn-primary">新增</button>
+                <button type="reset" form="add-round-form" class="btn me-auto" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" form="add-round-form" class="btn btn-primary">Create</button>
             </div>
         </div>
     </div>
@@ -120,25 +120,25 @@
                 <form action="" method="post" id="update-round-form" autocomplete="off">
                     <input type="hidden" name="id" id="u-id">
                     <div class="mb-3">
-                        <label class="form-label required">Round 名字</label>
-                        <input type="text" class="form-control" id="u-name" name="name" maxlength="50" placeholder="給Round一個名字 (例: 決賽)" required>
+                        <label class="form-label required">Round Name</label>
+                        <input type="text" class="form-control" id="u-name" name="name" maxlength="50" placeholder="Give a name to Round (Example : Final)" required>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">簡述</label>
-                        <input type="text" class="form-control" id="u-description" name="description" maxlength="50" placeholder="(可選) 簡單備註">
+                        <label class="form-label">Short description</label>
+                        <input type="text" class="form-control" id="u-description" name="description" maxlength="50" placeholder="(Optional) Simple Remarks">
                     </div>
                     <div class="mb-3">
                         <label class="form-label required">Best Of</label>
                         <input type="number" class="form-control" id="u-best_of" name="best_of" min="0" value="9" required>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label required">開始時間</label>
+                        <label class="form-label required">Starting time</label>
                         <input type="datetime-local" class="form-control" id="u-start_date"  name="start_date" step="1" required>
                     </div>
                     <div class="mb-3">
                         <label class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" id="u-pool_publish" name="pool_publish" value="1">
-                            <span class="form-check-label">公佈圖池</span>
+                            <span class="form-check-label">Publish</span>
                         </label>
                     </div>
                     <div id="spinner" style="display: none;">
@@ -147,7 +147,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="reset" form="update-round-form" class="btn me-auto" data-bs-dismiss="modal">取消</button>
+                <button type="reset" form="update-round-form" class="btn me-auto" data-bs-dismiss="modal">Cancel</button>
                 <button type="submit" form="update-round-form" class="btn btn-primary">Edit</button>
             </div>
         </div>

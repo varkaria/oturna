@@ -1,5 +1,5 @@
 {% extends 'manager/base.html' %}
-{% block title %}人員管理{% endblock title %}
+{% block title %}Staff{% endblock title %}
 {% block head %}
 <style>
     .disabled-staff {
@@ -14,7 +14,7 @@
 </button>
 <label class="form-selectgroup-item">
     <input type="checkbox" id="view-all" class="form-selectgroup-input">
-    <span class="form-selectgroup-label">顯示已停用的Staff</span>
+    <span class="form-selectgroup-label">Show Disabled Staff</span>
 </label>
 {% endblock actions %}
 {% block content %}
@@ -25,7 +25,7 @@
                 <tr>
                     <th>Staff</th>
                     <th>Role</th>
-                    <th>權限</th>
+                    <th>Duty</th>
                     <th class="js-sort-none"></th>
                 </tr>
             </thead>
@@ -101,67 +101,67 @@
                             <input type="text" name="id" class="form-control" id="staff-manager-id" autocomplete="off" pattern="\d+" required>
                         </div>
                         <div class="mb-3">
-                            <label for="staff-manager-group">主職位:</label>
+                            <label for="staff-manager-group">Group:</label>
                             <select name="group" id="staff-manager-group" class="form-select" required>
-                                <option value="1" style="display: none;">主辦</option>
-                                <option value="2">管理員</option>
-                                <option value="3">裁判</option>
-                                <option value="4">賽評</option>
-                                <option value="5">直播</option>
-                                <option value="6">圖池</option>
-                                <option value="7">美術</option>
-                                <option value="8">測試員</option>
-                                <option value="9">技術人員</option>
-                                <option value="10" selected>工作人員</option>
+                                <option value="1" style="display: none;">Host</option>
+                                <option value="2">Admin</option>
+                                <option value="3">Referee</option>
+                                <option value="4">Commenter</option>
+                                <option value="5">Streamer</option>
+                                <option value="6">Mappooler</option>
+                                <option value="7">Designer</option>
+                                <option value="8">Tester</option>
+                                <option value="9">Technician</option>
+                                <option value="10" selected>Staff</option>
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="staff-manager-id">權限:</label>
+                            <label for="staff-manager-id">Permissions:</label>
                             <label class="form-check">
                                 <input type="checkbox" value="1" id="checkbox-staff" class="form-check-input staff-checkbox" checked>
-                                <span for="checkbox-staff" class="form-check-label">STAFF</span>
+                                <span for="checkbox-staff" class="form-check-label">Staff</span>
                             </label>
                             <label class="form-check">
                                 <input type="checkbox" value="2" id="checkbox-referee" class="form-check-input staff-checkbox">
-                                <span for="checkbox-referee" class="form-check-label">REFFEREE</span>
+                                <span for="checkbox-referee" class="form-check-label">Referee</span>
                             </label>
                             <label class="form-check">
                                 <input type="checkbox" value="4" id="checkbox-commentator" class="form-check-input staff-checkbox">
-                                <span for="checkbox-commentator" class="form-check-label">COMMENTATOR</span>
+                                <span for="checkbox-commentator" class="form-check-label">Commenter</span>
                             </label>
                             <label class="form-check">
                                 <input type="checkbox" value="8" id="checkbox-srteamer" class="form-check-input staff-checkbox">
-                                <span for="checkbox-srteamer" class="form-check-label">STREAMER</span>
+                                <span for="checkbox-srteamer" class="form-check-label">Streamer</span>
                             </label>
                             <label class="form-check">
                                 <input type="checkbox" value="16" id="checkbox-mappooler" class="form-check-input staff-checkbox">
-                                <span for="checkbox-mappooler" class="form-check-label">MAPPOOLER</span>
+                                <span for="checkbox-mappooler" class="form-check-label">Mappoller</span>
                             </label>
                             <label class="form-check">
                                 <input type="checkbox" value="32" id="checkbox-gfx" class="form-check-input staff-checkbox">
-                                <span for="checkbox-gfx" class="form-check-label">GFX</span>
+                                <span for="checkbox-gfx" class="form-check-label">Designer</span>
                             </label>
                             <label class="form-check">
                                 <input type="checkbox" value="64" id="checkbox-admin" class="form-check-input staff-checkbox">
-                                <span for="checkbox-admin" class="form-check-label">ADMIN</span>
+                                <span for="checkbox-admin" class="form-check-label">Admin</span>
                             </label>
                             <label class="form-check">
                                 <input type="checkbox" value="128" id="checkbox-tester" class="form-check-input staff-checkbox">
-                                <span for="checkbox-tester" class="form-check-label">TESTER</span>
+                                <span for="checkbox-tester" class="form-check-label">Tester</span>
                             </label>
                             <label class="form-check">
                                 <input type="checkbox" value="256" id="checkbox-tech" class="form-check-input staff-checkbox">
-                                <span for="checkbox-tech" class="form-check-label">TECH</span>
+                                <span for="checkbox-tech" class="form-check-label">Technician</span>
                             </label>
                             <label class="form-check" style="display: none;">
                                 <input type="checkbox" value="512" id="checkbox-host" class="form-check-input staff-checkbox">
-                                <span for="checkbox-host" class="form-check-label">HOST</span>
+                                <span for="checkbox-host" class="form-check-label">Host</span>
                             </label>
                             <input type="hidden" name="privileges" id="privileges" value="1">
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Post</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Add</button>
                         </div>
                     </form>
                 </div>
@@ -178,14 +178,14 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          你確定要停用 <span id="disable-staff-id"></span> 嗎?
+          Are you sure you want to disable <span id="disable-staff-id"></span> this staff?
         </div>
         <div class="modal-footer">
             <form method="POST">
                 <input type="hidden" name="type" value="disable">
                 <input type="hidden" name="id" id="disable-staff-id-input">
-                <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                <button type="submit" class="btn btn-danger">停用</button>
+                <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-danger">Disable</button>
             </form>
         </div>
       </div>

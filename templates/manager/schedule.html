@@ -1,5 +1,5 @@
 {% extends 'manager/base.html' %}
-{% block title %}比賽排程管理{% endblock title %}
+{% block title %}Schedule{% endblock title %}
 {% block head %}
 <style>
     .filter-code {
@@ -19,7 +19,7 @@
 {% if isadmin %}
 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#match-modal">
     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-    新增場次
+    New Schedule
 </button>
 {% endif %}
 {% endblock actions %}
@@ -27,7 +27,7 @@
 <div class="row mb-3">
     <div class="col">
         <div class="input-group flex-nowrap">
-            <span class="input-group-text">階段</span>
+            <span class="input-group-text">Round</span>
             <select class="form-select" id="select-round">
                 <option value="0">All</option>
                 {% for r in rounds %}
@@ -46,9 +46,9 @@
     </div>
     <div class="col-auto">
         <div class="form-selectgroup">
-            <label class="form-selectgroup-item" data-bs-toggle="tooltip" data-bs-placement="top" title="顯示已結束及棄賽的場次">
+            <label class="form-selectgroup-item" data-bs-toggle="tooltip" data-bs-placement="top" title="Show finished and cancelled rounds">
               <input type="checkbox" class="form-selectgroup-input" id="view-completed">
-              <span class="form-selectgroup-label">顯示已結束</span>
+              <span class="form-selectgroup-label">Show Completed</span>
             </label>
           </div>
     </div>
@@ -121,13 +121,13 @@
                         <span class="avatar avatar-sm" style="background-image: url({{m.team2.flag_name|flag_url}});"></span>
                     </td>
                     <td>{% if m.stats == 0 %}
-                        <span class="badge bg-secondary">未開始</span>
+                        <span class="badge bg-secondary">Not Started</span>
                         {% elif m.stats == 1 %}
-                        <span class="badge bg-success">已結束</span>
+                        <span class="badge bg-success">Ended</span>
                         {% elif m.stats == 2 %}
-                        <span class="badge bg-warning">棄賽</span>
+                        <span class="badge bg-warning">Cancelled</span>
                         {% else %}
-                        <span class="badge">未知</span>
+                        <span class="badge">Unknown</span>
                         {% endif %}
                     </td>
                     <td>{{m.referee.username if m.referee.username is not none else ''}}</td>
@@ -156,42 +156,42 @@
                                     </svg>
                                 </span>
                                 <span>
-                                    選項
+                                    Options
                                 </span>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end" data-id="{{ m.id }}" aria-labelledby="staff-menu">
                                 {% if m.stats < 1 %} {% if m.referee.username and m.streamer.username and
                                     m.commentator.username and m.commentator2.username %} <span
-                                    class="px-3 py-1 text-muted">該場次沒有工作可接</span>
+                                    class="px-3 py-1 text-muted">No referee/streamer available</span>
                                     {% endif %}
                                     {% if m.referee.username is none %}
-                                    <li><button class="dropdown-item job_action ref get" type="button">接裁判工作</button></li>
+                                    <li><button class="dropdown-item job_action ref get" type="button">Become Referee</button></li>
                                     {% endif %}
                                     {% if m.streamer.username is none %}
-                                    <li><button class="dropdown-item job_action stream get" type="button">接直播工作</button>
+                                    <li><button class="dropdown-item job_action stream get" type="button">Become Streamer</button>
                                     </li>
                                     {% endif %}
                                     {% if (m.commentator.username is none) or (m.commentator2.username is none) %}
-                                    <li><button class="dropdown-item job_action comm get" type="button">接賽評工作</button></li>
+                                    <li><button class="dropdown-item job_action comm get" type="button">Become Commentator</button></li>
                                     {% endif %}
                                     {% if m.referee.id == cur_user.id %}
                                     <li><button class="dropdown-item job_action ref remove text-danger"
-                                            type="button">解除裁判工作</button></li>
+                                            type="button">Delete Referee</button></li>
                                     {% endif %}
                                     {% if m.streamer.id == cur_user.id %}
                                     <li><button class="dropdown-item job_action stream remove text-danger"
-                                            type="button">解除直播工作</button></li>
+                                            type="button">Delete Streamer</button></li>
                                     {% endif %}
                                     {% if (m.commentator.id == cur_user.id) or (m.commentator2.id == cur_user.id) %}
                                     <li><button class="dropdown-item job_action comm remove text-danger"
-                                            type="button">解除賽評工作</button></li>
+                                            type="button">Delete Commentator</button></li>
                                     {% endif %}
                                     {% else %}
-                                    <span class="px-3 py-1 text-muted">該場次已結束</span>
+                                    <span class="px-3 py-1 text-muted">Ended</span>
                                     {% endif %}
                                     {% if isadmin %}
                                     <li><button class="dropdown-item modify-match text-primary" type="button"
-                                            data-bs-toggle="modal" data-bs-target="#modify-match-modal">Edit場次資料</button></li>
+                                            data-bs-toggle="modal" data-bs-target="#modify-match-modal">Edit</button></li>
                                     {% endif %}
                             </ul>
                         </div>
@@ -207,17 +207,17 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">新增場次</h5>
+                <h5 class="modal-title">New Schedule</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body pt-2">
                 <form id="match-action" action="match/" method="post" autocomplete="off">
                     <div class="mb-2">
-                        <label class="form-label">場次代碼</label>
-                        <input type="text" name="code" class="form-control" id="m-code" maxlength="10" placeholder="10字以內，不可重複" required>
+                        <label class="form-label">Code</label>
+                        <input type="text" name="code" class="form-control" id="m-code" maxlength="10" placeholder="Within 10 integer, No repeat" required>
                     </div>
                     <div class="mb-2">
-                        <label class="form-label">階段</label>
+                        <label class="form-label">Rounds</label>
                         <select class="form-select" name="round" id="m-round">
                             {% for r in rounds %}
                             <option value="{{r.id}}">{{r.name}}</option>
@@ -225,38 +225,38 @@
                         </select>
                     </div>
                     <div class="mb-2">
-                        <label class="form-label">隊伍1(玩家1)</label>
+                        <label class="form-label">Team 1 (Player 1)</label>
                         <select type="text" name="team1" class="form-select" id="m-team1" value="" required>
-                            <option value="" data-custom-properties="&lt;span class=&quot;avatar avatar-xs&quot;&gt;?&lt;/span&gt;">請選擇隊伍1</option>
+                            <option value="" data-custom-properties="&lt;span class=&quot;avatar avatar-xs&quot;&gt;?&lt;/span&gt;">Please select team 1</option>
                             {% for team in teams %}
                             <option value="{{team.id}}" data-custom-properties="&lt;span class=&quot;avatar avatar-xs&quot; style=&quot;background-image: url({{ team.flag_name | flag_url }})&quot;&gt;&lt;/span&gt;">{{team.full_name}}</option>
                             {% endfor %}
                         </select>
                     </div>
                     <div class="mb-2">
-                        <label class="form-label">隊伍2(玩家2)</label>
+                        <label class="form-label">Team 2 (Player 2)</label>
                         <select type="text" name="team2" class="form-select" id="m-team2" value="" required>
-                            <option value="" data-custom-properties="&lt;span class=&quot;avatar avatar-xs&quot;&gt;?&lt;/span&gt;">請選擇隊伍1</option>
+                            <option value="" data-custom-properties="&lt;span class=&quot;avatar avatar-xs&quot;&gt;?&lt;/span&gt;">Please select team 1</option>
                             {% for team in teams %}
                             <option value="{{team.id}}" data-custom-properties="&lt;span class=&quot;avatar avatar-xs&quot; style=&quot;background-image: url({{ team.flag_name | flag_url }})&quot;&gt;&lt;/span&gt;">{{team.full_name}}</option>
                             {% endfor %}
                         </select>
                     </div>
                     <div class="mb-2">
-                        <label class="form-label">時間</label>
+                        <label class="form-label">Time</label>
                         <input type="datetime-local" name="date" class="form-control" id="m-date" required>
                     </div>
                     <div class="mb-2">
                         <label class="form-check">
                             <input class="form-check-input" type="checkbox" name="loser" value="1" id="m-loser">
-                            <span class="form-check-label">敗部場</span>
+                            <span class="form-check-label">Defeated</span>
                         </label>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="reset" form="match-action" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                <button type="submit" form="match-action" class="btn btn-success">新增</button>
+                <button type="reset" form="match-action" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" form="match-action" class="btn btn-success">Done</button>
             </div>
         </div>
     </div>
@@ -266,7 +266,7 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Edit場次</h5>
+                <h5 class="modal-title">Edit Schedule</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -274,13 +274,13 @@
                     <div class="row">
                         <div class="col-6">
                             <div class="mb-3">
-                                <label class="form-label">場次代碼</label>
+                                <label class="form-label">Code</label>
                                 <input type="text" name="code" class="form-control" id="mo-code" maxlength="10"
                                     required>
-                                <span class="form-text">10字以內，不可重複</span>
+                                <span class="form-text">Within 10 integer, No repeat</span>
                             </div>
                             <div class="mb-3">
-                                <label for="mo-round" class="form-label">階段</label>
+                                <label for="mo-round" class="form-label">Round</label>
                                 <select class="form-select" name="round_id" id="mo-round" value="">
                                     {% for r in rounds %}
                                     <option value="{{r.id}}">{{r.name}}</option>
@@ -290,57 +290,57 @@
                             <div class="mb-3">
                                 <div class="row">
                                     <div class="col-8">
-                                        <label class="form-label">隊伍1(玩家1)</label>
+                                        <label class="form-label">Team 1 (Player 1)</label>
                                         <select type="text" name="team1" class="form-select" id="mo-team1" required>
-                                            <option value="" data-custom-properties="&lt;span class=&quot;avatar avatar-xs&quot;&gt;?&lt;/span&gt;">請選擇隊伍1</option>
+                                            <option value="" data-custom-properties="&lt;span class=&quot;avatar avatar-xs&quot;&gt;?&lt;/span&gt;">Select team 1</option>
                                             {% for team in teams %}
                                             <option value="{{team.id}}" data-custom-properties="&lt;span class=&quot;avatar avatar-xs&quot; style=&quot;background-image: url({{ team.flag_name | flag_url }})&quot;&gt;&lt;/span&gt;">{{team.full_name}}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
                                     <div class="col-4 ps-0">
-                                        <label class="form-label">分數</label>
+                                        <label class="form-label">Score</label>
                                         <input type="number" name="team1_score" id="mo-team1_score" class="form-control"
                                             min="-1" max="100" required>
-                                        <span class="form-text">-1=棄賽者</span>
+                                        <span class="form-text">-1 = Doesn't show up</span>
                                     </div>
                                 </div>
                             </div>
                             <div class="mb-3">
                                 <div class="row">
                                     <div class="col-8">
-                                        <label class="form-label">隊伍2(玩家2)</label>
+                                        <label class="form-label">Team 2 (Player 2)</label>
                                         <select type="text" name="team2" class="form-select" id="mo-team2" required>
-                                            <option value="" data-custom-properties="&lt;span class=&quot;avatar avatar-xs&quot;&gt;?&lt;/span&gt;">請選擇隊伍2</option>
+                                            <option value="" data-custom-properties="&lt;span class=&quot;avatar avatar-xs&quot;&gt;?&lt;/span&gt;">Select team 2</option>
                                             {% for team in teams %}
                                             <option value="{{team.id}}" data-custom-properties="&lt;span class=&quot;avatar avatar-xs&quot; style=&quot;background-image: url({{ team.flag_name | flag_url }})&quot;&gt;&lt;/span&gt;">{{team.full_name}}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
                                     <div class="col-4 ps-0">
-                                        <label class="form-label">分數</label>
+                                        <label class="form-label">Score</label>
                                         <input type="number" name="team2_score" id="mo-team2_score" class="form-control"
                                             min="-1" max="100" required>
-                                        <span class="form-text">-1=棄賽者</span>
+                                        <span class="form-text">-1 = Doesn't show up</span>
                                     </div>
                                 </div>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">時間</label>
+                                <label class="form-label">Time</label>
                                 <input type="datetime-local" name="date" class="form-control" id="mo-date" required>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">場次狀態</label>
+                                <label class="form-label">Status</label>
                                 <select name="stats" id="mo-stats" class="form-select" required>
-                                    <option value="0">未開始</option>
-                                    <option value="1">已結束</option>
-                                    <option value="2">棄賽</option>
+                                    <option value="0">Not started</option>
+                                    <option value="1">Ended</option>
+                                    <option value="2">Cancelled</option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="mb-3">
-                                <label class="form-label">裁判</label>
+                                <label class="form-label">Referee</label>
                                 <select name="referee" id="mo-ref" class="form-select">
                                     <option value="" data-custom-properties="&lt;span class=&quot;avatar avatar-xs&quot;&gt;?&lt;/span&gt;"></option>
                                     {% for ref in staffs['REFEREE'] %}
@@ -349,7 +349,7 @@
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">直播</label>
+                                <label class="form-label">Streamer</label>
                                 <select name="streamer" id="mo-stream" class="form-select">
                                     <option value="" data-custom-properties="&lt;span class=&quot;avatar avatar-xs&quot;&gt;?&lt;/span&gt;"></option>
                                     {% for stream in staffs['STREAMER'] %}
@@ -358,7 +358,7 @@
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">賽評</label>
+                                <label class="form-label">Commentator 1</label>
                                 <select name="commentator" id="mo-comm" class="form-select">
                                     <option value="" data-custom-properties="&lt;span class=&quot;avatar avatar-xs&quot;&gt;?&lt;/span&gt;"></option>
                                     {% for comm in staffs['COMMENTATOR'] %}
@@ -367,7 +367,7 @@
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">賽評2</label>
+                                <label class="form-label">Commentator 2</label>
                                 <select name="commentator2" id="mo-comm2" class="form-select">
                                     <option value="" data-custom-properties="&lt;span class=&quot;avatar avatar-xs&quot;&gt;?&lt;/span&gt;"></option>
                                     {% for comm2 in staffs['COMMENTATOR'] %}
@@ -384,12 +384,12 @@
                                 <input type="text" name="video_link" class="form-control" id="mo-videolink">
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">備註</label>
+                                <label class="form-label">Remark</label>
                                 <input type="text" name="note" class="form-control" id="mo-note">
                             </div>
                             <div class="mb-3">
                                 <div class="form-check">
-                                    <label class="form-check-label">敗部場</label>
+                                    <label class="form-check-label">Defeated</label>
                                     <input class="form-check-input" type="checkbox" name="loser" value="1"
                                         id="mo-loser">
                                 </div>
@@ -400,9 +400,9 @@
             </div>
             <div class="modal-footer">
                 <button type="reset" form="modify-match" class="btn btn-danger" data-bs-dismiss="modal"
-                    data-bs-toggle="modal" data-bs-target="#delete-match-modal">Delete場次</button>
-                <button type="reset" form="modify-match" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                <button type="submit" form="modify-match" class="btn btn-success">更新</button>
+                    data-bs-toggle="modal" data-bs-target="#delete-match-modal">Delete Match</button>
+                <button type="reset" form="modify-match" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" form="modify-match" class="btn btn-success">Done</button>
             </div>
         </div>
     </div>
@@ -416,14 +416,14 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p>你確定要Delete <span id="md-check-text"></span> 場次嗎?</p>
+                <p>Are you sure you want to delete this <span id="md-check-text"></span> schedule?</p>
                 <form method="post" id="md-form">
                     <input type="hidden" id="mb-id">
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">否</button>
-                <button type="button" class="btn btn-danger" id="confirm-delete-match">是(點兩次)</span></button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                <button type="button" class="btn btn-danger" id="confirm-delete-match">Yes (Double click)</span></button>
             </div>
         </div>
     </div>
