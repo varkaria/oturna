@@ -8,8 +8,13 @@
   <title>{% block title %}ThisIsTitle{% endblock title %} | Tournament Manager</title>
   <!-- CSS files -->
   <link href="/static/css/framework/tabler.css" rel="stylesheet" />
+  <link href="/static/css/framework/tabler-flags.css" rel="stylesheet" />
+  <link href="/static/css/framework/tabler-payments.css" rel="stylesheet" />
+  <link href="/static/css/framework/tabler-vendors.css" rel="stylesheet" />
+  <link href="/static/css/framework/demo.css" rel="stylesheet" />
   <link href="/static/css/style.css" rel="stylesheet" />
   {% block head %}
+
   {% endblock head %}
 </head>
 
@@ -305,11 +310,11 @@
     </div>
   </div>
   <!-- Tabler Core -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"></script>
-  <script src="/static/js/framework/tabler.min.js"></script>
+  <script src="/static/js/framework/jquery.min.js"></script>
+  <script src="/static/js/framework/popper.min.js"></script>
+  <script src="/static/js/framework/tabler.js"></script>
   <script src="/static/js/framework/sort-table.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/choices.js/9.0.1/choices.min.js"></script>
+  <script src="/static/js/framework/choices.js"></script>
   {% block script %}
 
   {% endblock script %}
