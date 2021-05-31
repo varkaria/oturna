@@ -1,35 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OMTHPL2021 | Background</title>
-    <link rel="stylesheet" href="/static/css/stream/fonts/stylesheet.css">
-    <link rel="stylesheet" href="/static/css/stream/background.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/reconnecting-websocket/1.0.0/reconnecting-websocket.min.js"></script>
-    <script src="http://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-</head>
-
-<body>
-    <div class="title-sub">
-        <div class="title">Mappool Showcase</div>
-        <div class="subtitle">Qualifiers Round</div>
-    </div>
-
-    <section id="wave-background">
-        <div class="wave"></div>
-     </section>
-
-     <div class="song-display">
-         <div class="title">Now Playing</div>
-         <div class="song-data">...</div>
-     </div>
-     
-     <div class="logo"></div>
-
-     <div id="particles-js"></div>
-</body>
-    <script src="/static/js/stream/background.js"></script>
-</html>
+{% extends '/stream/base.html' %}
+{% block title %}GreetingCM{% endblock %}
+{% block header %}
+<link rel="stylesheet" href="/static/css/stream/fonts/stylesheet.css">
+<link rel="stylesheet" href="/static/css/stream/background.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reconnecting-websocket/1.0.0/reconnecting-websocket.min.js"></script>
+<script src="http://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+{% endblock %}
+{% block content %}
+<div class="title-sub">
+    <div class="title">Mappool Showcase</div>
+    <div class="subtitle">Qualifiers Round</div>
+</div>
+<section id="wave-background">
+    <div class="wave"></div>
+</section>
+<div class="song-display">
+    <div class="title">Now Playing</div>
+    <div class="song-data">...</div>
+</div>
+<div class="logo"></div>
+<div id="particles-js"></div>
+<script src="/static/js/stream/background.js"></script>
+{% endblock %}

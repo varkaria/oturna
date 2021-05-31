@@ -1,33 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends '/stream/base.html' %}
+{% block title %}Showcase{% endblock %}
+{% block header %}
+<link rel="stylesheet" href="/static/css/stream/fonts/stylesheet.css">
+<link rel="stylesheet" href="/static/css/stream/showcase.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reconnecting-websocket/1.0.0/reconnecting-websocket.min.js"></script>
+{% endblock %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OMTHPL2021 | Background</title>
-    <link rel="stylesheet" href="/static/css/stream/fonts/stylesheet.css">
-    <link rel="stylesheet" href="/static/css/stream/showcase.css">
-    <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/reconnecting-websocket/1.0.0/reconnecting-websocket.min.js"></script>
-</head>
-
-<body>
-    <div class="title-sub">
-        <div class="titles">
-            <div class="title">Mappool Showcase</div>
-            <div class="subtitle">Qualifiers Round</div>
-        </div>
-        <img src="/static/img/stream/logo_notitle.png" class="logo">
+{% block content %}
+<div class="title-sub">
+    <div class="titles">
+        <div class="title">Mappool Showcase</div>
+        <div class="subtitle">Qualifiers Round</div>
     </div>
-
-    <section id="wave-background">
-        <div class="wave"></div>
-    </section>
-
-    <div class="song-list" id="songs">
-    </div>
-</body>
+    <img src="/static/img/stream/logo_notitle.png" class="logo">
+</div>
+<section id="wave-background">
+    <div class="wave"></div>
+</section>
+<div class="song-list" id="songs"></div>
 <script src="/static/js/stream/showcase.js"></script>
+{% endblock %}
 
-</html>
