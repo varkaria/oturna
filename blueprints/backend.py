@@ -500,10 +500,10 @@ def settings():
                 else:
                     update_text += f"{k}='{v}',"
             
-            db.query(f"UPDATE backend SET {update_text[:-1]} WHERE id = 1")
+            db.query(f"UPDATE tourney SET {update_text[:-1]} WHERE id = 1")
             flash('Save Success', 'success')
             return redirect(url_for('backend.settings'))
-    return render_template('manager/settings.html', settings=db.query_one('select * from backend where id = 1'))
+    return render_template('manager/settings.html', settings=db.query_one('select * from tourney where id = 1'))
 
 # view
 @backend.route('/mappool/')
