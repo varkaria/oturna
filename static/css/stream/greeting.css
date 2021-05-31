@@ -1,0 +1,67 @@
+body {
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+   width: 1366;
+   height: 768;
+   position: absolute;
+}
+
+section {
+   position: absolute;
+   width: 1366px;
+   height: 768px;
+   overflow: hidden;
+   background: url(/static/img/stream/greeting.svg)
+}
+
+section .wave {
+   position: absolute;
+   bottom: 0;
+   left: 0;
+   width: 100%;
+   height: 130px;
+   background: url(/static/img/stream/wave.svg);
+}
+
+section .wave2 {
+   position: absolute;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 130px;
+   background: url(/static/img/stream/wave.svg);
+}
+
+section .wave {
+   animation: animate-wave-1 30s linear infinite;
+   opacity: 1;
+   animation-delay: 0s;
+   bottom: 0;
+}
+
+section .wave2 {
+   animation: animate-wave-2 30s linear infinite;
+   opacity: 1;
+   transform: rotate(180deg);
+   animation-delay: 0s;
+   bottom: 0;
+}
+
+@keyframes animate-wave-1 {
+   0% {
+      background-position-x: 0;
+   }
+   100% {
+      background-position-x: 1600px;
+   }
+}
+
+@keyframes animate-wave-2   {
+   0% {
+      background-position-x: 0;
+   }
+   100% {
+      background-position-x: 1600px;
+   }
+}
