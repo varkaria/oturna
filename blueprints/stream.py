@@ -28,9 +28,9 @@ def index():
 def greeting_cm():
     return render_template('stream/greeting_cm.html')
 
-@stream.route('/greeting_daniel')
+@stream.route('/greeting_host')
 def greeting_daniel():
-    return render_template('stream/greeting_daniel.html')
+    return render_template('stream/greeting_host.html')
 
 @stream.route('/showcase')
 def m_showcase():
