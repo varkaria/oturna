@@ -310,19 +310,39 @@ def teams():
 
     return render_template('manager/team.html', teams=json.loads(teams))
 
-@backend.route('/team/<team_id>/add', methods=['POST'])
+@backend.route('/team/add', methods=['POST'])
 @login_required
-def team_add(team_id):
+def team_add():
     c_team = dict(
-        id=int(team_id),
         full_name=request.form.get('full_name'),
         acronym=request.form.get('acronym')
     )
     c_leader = request.form.get("leader", type=int)
     c_players = request.form.getlist("player[]", int)
+    c_flag = request.files['a_flag_name']
+
+    if not c_leader:
+        flash('Player leader did not checked it', 'danger')
+        return redirect(url_for('backend.teams'))
+
+    if c_flag.filename == '':
+        flash('No selected file', 'danger')
+        return redirect(url_for('backend.teams'))
 
     try:
-        # flash('TeamID: {} add successfully'.format(team_id), 'success')
+        db.query(f"INSERT INTO `tourney`.`team` (`full_name`, `flag_name`, `acronym`) VALUES ('{c_team['full_name']}', 'avatar.4', '{c_team['acronym']}')")
+        res = db.query("SELECT LAST_INSERT_ID() AS id FROM team LIMIT 1")
+
+        for player in c_players:
+            args = {'k': Config.OSU_API_KEY, 'u': player}
+            player_info = conv(requests.get('https://osu.ppy.sh/api/get_user', args).json()[0])
+            player_bp1 = conv(requests.get('https://osu.ppy.sh/api/get_user_best', args|{'limit': 1}).json()[0])
+            leader = 1 if c_leader == player_info["user_id"] else 0
+            db.query(
+                "INSERT INTO player (user_id, username, team, info, bp1, leader) VALUES (%s, %s, %s, %s, %s, %s)",
+                (player_info["user_id"], player_info["username"], res['id'], json.dumps(player_info), json.dumps(player_bp1), leader))
+
+        flash('TeamID: {} add successfully'.format(res['id']), 'success')
         return redirect(url_for('backend.teams'))
     except Exception as e:
         flash('An error occurred: {}'.format(e.args), 'danger')

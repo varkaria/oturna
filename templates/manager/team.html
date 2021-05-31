@@ -46,7 +46,7 @@
 </style>
 {% endblock head %}
 {% block actions %}
-<button class="btn btn-primary add-staff-btn" data-bs-toggle="modal" data-bs-target="#staff-manager-modal">
+<button class="btn btn-primary add-staff-btn" data-bs-toggle="modal" data-bs-target="#add-modal">
     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
         stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -143,6 +143,49 @@
         </table>
     </div>
 </div>
+<div class="modal modal-blur fade" id="add-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <h5 class="modal-title">Add Team</h5>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="" method="post" id="add-form" autocomplete="off" enctype="multipart/form-data">
+                    <input type="hidden" name="id" id="a-id">
+                    <div class="mb-3">
+                        <label class="form-label required">Team name</label>
+                        <input type="text" class="form-control" id="a-fullname" name="full_name" maxlength="50"
+                            placeholder="Full name of team" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Short name</label>
+                        <input type="text" class="form-control" id="a-acronym" name="acronym"
+                        placeholder="Just 3 words of team">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Flags / Avatars</label>
+                        <div class="input-group">
+                            <input type="file" class="form-control" id="a-flagname" name="a_flag_name"
+                                aria-label="Text input with dropdown button" type="image/png">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label vcenter">Team members<a class="btn btn-sm btn-icon"
+                                id="add-player-item-add">+</a></label>
+                        <div id="a-player-aria"></div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="reset" form="add-form" class="btn me-auto" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" form="add-form" class="btn btn-primary">Add</button>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="modal modal-blur fade" id="update-modal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -170,23 +213,13 @@
                     <div class="mb-3">
                         <label class="form-label">Flags / Avatars</label>
                         <div class="input-group">
-                            <select name="flag_type" id="u-flagtype" class="form-select-g">
-                                <option value="avatar">Avatar</option>
-                                <option value="url">URL</option>
-                                <option value="local">Local</option>
-                            </select>
-                            <input type="text" class="form-control" id="u-flagname" name="flag_name"
-                                aria-label="Text input with dropdown button">
+                            <input type="file" class="form-control" id="u-flagname" name="flag_name"
+                                aria-label="Text input with dropdown button" disabled>
                         </div>
-                        <ul class="mt-2">
-                            <li>Avatar: Enter osu! User ID</li>
-                            <li>URL: Enter image URL</li>
-                            <li>Local: Upload images</li>
-                        </ul>
                     </div>
                     <div class="mb-3">
                         <label class="form-label vcenter">Team members<a class="btn btn-sm btn-icon"
-                                id="add-player-item">+</a></label>
+                                id="add-player-item-update">+</a></label>
                         <div id="u-player-aria"></div>
                     </div>
                 </form>
@@ -261,7 +294,6 @@
                 $("#u-id").val(data.id);
                 $("#u-fullname").val(data.full_name);
                 $("#u-acronym").val(data.acronym);
-                $("#u-flagname").val(data.flag_name.split('.', 2)[1]);
 
                 for (i in data.players) {
                     var isleader = data.players[i].leader == 1 ? true : false
@@ -270,6 +302,35 @@
             })
             .always(function () {
                 $("#spinner").hide();
+            });
+    });
+
+    $(".add-staff-btn").click(function () {
+        $("#add-form")[0].action = `./add`;
+    });
+    
+    $("#a-player-aria").on("click", "#del-player-list-btn", function () {
+        $(this).parent().remove();
+    });
+
+    $("#a-player-aria").on("change", "input[name='player[]']", function () {
+        var user_id = $(this).val();
+        var pi_name = $(this).parent().children(".pinput-username");
+        var pi_avat = $(this).parent().children(".pinput-avatar");
+        var pi_isle = $(this).parent().children(".pinput-isleader").children(".pinput-isleader");
+        var pi_usid = $(this).parent().children(".pinput-userid");
+        pi_name.text('Loading...');
+        $.getJSON(`/api/web/get_user?u=${user_id}`,
+            function (data) {
+                pi_name.text(data[0].username);
+                pi_avat.css("background-image", `url(https://a.ppy.sh/${data[0].user_id})`);
+                pi_isle.attr("value", data[0].user_id);
+                pi_usid.val(data[0].user_id);
+            }).fail(function () {
+                pi_name.text("Unknown");
+                pi_avat.css("background-image", null);
+                pi_isle.attr("value", null);
+                pi_isle.attr("checked", null);
             });
     });
 
@@ -314,7 +375,11 @@
         <a class="btn btn-outline-danger" id="del-player-list-btn">X</a>
     </div>`
 
-    $("#add-player-item").click(function () {
+    $("#add-player-item-add").click(function () {
+        $("#a-player-aria").append(playerItem);
+    });
+
+    $("#add-player-item-update").click(function () {
         $("#u-player-aria").append(playerItem);
     });
 
