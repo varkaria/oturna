@@ -35,3 +35,7 @@ def greeting_daniel():
 @stream.route('/showcase')
 def m_showcase():
     return render_template('stream/showcase.html')
+
+@stream.route('/match')
+def match():
+    return render_template('stream/match.html')
