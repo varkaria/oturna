@@ -87,11 +87,9 @@ def base():
 def dashboard():
     return render_template('manager/dashboard.html')
 
-
 @backend.route('/login')
 def gologin():
     return render_template('manager/auth.html')
-
 
 def login(user):
     session.clear()
@@ -124,6 +122,11 @@ def callback():
 def logout():
     session.clear()
     return redirect(url_for('index'))
+
+@backend.route('/planning/')
+@login_required
+def planning():
+    return render_template('manager/plan.html')
 
 @backend.route('/schedule/')
 @login_required
@@ -307,16 +310,34 @@ def teams():
 
     return render_template('manager/team.html', teams=json.loads(teams))
 
-@backend.route('/team/<team_id>/update', methods=['POST'])
+@backend.route('/team/<team_id>/add', methods=['POST'])
 @login_required
-def team_update(team_id):
-    s_team = db.query_one("SELECT id, full_name, flag_name, acronym FROM team WHERE id = %s", (team_id,))
-    s_leader = db.query_one("SELECT user_id, COUNT(*) AS bool FROM player WHERE team = %s AND leader = 1", (team_id,))["user_id"]
-    s_players = json.loads(db.query_one("SELECT JSON_ARRAYAGG(user_id) playsers FROM player WHERE team = %s", (team_id,))["playsers"])
+def team_add(team_id):
     c_team = dict(
         id=int(team_id),
         full_name=request.form.get('full_name'),
-        flag_name="{}.{}".format(request.form.get('flag_type'),request.form.get('flag_name')),
+        acronym=request.form.get('acronym')
+    )
+    c_leader = request.form.get("leader", type=int)
+    c_players = request.form.getlist("player[]", int)
+
+    try:
+        # flash('TeamID: {} add successfully'.format(team_id), 'success')
+        return redirect(url_for('backend.teams'))
+    except Exception as e:
+        flash('An error occurred: {}'.format(e.args), 'danger')
+        return redirect(url_for('backend.teams'))
+
+
+@backend.route('/team/<team_id>/update', methods=['POST'])
+@login_required
+def team_update(team_id):
+    s_team = db.query_one("SELECT id, full_name, acronym FROM team WHERE id = %s", (team_id))
+    s_leader = db.query_one("SELECT user_id, COUNT(*) AS bool FROM player WHERE team = %s AND leader = 1", (team_id))["user_id"]
+    s_players = json.loads(db.query_one("SELECT JSON_ARRAYAGG(user_id) playsers FROM player WHERE team = %s", (team_id))["playsers"])
+    c_team = dict(
+        id=int(team_id),
+        full_name=request.form.get('full_name'),
         acronym=request.form.get('acronym')
     )
     c_leader = request.form.get("leader", type=int)
@@ -350,12 +371,11 @@ def team_update(team_id):
                 else: 
                     db.query("DELETE FROM player WHERE team = %s AND user_id = %s", (team_id, player))
 
-        flash('TeamID: {} updated successfully'.format(team_id), 'success')
+        flash('TeamID: {} added successfully'.format(team_id), 'success')
         return redirect(url_for('backend.teams'))
     except Exception as e:
         flash('An error occurred: {}'.format(e.args), 'danger')
         return redirect(url_for('backend.teams'))
-
 
 @backend.route('/team/<id>/delete', methods=['POST'])
 @login_required
@@ -468,16 +488,16 @@ def staff():
                 privileges = int(request.form['privileges'])
                 username = osuapi.get(osuapi.V1Path.get_user, u=user_id)[0]['username']
                 if postype == 'add':
-                    if db.query_one("Select user_id from staff where user_id = %s", (user_id,)) == None:
+                    if db.query_one("Select user_id from staff where user_id = %s", (user_id)) == None:
                         db.query("Insert into staff (user_id, username, group_id, privileges) Values (%s, %s, %s, %s)", (user_id, username, group, privileges))
                     else:
                         db.query("Update staff Set group_id = %s, privileges = %s, username = %s, active = 1 Where user_id = %s", (group, privileges, username, user_id))
                 elif postype == 'update':
                     db.query("Update staff Set group_id = %s, privileges = %s, username = %s Where user_id = %s", (group, privileges, username, user_id))
             elif postype == 'disable':
-                db.query("Update staff Set active = 0 Where user_id = %s", (user_id,))
+                db.query("Update staff Set active = 0 Where user_id = %s", (user_id))
             elif postype == 'enable':
-                db.query("Update staff Set active = 1 Where user_id = %s", (user_id,))
+                db.query("Update staff Set active = 1 Where user_id = %s", (user_id))
         except Exception as e:
             flash(e.args[0], 'danger')
             log.exception(e)
@@ -553,8 +573,8 @@ def mappool_add(round):
         if round_info['pool_publish'] == 1:
             raise Exception('This phase of the pool has been announced and cannot be changed!')
 
-        modcount = db.query_one('SELECT mods, COUNT(*) AS `count` FROM mappool WHERE round_id = 1 and mods = %s', (group,)) # Take the group count
-        mods = db.query_one("SELECT enabled_mods FROM map_group WHERE name = %s", (group,))
+        modcount = db.query_one('SELECT mods, COUNT(*) AS `count` FROM mappool WHERE round_id = 1 and mods = %s', (group)) # Take the group count
+        mods = db.query_one("SELECT enabled_mods FROM map_group WHERE name = %s", (group))
         # Judging whether it will change the difficulty MODS
         if mods['enabled_mods'] in ('TB', 'FM'):
             request_mods = 0
