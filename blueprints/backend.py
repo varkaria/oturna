@@ -506,11 +506,25 @@ def settings():
     return render_template('manager/settings.html', settings=db.query_one('select * from backend where id = 1'))
 
 # view
-@backend.route('/mappool/', defaults={'round_id': '1'})
+@backend.route('/mappool/')
+@login_required
+@need_privilege(Staff.MAPPOOLER)
+def mappool_getid():
+    round = db.query("SELECT id FROM round")
+    round_id = round['id']
+
+    return redirect(f'/manager/mappool/{round_id}')
+
 @backend.route('/mappool/<round_id>')
 @login_required
 @need_privilege(Staff.MAPPOOLER)
 def mappool(round_id):
+    round = db.query("SELECT id FROM round where id = %s", (round_id))
+    if round:
+        round_id = round_id
+    else:
+        roundfirst = db.query("SELECT id FROM round")
+
     mappool = db.query("SELECT JSON_ARRAYAGG(json) json FROM json_mappool WHERE round_id = %s GROUP BY round_id", round_id)
     
     sortorder={"FM":0, "HD":1, "HR":2, "DT":3, "NM":5, "Roll":6, "EZ":7, "FL":8, "TB":9}
@@ -535,7 +549,7 @@ def mappool_add(round):
         poster = int(session['id'])          # Nominator ID
 
         # SQL's message
-        round_info = db.query_one('select * from round where id = %s', (round,)) # Round information
+        round_info = db.query_one('select * from round where id = %s', (round)) # Round information
         if round_info['pool_publish'] == 1:
             raise Exception('This phase of the pool has been announced and cannot be changed!')
 
