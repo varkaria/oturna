@@ -7,7 +7,7 @@ stream = Blueprint('stream', __name__)
 
 @stream.route('/')
 def showlist():
-    return render_template('stream/showlist.html')
+    return render_template('stream/stream_list.html')
 
 @stream.route('/bg')
 def index():
