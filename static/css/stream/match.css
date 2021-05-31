@@ -1,0 +1,16 @@
+body {
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+   width: 1366;
+   height: 768;
+   position: absolute;
+}
+
+section {
+   position: absolute;
+   width: 1366px;
+   height: 768px;
+   overflow: hidden;
+   background: url(/static/img/stream/match.svg)
+}
