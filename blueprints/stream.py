@@ -8,16 +8,14 @@ stream = Blueprint('stream', __name__)
 @stream.route('/bg')
 def index():
     songpos = request.args.get('songpos')
-    title = request.args.get('t')
-    subtitle = request.args.get('s')
 
-    if title:
-        title = title
+    if request.args.get('t'):
+        title = request.args.get('t')
     else:
         title = ''
-    
-    if subtitle:
-        subtitle = subtitle
+
+    if request.args.get('s'):
+        subtitle = request.args.get('s')
     else:
         subtitle = ''
 
