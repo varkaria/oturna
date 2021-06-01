@@ -81,14 +81,17 @@ def strdtf(str_dt: str, sep='T', timespec='auto'):
 
 @app.template_filter('flag_url')
 def flag_url(flag_name: str):
-    flag_name = flag_name.split('.')
-    if flag_name[0] == 'avatar':
-        return f'https://a.ppy.sh/{flag_name[1]}'
-    elif flag_name[0] == 'local':
-        return f'/team_flag/{flag_name[1]}'
-    elif flag_name[0] == 'url':
-        return flag_name[1]
-    elif flag_name[0] == 'none':
+    if flag_name:
+        flag_name = flag_name.split('.')
+        if flag_name[0] == 'avatar':
+            return f'https://a.ppy.sh/{flag_name[1]}'
+        elif flag_name[0] == 'local':
+            return f'/team_flag/{flag_name[1]}'
+        elif flag_name[0] == 'url':
+            return flag_name[1]
+        elif flag_name[0] == 'none':
+            return ''
+    else:
         return ''
 
 @app.template_filter('privilege')
