@@ -1,0 +1,16 @@
+{% extends '/stream/base.html' %}
+{% block title %}Lists{% endblock %}
+{% block content %}
+<style>
+    ul li {
+        margin: 0 0 10px 0;
+        font-size: large;
+    }
+</style>
+<ul>
+    <li><a href="/stream/greeting_cm">greeting_commentator</a></li>
+    <li><a href="/stream/greeting_host">greeting_host</a></li>
+    <li><a href="/stream/showcase">showcase</a></li>
+    <li><a href="/stream/match">match</a></li>
+</ul>
+{% endblock %}

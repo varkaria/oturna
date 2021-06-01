@@ -5,6 +5,10 @@ from objects import mysql
 db = mysql.DB()
 stream = Blueprint('stream', __name__)
 
+@stream.route('/')
+def showlist():
+    return render_template('stream/stream_list.html')
+
 @stream.route('/bg')
 def background():
     songpos = request.args.get('songpos')
