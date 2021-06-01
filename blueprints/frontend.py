@@ -1,6 +1,7 @@
-from flask import Blueprint, jsonify, request, render_template
+from flask import Blueprint, jsonify, request, render_template, send_file
 from objects import mysql
 import markdown2
+import os
 
 db = mysql.DB()
 frontend = Blueprint('frontend', __name__)
@@ -47,3 +48,14 @@ def mappools(pool_id=db.current_round['id']):
 @frontend.route('/staff/')
 def staff():
     return render_template('staff.html', staff=db.get_staff())
+
+@frontend.route("/team_flag/<int:uid>")
+def serveAvatar(uid):
+    # Check if avatar exists
+    if os.path.isfile("{}/{}.jpg".format('.data/team_pics', uid)):
+        avatarid = uid
+    else:
+        avatarid = -1
+
+    # Serve actual avatar or default one
+    return send_file("{}/{}.jpg".format('.data/team_pics', avatarid))

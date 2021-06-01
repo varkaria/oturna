@@ -85,9 +85,11 @@ def flag_url(flag_name: str):
     if flag_name[0] == 'avatar':
         return f'https://a.ppy.sh/{flag_name[1]}'
     elif flag_name[0] == 'local':
-        return f'/static/teams/flags/{flag_name[1]}'
+        return f'/team_flag/{flag_name[1]}'
     elif flag_name[0] == 'url':
         return flag_name[1]
+    elif flag_name[0] == 'none':
+        return ''
 
 @app.template_filter('privilege')
 def privilege(num):

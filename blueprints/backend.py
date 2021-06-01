@@ -7,6 +7,7 @@ from objects.flag import Staff, Mods
 from rich.console import Console
 from functools import wraps
 from objects import osuapi, mysql
+from PIL import Image
 import json, re, requests
 
 backend = Blueprint('backend', __name__)
@@ -333,8 +334,20 @@ def team_add():
         return redirect(url_for('backend.teams'))
 
     try:
-        db.query(f"INSERT INTO `tourney`.`team` (`full_name`, `flag_name`, `acronym`) VALUES ('{c_team['full_name']}', 'avatar.4', '{c_team['acronym']}')")
+        db.query(f"INSERT INTO `tourney`.`team` (`full_name`, `acronym`) VALUES ('{c_team['full_name']}', '{c_team['acronym']}')")
         res = db.query("SELECT LAST_INSERT_ID() AS id FROM team LIMIT 1")
+        c_id = res['id']
+
+        if c_flag:
+            img = Image.open(c_flag)
+            width, height = img.size
+            if width != 512 and height != 512:
+                new_image = img.resize((512, 512))
+                export = new_image.convert('RGB')
+                export.save(f".data/team_pics/{c_id}.jpg")
+            db.query(f"UPDATE `tourney`.`team` SET `flag_name`='local.{c_id}' WHERE `id`={c_id}")
+        else:
+            db.query(f"UPDATE `tourney`.`team` SET `flag_name`='none.0' WHERE `id`={c_id}")
 
         for player in c_players:
             args = {'k': Config.OSU_API_KEY, 'u': player}
@@ -343,9 +356,9 @@ def team_add():
             leader = 1 if c_leader == player_info["user_id"] else 0
             db.query(
                 "INSERT INTO player (user_id, username, team, info, bp1, leader) VALUES (%s, %s, %s, %s, %s, %s)",
-                (player_info["user_id"], player_info["username"], res['id'], json.dumps(player_info), json.dumps(player_bp1), leader))
+                (player_info["user_id"], player_info["username"], c_id, json.dumps(player_info), json.dumps(player_bp1), leader))
 
-        flash('TeamID: {} add successfully'.format(res['id']), 'success')
+        flash('TeamID: {} add successfully'.format(c_id), 'success')
         return redirect(url_for('backend.teams'))
     except Exception as e:
         flash('An error occurred: {}'.format(e.args), 'danger')
