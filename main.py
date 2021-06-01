@@ -30,6 +30,8 @@ from blueprints.api import api
 app.register_blueprint(api, url_prefix='/api')
 from blueprints.frontend import frontend
 app.register_blueprint(frontend, url_prefix='/')
+from blueprints.pickban import pickban
+app.register_blueprint(pickban, url_prefix='/pickban')
 
 app.json_encoder = CustomJSONEncoder
 
