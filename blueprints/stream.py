@@ -6,7 +6,7 @@ db = mysql.DB()
 stream = Blueprint('stream', __name__)
 
 @stream.route('/bg')
-def index():
+def background():
     songpos = request.args.get('songpos')
 
     if request.args.get('t'):

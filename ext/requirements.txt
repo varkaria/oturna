@@ -18,3 +18,4 @@ cffi==1.14.5
 cryptography==3.4.7 
 pycparser==2.20
 markdown2
+Pillow

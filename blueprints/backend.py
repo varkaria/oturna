@@ -78,6 +78,9 @@ def check_privilege(id, privilege: Staff):
     user_privilege = Staff(user['privileges'])
     return bool(privilege in user_privilege)
 
+def log_activity(s_id:int,type,log):
+    ...
+
 @backend.route('/base')
 def base():
     return render_template('/manager/base.html')
@@ -121,7 +124,7 @@ def callback():
 @backend.route('/logout')
 def logout():
     session.clear()
-    return redirect(url_for('index'))
+    return redirect(url_for('frontend.index'))
 
 @backend.route('/planning/')
 @login_required
@@ -322,7 +325,7 @@ def team_add():
     c_flag = request.files['a_flag_name']
 
     if not c_leader:
-        flash('Player leader did not checked it', 'danger')
+        flash('Player leader did not checked', 'danger')
         return redirect(url_for('backend.teams'))
 
     if c_flag.filename == '':
@@ -604,7 +607,7 @@ def mappool_add(round):
             request_mods = 0
 
         # API's message
-        beatmap = osuapi.get(osuapi.V1Path.get_beatmaps, b=request.form['id'], m=0, mods=request_mods)[0]
+        beatmap = osuapi.get(osuapi.V1Path.get_beatmaps, b=request.form['id'], mods=request_mods)[0]
         # Convert the API's data into the correct type
         for k in beatmap:
             beatmap[k] = osuapi.todata(beatmap[k])
