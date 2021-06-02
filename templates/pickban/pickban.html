@@ -1,18 +1,94 @@
+<!--        1.Make 2nd block after 1st block click stroke start fading
+            2.Make mappool section - ALMOST DONE
+            3. Tweak up design
+            4.Pull pfp from database - How
+-->
+
 {% extends '/pickban/base.html' %}
 {% block title %}Pick & Ban{% endblock %}
 {% block header %}
 <link rel="stylesheet" href="/static/css/pickban/style.css">
-<link rel="preconnect" href="https://fonts.gstatic.com">
-<link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
-<link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
 {% endblock %}
 {% block content %}
-<header class="mx-auto">
-    <div class="flex flex-col h-16 justify-center items-center round-text">
-        <h1 class="text-3xl text-white">Pick & Ban</h1>
+<style>
+    a {
+      font-family: 'Quicksand';
+    }
+</style>
+<nav class="mx-auto px-8">
+    <div class="flex h-14 justify-between items-center">
+        <div class="flex-row justify-start text-white text-3xl">
+            <a href="/pickban">Pick & Ban</a>
+        </div>
+        <div class="flex-row justify-end text-white text-3xl">
+            <a href="/">{{ match_id }} | {{ team1 }} vs {{ team2 }}</a>
+        </div>
     </div>
-</header>
-<div class="flex flex-col items-center justify-center p-8 round-text in-and-out">
-    <h1 class="text-4xl text-white">Team {{ team_name }} {{ state }}</h1> <!-- EX: Team {{ name }} {{ state }} -->
-</div>
+</nav>
+<section id="pickban" class="px-10 py-10">
+    <div class="flex flex-col space-y-8">
+        <div id="team1" class="flex flex-row justify-start">
+            <div id="container-pic" class="m-10 pr-10">
+                <img src="/static/img/pickban/test.svg" height="120" width="120" alt="" srcset="">
+            </div>
+            <div id="ban1" class="pt-3 pl-10"> <!--BAN1-->
+                <img id="banimg-1" src="/static/img/pickban/pickban-square.svg" height="150" width="120">
+            </div>
+            <div id="pick2" class="pt-3"> <!--PICK2-->
+                <img id="pickimg-2" src="/static/img/pickban/pickban-square.svg" height="150" width="120">
+            </div>
+            <div id="ban4" class="pt-3"> <!--BAN4-->
+                <img id="banimg-4" src="/static/img/pickban/pickban-square.svg" height="150" width="120">
+            </div>
+            <div id="pick3" class="pt-3"> <!--PICK3-->
+                <img id="pickimg-3" src="/static/img/pickban/pickban-square.svg" height="150" width="120">
+            </div>
+        </div>
+        <div id="team2" class="flex flex-row justify-start">
+            <div id="container-pic" class="m-10 pr-10">
+                <img src="/static/img/pickban/test.svg" height="120" width="120" alt="" srcset="">
+            </div>
+            <div id="ban2" class="pt-3"> <!--BAN2-->
+                <img id="banimg-2" src="/static/img/pickban/pickban-square.svg" height="150" width="120">
+            </div>
+            <div id="pick1" class="pt-3"> <!--PICK1-->
+                <img id="pickimg-1" src="/static/img/pickban/pickban-square.svg" height="150" width="120">
+            </div>
+            <div id="ban3" class="pt-3"> <!--BAN3-->
+                <img id="banimg-3" src="/static/img/pickban/pickban-square.svg" height="150" width="120">
+            </div>
+            <div id="pick4" class="pt-3"> <!--PICK4-->
+                <img id="pickimg-4" src="/static/img/pickban/pickban-square.svg" height="150" width="120">
+            </div>
+        </div>
+        <div class="flex justify-center items-center">
+            <h1 class="text-3xl text-white" style="font-family: 'Quicksand';">Team {{ team_choose }} {{ state }}</h1>
+        </div>
+    </div>
+</section>
+<section id="mappool" class="h-screen mx-auto pt-8 pr-20 pl-20">
+    <div class="row mb-2 pt-3">
+        {% for mod in mappool.mappool %}
+        <div class="col-12">
+            <div class="row px-2 justify-content-center">
+                {% for map in mappool.mappool[mod] %}
+                <div class="col-lg-6 p-5 pt-0 pb-5">
+                    <div class="card bg-dark map-card text-start" style="background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(https://assets.ppy.sh/beatmaps/{{map.info.beatmapset_id}}/covers/cover.jpg);">
+                        <a class="text-light" href="https://osu.ppy.sh/b/{{map.beatmap_id}}" target="_blank">
+                            <div class="card-img-overlay dark-background">
+                                <img class="mod-icon" src="/static/img/mods/{{mod}}.png">
+                                <div class="text-truncate">
+                                    <h4 class="card-title fw-bold">{{map.info.title}} [{{map.info.version}}]</h5>
+                                    <p class="card-text">{{map.info.artist}} || MAPPER: {{map.info.creator}}</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
 {% endblock %}
