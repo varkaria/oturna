@@ -21,7 +21,8 @@
             <a href="/pickban">Pick & Ban</a>
         </div>
         <div class="flex-row justify-end text-white text-3xl">
-            <a href="/">{{ match_id }} | {{ team1 }} vs {{ team2 }}</a>
+            <a href="/" class="pr-40">{{ match_id }} | {{ team1 }} vs {{ team2 }}</a>
+            <a href="/" class="absolute text-xl right-16 top-4">Gusbell <img src="/static/img/pickban/test.svg" class="absolute top-0 left-20" height="30" width="30" alt="" srcset=""></a>
         </div>
     </div>
 </nav>
@@ -32,16 +33,16 @@
                 <img src="/static/img/pickban/test.svg" height="120" width="120" alt="" srcset="">
             </div>
             <div id="ban1" class="pt-3 pl-10"> <!--BAN1-->
-                <img id="banimg-1" src="/static/img/pickban/pickban-square.svg" height="150" width="120">
+                <button id="ban-1"><img id="banimg-1" src="/static/img/pickban/pickban-square.svg" height="150" width="120"></button>
             </div>
             <div id="pick2" class="pt-3"> <!--PICK2-->
-                <img id="pickimg-2" src="/static/img/pickban/pickban-square.svg" height="150" width="120">
+                <button id="pick-2"><img id="pickimg-2" src="/static/img/pickban/pickban-square.svg" height="150" width="120"></button>
             </div>
             <div id="ban4" class="pt-3"> <!--BAN4-->
-                <img id="banimg-4" src="/static/img/pickban/pickban-square.svg" height="150" width="120">
+                <button id="ban-4"><img id="banimg-4" src="/static/img/pickban/pickban-square.svg" height="150" width="120"></button>
             </div>
             <div id="pick3" class="pt-3"> <!--PICK3-->
-                <img id="pickimg-3" src="/static/img/pickban/pickban-square.svg" height="150" width="120">
+                <button id="pick-3"><img id="pickimg-3" src="/static/img/pickban/pickban-square.svg" height="150" width="120"></button>
             </div>
         </div>
         <div id="team2" class="flex flex-row justify-start">
@@ -49,16 +50,16 @@
                 <img src="/static/img/pickban/test.svg" height="120" width="120" alt="" srcset="">
             </div>
             <div id="ban2" class="pt-3"> <!--BAN2-->
-                <img id="banimg-2" src="/static/img/pickban/pickban-square.svg" height="150" width="120">
+                <button id="ban-2"><img id="banimg-2" src="/static/img/pickban/pickban-square.svg" height="150" width="120"></button>
             </div>
             <div id="pick1" class="pt-3"> <!--PICK1-->
-                <img id="pickimg-1" src="/static/img/pickban/pickban-square.svg" height="150" width="120">
+                <button id="pick-1"><img id="pickimg-1" src="/static/img/pickban/pickban-square.svg" height="150" width="120"></button>
             </div>
             <div id="ban3" class="pt-3"> <!--BAN3-->
-                <img id="banimg-3" src="/static/img/pickban/pickban-square.svg" height="150" width="120">
+                <button id="ban-3"><img id="banimg-3" src="/static/img/pickban/pickban-square.svg" height="150" width="120"></button>
             </div>
             <div id="pick4" class="pt-3"> <!--PICK4-->
-                <img id="pickimg-4" src="/static/img/pickban/pickban-square.svg" height="150" width="120">
+                <button id="pick-4"><img id="pickimg-4" src="/static/img/pickban/pickban-square.svg" height="150" width="120"></button>
             </div>
         </div>
         <div class="flex justify-center items-center">
@@ -73,16 +74,16 @@
             <div class="row px-2 justify-content-center">
                 {% for map in mappool.mappool[mod] %}
                 <div class="col-lg-6 p-5 pt-0 pb-5">
-                    <div class="card bg-dark map-card text-start" style="background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(https://assets.ppy.sh/beatmaps/{{map.info.beatmapset_id}}/covers/cover.jpg);">
-                        <a class="text-light" href="https://osu.ppy.sh/b/{{map.beatmap_id}}" target="_blank">
+                    <div id="mapsel" class="card bg-dark map-card text-start" style="background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(https://assets.ppy.sh/beatmaps/{{map.info.beatmapset_id}}/covers/cover.jpg);">
+                        <button class="text-light">
                             <div class="card-img-overlay dark-background">
                                 <img class="mod-icon" src="/static/img/mods/{{mod}}.png">
                                 <div class="text-truncate">
                                     <h4 class="card-title fw-bold">{{map.info.title}} [{{map.info.version}}]</h5>
-                                    <p class="card-text">{{map.info.artist}} || MAPPER: {{map.info.creator}}</p>
+                                    <p class="card-text">{{map.info.artist}} || Mapper: {{map.info.creator}}</p>
                                 </div>
                             </div>
-                        </a>
+                        <button>
                     </div>
                 </div>
                 {% endfor %}
@@ -91,4 +92,41 @@
         {% endfor %}
     </div>
 </section>
+
+<script>
+$(document).ready(function () {
+    $('#ban1').click(function () {
+        $('#banimg-1').css('animation-name', 'ban-still')
+        $('#banimg-2').css('animation-name', 'stroke-fade-ban').css('animation-duration', '1s').css('animation-iteration-count', 'infinite').css('animation-direction', 'alternate')
+    });
+    $('#ban2').click(function () {
+        $('#banimg-2').css('animation-name', 'ban-still')
+        $('#pickimg-1').css('animation-name', 'stroke-fade-pick').css('animation-duration', '1s').css('animation-iteration-count', 'infinite').css('animation-direction', 'alternate')
+    });
+    $('#pick1').click(function () {
+        $('#pickimg-1').css('animation-name', 'pick-still')
+        $('#pickimg-2').css('animation-name', 'stroke-fade-pick').css('animation-duration', '1s').css('animation-iteration-count', 'infinite').css('animation-direction', 'alternate')
+    });
+    $('#pick2').click(function () {
+        $('#pickimg-2').css('animation-name', 'pick-still')
+        $('#banimg-3').css('animation-name', 'stroke-fade-ban').css('animation-duration', '1s').css('animation-iteration-count', 'infinite').css('animation-direction', 'alternate')
+    });
+    $('#ban3').click(function () {
+        $('#banimg-3').css('animation-name', 'ban-still')
+        $('#banimg-4').css('animation-name', 'stroke-fade-ban').css('animation-duration', '1s').css('animation-iteration-count', 'infinite').css('animation-direction', 'alternate')
+    });
+    $('#ban4').click(function () {
+        $('#banimg-4').css('animation-name', 'ban-still')
+        $('#pickimg-3').css('animation-name', 'stroke-fade-pick').css('animation-duration', '1s').css('animation-iteration-count', 'infinite').css('animation-direction', 'alternate')   
+    });
+    $('#pick3').click(function () {
+        $('#pickimg-3').css('animation-name', 'pick-still')
+        $('#pickimg-4').css('animation-name', 'stroke-fade-pick').css('animation-duration', '1s').css('animation-iteration-count', 'infinite').css('animation-direction', 'alternate')   
+    });
+    $('#pick4').click(function () {
+        $('#pickimg-4').css('animation-name', 'pick-still')
+    });
+});
+</script> 
+
 {% endblock %}
