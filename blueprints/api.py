@@ -44,7 +44,7 @@ def show_data(table_name):
 @api.route('/data/<table_name>/<id>')
 @login_required
 def getdata(table_name:str, id:str):
-    if table_name in ('game', 'group', 'map_group', 'mappool', 'match', 'player', 'round', 'staff', 'team', 'tourney', 'view_staff'):
+    if table_name in ('group', 'map_group', 'mappool', 'match', 'player', 'round', 'staff', 'team', 'tourney', 'view_staff'):
         if id.isdigit():
             return jsonify(data=db.query_one('select * from `%s` where id = %s limit 1' % (table_name, id)))
         elif id == '*':

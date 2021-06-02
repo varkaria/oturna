@@ -49,31 +49,28 @@ class DB(object):
         self.connect.close()
 
     def get_mappool(self, round_id, ingore_pool_publish=False, format=True):
-        mappool = {}
         round = self.query_one(f"SELECT * FROM round WHERE id = {round_id}")
         pooldata = self.query_all(f"SELECT m.*, mg.hex_color, s.user_id, s.username FROM mappool AS m LEFT JOIN staff AS s ON s.id=m.nominator LEFT JOIN map_group AS mg ON mg.name=m.mods WHERE round_id = {round_id} ORDER BY FIELD(`mods`, 'FM', 'NM', 'HD', 'HR', 'DT', 'Roll', 'EZ', 'TB'), code")
         if round['pool_publish'] or ingore_pool_publish:
-            if format:
-                for map in pooldata:
-                    map['info'] = json.loads(map['info'])
-                for map in pooldata:
-                    if map['mods'] not in mappool.keys():
-                        mappool[map['mods']] = []
-                    mappool[map['mods']].append(map)
-                return {
-                    'round_id': int(round_id),
-                    'mappool': mappool
-                    }
-            else:
-                for map in pooldata:
-                    map['info'] = json.loads(map['info'])
+            for map in pooldata:
+                map['info'] = json.loads(map['info'])
+            if not format:
                 return pooldata
+
+            mappool = {}
+            for map in pooldata:
+                if map['mods'] not in mappool.keys():
+                    mappool[map['mods']] = []
+                mappool[map['mods']].append(map)
+            return {
+                'round_id': int(round_id),
+                'mappool': mappool
+                }
        
 
     @property
     def active_rounds(self):
-        rounds = self.query_all("SELECT * FROM round WHERE start_date < NOW()")
-        return rounds
+        return self.query_all("SELECT * FROM round WHERE start_date < NOW()")
 
     @property
     def current_round(self):
@@ -137,14 +134,10 @@ class DB(object):
             """
         if round_id or id:
             query_text += " WHERE "
-            if round_id: query_text += "m.round_id = %s " % round_id
-            if id: query_text += "m.id = %d " % id
-        matchs = []
+        if round_id: query_text += "m.round_id = %s " % round_id
+        if id: query_text += "m.id = %d " % id
         query = self.query_all(query_text)
-        for m in query:
-            matchs.append(json.loads(m['json']))
-
-        return matchs
+        return [json.loads(m['json']) for m in query]
 
     def get_staff(self, staff_id=None, user_id=None, format=True, viewall=False):
         if user_id:
@@ -158,12 +151,11 @@ class DB(object):
         va = 'WHERE s.active = 1 ORDER BY s.active, s.id' if not viewall else 'ORDER BY s.id'
 
         query = self.query_all('SELECT s.id, s.user_id, s.username, s.privileges, s.active, g.* FROM staff s INNER JOIN `group` g ON g.id = s.group_id ' + va)
-        if format:
-            staff = {}
-            for s in query:
-                if s['th_name'] not in staff.keys():
-                    staff[s['th_name']] = []
-                staff[s['th_name']].append(s)
-            return staff
-        else:
+        if not format:
             return query
+        staff = {}
+        for s in query:
+            if s['th_name'] not in staff.keys():
+                staff[s['th_name']] = []
+            staff[s['th_name']].append(s)
+        return staff
