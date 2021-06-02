@@ -1,31 +1,128 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500&display=swap');
+
 html {
     margin: 0;
     padding: 0;
     height: 100%;
     width: 100%;
     background-color: rgb(44, 45, 44);
+    overflow-x: hidden;
 }
 
-header {
+nav {
     background-color: rgb(38, 38, 38);
 }
 
-.round-text {
-    font-family: 'Varela Round', sans-serif;
+#mappool {
+    background-color: rgb(38, 38, 38);
 }
 
-.in-and-out {
-    animation-name: fade-in-out;
+#pick1, #pick3 {
+    padding-left: 100px;
+}
+
+#pick2, #pick4 {
+    padding-left: 450px;
+}
+
+#ban2 {
+    padding-left: 200px;
+}
+
+#ban3, #ban4 {
+    padding-left: 250px;
+}
+
+@media only screen and (max-width: 1400px) {
+
+    #pick1, #pick3 {
+    padding-left: 50px;
+    }
+    
+    #pick2, #pick4 {
+        padding-left: 50px;
+    }
+
+    #ban2 {
+        padding-left: 50px;
+    }
+
+    #ban3, #ban4 {
+        padding-left: 50px;
+    }
+}
+
+#pickimg-1, #pickimg-2, #pickimg-3, #pickimg-4, #banimg-1, #banimg-2, #banimg-3, #banimg-4 {
+    border-radius: 20px;
+}
+
+#pickanim {
+    animation-name: stroke-fade-pick;
     animation-duration: 1s;
     animation-iteration-count: infinite;
     animation-direction: alternate;
 }
 
-@keyframes fade-in-out {
+@keyframes pick-still {
     0% {
-        opacity: 0;
+        border: 5px solid rgb(56, 65, 180);
     }
     100% {
-        opacity: 1;
+        border: 5px solid rgb(56, 65, 180);
     }
+}
+
+@keyframes stroke-fade-pick {
+    0% {
+        border: 5px solid rgb(56, 65, 180, 0); 
+    }
+    100% {
+        border: 5px solid rgb(56, 65, 180);
+    }
+}
+
+#banimg-1 {
+    animation-name: stroke-fade-ban;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+@keyframes ban-still {
+    0% {
+        border: 5px solid rgb(172, 33, 33);
+    }
+    100% {
+        border: 5px solid rgb(172, 33, 33);
+    }
+}
+
+@keyframes stroke-fade-ban {
+    0% {
+        border: 5px solid rgb(172, 33, 33, 0); 
+    }
+    100% {
+        border: 5px solid rgb(172, 33, 33);
+    }
+}
+
+.map-card {
+    background-position: center !important;
+    background-size: cover !important;
+    height: 90px !important;
+    border: 0px;
+    user-select: none;
+}
+
+
+.mod-icon {
+    position: absolute;
+    pointer-events: none;
+    right: 10px;
+    width: 60px;
+    height: 60px;
+}
+
+.card {
+    background: linear-gradient( rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7))
 }
