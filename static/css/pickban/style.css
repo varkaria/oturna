@@ -17,7 +17,7 @@ nav {
     background-color: rgb(38, 38, 38);
 }
 
-@media only screen and (min-width: 0px) {
+@media only screen and (max-width: 1640px) {
 
     #pick1, #pick3 {
     padding-left: 50px;
@@ -36,7 +36,7 @@ nav {
     }
 }
 
-@media only screen and (min-width: 1600px) {
+@media only screen and (min-width: 1660px) {
 
     #pick1, #pick3 {
     padding-left: 100px;
