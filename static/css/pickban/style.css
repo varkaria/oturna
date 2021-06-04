@@ -17,7 +17,7 @@ nav {
     background-color: rgb(38, 38, 38);
 }
 
-@media only screen and (max-width: 1619px) {
+@media only screen and (max-width: 1819px) {
 
     #pick1, #pick3 {
     padding-left: 50px;
@@ -33,25 +33,6 @@ nav {
 
     #ban3, #ban4 {
         padding-left: 50px;
-    }
-}
-
-@media only screen and (min-width: 1620px) {
-
-    #pick1, #pick3 {
-    padding-left: 80px;
-    }
-    
-    #pick2, #pick4 {
-        padding-left: 230px;
-    }
-
-    #ban2 {
-        padding-left: 120px;
-    }
-
-    #ban3, #ban4 {
-        padding-left: 120px;
     }
 }
 
