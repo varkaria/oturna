@@ -1,12 +1,12 @@
 from config import Config
 from objects.flag import Staff
 from flask.json import JSONEncoder
-from flask import Flask, send_from_directory, session
+from flask import Flask, send_from_directory, session, redirect, url_for, request
 from flask_socketio import SocketIO, send, emit
 from datetime import datetime
+from functools import wraps
 from objects import osuapi, mysql
 import re, os
-
 class CustomJSONEncoder(JSONEncoder):
     def default(self, obj):
         try:
@@ -19,38 +19,38 @@ class CustomJSONEncoder(JSONEncoder):
             return list(iterable)
         return JSONEncoder.default(self, obj)
 
-sql = mysql.DB()
+db = mysql.DB()
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_object(Config)
 socketio = SocketIO(app)
 
 @socketio.on('firstdata')
 def handle_data(d):
-    emit('data_result', sql.get_match_ban_pick())
+    emit('data_result', db.get_match_ban_pick())
 
 @socketio.on('pickban')
 def handle_data(d):
     if not session:
         return emit('new_result', 'You are not login yet?')
-    t_data = sql.query('SELECT team as id FROM player WHERE user_id=%s', session['user_id'])
-    sql.query('INSERT INTO match_sets_banpick (`set_id`, `map_id`, `from`, `type`) VALUES (%s, %s, %s, %s);', [d['set'], d['map'], t_data['id'], d['type']])
-    emit('new_result', sql.get_match_ban_pick(), broadcast=True)
+    t_data = db.query('SELECT team as id FROM player WHERE user_id=%s', session['user_id'])
+    db.query('INSERT INTO match_sets_banpick (`set_id`, `map_id`, `from`, `type`) VALUES (%s, %s, %s, %s);', [d['set'], d['map'], t_data['id'], d['type']])
+    emit('new_result', db.get_match_ban_pick(), broadcast=True)
 
 @socketio.on('ready')
 def handle_data(d):
     if not session:
         return emit('new_result', 'You are not login yet?')
-    emit('new_result', sql.get_match_ban_pick(), broadcast=True)
+    emit('new_result', db.get_match_ban_pick(), broadcast=True)
 
 @socketio.on('disconnect')
 def handle_dis():
-    sql.query("UPDATE `tourney`.`player` SET `online`='0' WHERE  `user_id`=%s;", session['user_id'])
-    emit('new_result', sql.get_match_ban_pick(), broadcast=True)
+    db.query("UPDATE `tourney`.`player` SET `online`='0' WHERE  `user_id`=%s;", session['user_id'])
+    emit('new_result', db.get_match_ban_pick(), broadcast=True)
 
 @socketio.on('connect')
 def handle_dis():
-    sql.query("UPDATE `tourney`.`player` SET `online`='1' WHERE  `user_id`=%s;", session['user_id'])
-    emit('new_result', sql.get_match_ban_pick(), broadcast=True)
+    db.query("UPDATE `tourney`.`player` SET `online`='1' WHERE  `user_id`=%s;", session['user_id'])
+    emit('new_result', db.get_match_ban_pick(), broadcast=True)
 
 from blueprints.stream import stream
 app.register_blueprint(stream, url_prefix='/stream')
@@ -64,25 +64,57 @@ from blueprints.pickban import pickban
 app.register_blueprint(pickban, url_prefix='/pickban')
 app.json_encoder = CustomJSONEncoder
 
+def let_login(user):
+    session.clear()
+    session.permanent = True
+    session['id'] = user['id']
+    session['user_id'] = user['user_id']
+    session['username'] = user['username']
+
+@app.route('/login')
+def callback():
+    if request.args.get('code'):
+        u = osuapi.get_token(request.args['code'])
+        try:
+            next_url = request.args.get('state').split('->')
+            user = osuapi.get2(u['access_token'], me='')
+            print(next_url)
+            player = db.query('SELECT user_id from player WHERE `user_id`=%s', [user['id']])
+            staff = db.get_staff(user_id=user['id'])
+            if staff:
+                let_login(staff)
+                print('Someone Logged to This Website With Staff Perm')
+                return redirect('http://localhost:5000' + next_url[1])
+            elif player:
+                let_login(player)
+                print('Someone Logged to This Website With Player Perm')
+                return redirect('http://localhost:5000' + next_url[1])
+            else:
+                return redirect('http://localhost:5000')
+        except Exception as e:
+            print(e)
+    return redirect('http://localhost:5000')
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect('http://localhost:5000')
+
 @app.route('/favicon.ico')
 def faviconico():
     return send_from_directory(os.path.join(app.root_path, 'static'), 'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 @app.context_processor
 def rounds():
-    return dict(active_rounds=sql.active_rounds)
+    return dict(active_rounds=db.active_rounds)
 
 @app.context_processor
 def current_round():
-    return dict(current_round=sql.current_round)
+    return dict(current_round=db.current_round)
 
 @app.context_processor
 def tourney_info():
-    return dict(tourney=sql.tourney)
-
-@app.context_processor
-def authorize():
-    return dict(authorize=osuapi.authorize('login','identify'))
+    return dict(tourney=db.tourney)
 
 @app.template_filter('num')
 def num_filter(num):
