@@ -45,6 +45,17 @@ def get_token(code):
         return None
     return r.json()
 
+def get_token_bp(code):
+    url = "https://osu.ppy.sh/oauth/token"
+
+    payload = f'grant_type=authorization_code&client_id=7662&client_secret=RkLV0MCuoD2cdaVtw6s0TWUT0VW2TZWNFZ4otPUW&redirect_uri=http://localhost:5000/pickban/callback&code={code}'
+    headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+
+    r = requests.post(url, headers=headers, data=payload)
+    if r.status_code == 400:
+        return None
+    return r.json()
+
 def get(path:V1Path, **args):
     args['k'] = API_KEY
     req = requests.get(

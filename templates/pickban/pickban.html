@@ -7,126 +7,236 @@
 {% extends '/pickban/base.html' %}
 {% block title %}Pick & Ban{% endblock %}
 {% block header %}
-<link rel="stylesheet" href="/static/css/pickban/style.css">
 {% endblock %}
 {% block content %}
-<style>
-    a {
-      font-family: 'Quicksand';
-    }
-</style>
-<nav class="mx-auto px-8">
-    <div class="flex h-14 justify-between items-center">
-        <div class="flex-row justify-start text-white text-3xl">
-            <a href="/pickban">Pick & Ban</a>
-        </div>
-        <div class="flex-row justify-end text-white text-3xl">
-            <a href="/" class="pr-40">{{ match_id }} | {{ team1 }} vs {{ team2 }}</a>
-            <a href="/" class="absolute text-xl right-16 top-4">Gusbell <img src="/static/img/pickban/test.svg" class="absolute top-0 left-20" height="30" width="30" alt="" srcset=""></a>
-        </div>
-    </div>
-</nav>
-<section id="pickban" class="px-10 py-10">
-    <div class="flex flex-col space-y-8">
-        <div id="team1" class="flex flex-row justify-start">
-            <div id="container-pic" class="m-10 pr-10">
-                <img src="/static/img/pickban/test.svg" height="120" width="120" alt="" srcset="">
-            </div>
-            <div id="ban1" class="pt-3 pl-10"> <!--BAN1-->
-                <button id="ban-1"><img id="banimg-1" src="/static/img/pickban/pickban-square.svg" height="150" width="120"></button>
-            </div>
-            <div id="pick2" class="pt-3"> <!--PICK2-->
-                <button id="pick-2"><img id="pickimg-2" src="/static/img/pickban/pickban-square.svg" height="150" width="120"></button>
-            </div>
-            <div id="ban4" class="pt-3"> <!--BAN4-->
-                <button id="ban-4"><img id="banimg-4" src="/static/img/pickban/pickban-square.svg" height="150" width="120"></button>
-            </div>
-            <div id="pick3" class="pt-3"> <!--PICK3-->
-                <button id="pick-3"><img id="pickimg-3" src="/static/img/pickban/pickban-square.svg" height="150" width="120"></button>
-            </div>
-        </div>
-        <div id="team2" class="flex flex-row justify-start">
-            <div id="container-pic" class="m-10 pr-10">
-                <img src="/static/img/pickban/test.svg" height="120" width="120" alt="" srcset="">
-            </div>
-            <div id="ban2" class="pt-3"> <!--BAN2-->
-                <button id="ban-2"><img id="banimg-2" src="/static/img/pickban/pickban-square.svg" height="150" width="120"></button>
-            </div>
-            <div id="pick1" class="pt-3"> <!--PICK1-->
-                <button id="pick-1"><img id="pickimg-1" src="/static/img/pickban/pickban-square.svg" height="150" width="120"></button>
-            </div>
-            <div id="ban3" class="pt-3"> <!--BAN3-->
-                <button id="ban-3"><img id="banimg-3" src="/static/img/pickban/pickban-square.svg" height="150" width="120"></button>
-            </div>
-            <div id="pick4" class="pt-3"> <!--PICK4-->
-                <button id="pick-4"><img id="pickimg-4" src="/static/img/pickban/pickban-square.svg" height="150" width="120"></button>
-            </div>
-        </div>
-        <div class="flex justify-center items-center">
-            <h1 class="text-3xl text-white" style="font-family: 'Quicksand';">Team {{ team_choose }} {{ state }}</h1>
-        </div>
-    </div>
-</section>
-<section id="mappool" class="h-screen mx-auto pt-8 pr-20 pl-20">
-    <div class="row mb-2 pt-3">
-        {% for mod in mappool.mappool %}
-        <div class="col-12">
-            <div class="row px-2 justify-content-center">
-                {% for map in mappool.mappool[mod] %}
-                <div class="col-lg-6 p-5 pt-0 pb-5">
-                    <div id="mapsel" class="card bg-dark map-card text-start" style="background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(https://assets.ppy.sh/beatmaps/{{map.info.beatmapset_id}}/covers/cover.jpg);">
-                        <button class="text-light">
-                            <div class="card-img-overlay dark-background">
-                                <img class="mod-icon" src="/static/img/mods/{{mod}}.png">
-                                <div class="text-truncate">
-                                    <h4 class="card-title fw-bold">{{map.info.title}} [{{map.info.version}}]</h5>
-                                    <p class="card-text">{{map.info.artist}} || Mapper: {{map.info.creator}}</p>
+<div id="app">
+    <div class="fixed z-10 inset-0 overflow-y-auto active" v-if='results.team1.online == 0 || results.team2.online == 0'>
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 bg-gray-800 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true"></span>
+            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl 
+            transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <div class="bg-gray-600 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                            <div class="mt-2">
+                                <h1 class="text-center text-white text-xl mb-1 font-semibold">Ban & Pick Will Starting Soon</h1>
+                                <div class="flex">
+                                    <div class="p-8">
+                                        <img :class="'w-1/2 mx-auto mb-4 rounded-full border-2 ' + (results.team1.online == 1 ? 'border-green-600':'border-red-600')"
+                                            :src="'https://a.ppy.sh/' + results.team1.leader_id">
+                                        <h3 class="text-xl mb-1 font-semibold font-heading text-white text-center"><% results.team1.leader_name %></h3>
+                                        <p class="text-sm text-white text-center">Leader of <% results.team1.full_name %></p>
+                                    </div>
+                                    <div class="p-8">
+                                        <img :class="'w-1/2 mx-auto mb-4 rounded-full border-2 ' + (results.team2.online == 1 ? 'border-green-600':'border-red-600')"
+                                        :src="'https://a.ppy.sh/' + results.team2.leader_id">
+                                        <h3 class="text-xl mb-1 font-semibold font-heading text-white text-center"><% results.team2.leader_name %></h3>
+                                        <p class="text-sm text-white text-center">Leader of <% results.team2.full_name %></p>
+                                    </div>
                                 </div>
                             </div>
-                        <button>
+                        </div>
                     </div>
                 </div>
-                {% endfor %}
             </div>
         </div>
-        {% endfor %}
     </div>
-</section>
 
-<script>
-$(document).ready(function () {
-    $('#ban1').click(function () {
-        $('#banimg-1').css('animation-name', 'ban-still')
-        $('#banimg-2').css('animation-name', 'stroke-fade-ban').css('animation-duration', '1s').css('animation-iteration-count', 'infinite').css('animation-direction', 'alternate')
+
+    <nav class="mx-auto px-8">
+        <div class="flex h-14 justify-between items-center">
+            <div class="flex-row justify-start text-white text-3xl">
+                <a href="/pickban">Pick & Ban</a>
+            </div>
+            <div class="flex-row justify-end text-white text-3xl">
+                <div class='flex gap-2 items-center'>
+                    <img src="https://a.ppy.sh/{{ session.user_id }}" class="avatar">
+                    <a href="/" class="text-xl right-16 top-4">{{ session.username }}</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section id="pickban" class="px-10 py-10">
+        <div class="flex flex-col space-y-8">
+            <div id="team1" class="flex flex-row justify-start">
+                <div class="w-1/9 overflow-hidden">
+                    <img src="{{ data.team1.flag_name | flag_url }}" class="avatar-picture">
+                </div>
+                <div class="w-1/9 overflow-hidden">
+                    <div v-if="results.banpicks[0].info != null" class="b-block"
+                        :style="'background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(https://assets.ppy.sh/beatmaps/'+ results.banpicks[0].info.beatmapset_id +'/covers/cover.jpg);'">
+                        <a class="mods">
+                            <% results.banpicks[0].mods %>
+                        </a>
+                    </div>
+                    <div v-else class="b-block"></div>
+                </div>
+
+                <div class="w-1/9 overflow-hidden blank-block">
+                </div>
+
+                <div class="w-1/9 overflow-hidden blank-block">
+                </div>
+
+                <div class="w-1/9 overflow-hidden">
+                    <div v-if="results.banpicks[3]" class="b-block"
+                        :style="'background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(https://assets.ppy.sh/beatmaps/'+ results.banpicks[3].info.beatmapset_id +'/covers/cover.jpg);'">
+                        <a class="mods">
+                            <% results.banpicks[3].mods %>
+                        </a>
+                    </div>
+                    <div v-else class="b-block"></div>
+                </div>
+
+                <div class="w-1/9 overflow-hidden blank-block">
+                </div>
+
+                <div class="w-1/9 overflow-hidden">
+                    <div v-if="results.banpicks[5]" class="b-block"
+                        :style="'background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(https://assets.ppy.sh/beatmaps/'+ results.banpicks[5].info.beatmapset_id +'/covers/cover.jpg);'">
+                        <a class="mods">
+                            <% results.banpicks[5].mods %>
+                        </a>
+                    </div>
+                    <div v-else class="b-block"></div>
+                </div>
+
+                <div class="w-1/9 overflow-hidden">
+                    <div v-if="results.banpicks[6]" class="b-block"
+                        :style="'background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(https://assets.ppy.sh/beatmaps/'+ results.banpicks[6].info.beatmapset_id +'/covers/cover.jpg);'">
+                        <a class="mods">
+                            <% results.banpicks[6].mods %>
+                        </a>
+                    </div>
+                    <div v-else class="b-block"></div>
+                </div>
+                <div class="w-1/9 overflow-hidden blank-block">
+                </div>
+            </div>
+            <div id="team2" class="flex flex-wrap overflow-hidden justify-start">
+                <div class="w-1/9 overflow-hidden">
+                    <img src="{{ data.team2.flag_name | flag_url }}" class="avatar-picture">
+                </div>
+                <div class="w-1/9 overflow-hidden blank-block">
+                </div>
+
+                <div class="w-1/9 overflow-hidden">
+                    <div v-if="results.banpicks[1]" class="b-block"
+                        :style="'background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(https://assets.ppy.sh/beatmaps/'+ results.banpicks[1].info.beatmapset_id +'/covers/cover.jpg);'">
+                        <a class="mods">
+                            <% results.banpicks[1].mods %>
+                        </a>
+                    </div>
+                    <div v-else class="b-block"></div>
+                </div>
+
+                <div class="w-1/9 overflow-hidden">
+                    <div v-if="results.banpicks[2]" class="b-block"
+                        :style="'background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(https://assets.ppy.sh/beatmaps/'+ results.banpicks[2].info.beatmapset_id +'/covers/cover.jpg);'">
+                        <a class="mods">
+                            <% results.banpicks[2].mods %>
+                        </a>
+                    </div>
+                    <div v-else class="b-block"></div>
+                </div>
+
+                <div class="w-1/9 overflow-hidden blank-block">
+                </div>
+
+                <div class="w-1/9 overflow-hidden">
+                    <div v-if="results.banpicks[4]" class="b-block"
+                        :style="'background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(https://assets.ppy.sh/beatmaps/'+ results.banpicks[4].info.beatmapset_id +'/covers/cover.jpg);'">
+                        <a class="mods">
+                            <% results.banpicks[4].mods %>
+                        </a>
+                    </div>
+                    <div v-else class="b-block"></div>
+                </div>
+
+                <div class="w-1/9 overflow-hidden blank-block">
+                </div>
+
+                <div class="w-1/9 overflow-hidden blank-block">
+                </div>
+
+                <div class="w-1/9 overflow-hidden">
+                    <div v-if="results.banpicks[7]" class="b-block"
+                        :style="'background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(https://assets.ppy.sh/beatmaps/'+ results.banpicks[7].info.beatmapset_id +'/covers/cover.jpg);'">
+                        <a class="mods">
+                            <% results.banpicks[7].mods %>
+                        </a>
+                    </div>
+                    <div v-else class="b-block"></div>
+                </div>
+            </div>
+            <div class="flex justify-center items-center">
+                <h1 class="text-3xl text-white" v-if='results.picker'>Team <% results.picker_t %>
+                        <% results.status %>
+                </h1>
+                <h1 v-else class="text-3xl text-white">Ban was finished. gud luck!</h1>
+            </div>
+        </div>
+    </section>
+    <section id="mappool" class="h-screen mx-auto pt-8 pr-20 pl-20">
+        <div class="grid grid-flow-col grid-rows-3 grid-cols-4 gap-4">
+            <div id="mapsel" :class="'card bg-dark map-card text-start ' + (results.picker != userid ? 'disabled':'')"
+                v-for="(item, index) in results.available_maps" :key="item.id"
+                @click="pickban(results.set_id, item.info.beatmap_id, results.status)"
+                :style="'background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(https://assets.ppy.sh/beatmaps/'+ item.info.info.beatmapset_id +'/covers/cover.jpg);'">
+                <div class="card-img-overlay dark-background">
+                    <div class="text-truncate">
+                        <h5 class="card-title fw-bold">
+                            <% item.info.info.title %>
+                        </h5>
+                        <p class="card-text">
+                            <% item.info.info.artist %>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+    integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
+    crossorigin="anonymous"></script>
+<script type="text/javascript" charset="utf-8">
+    var socket = io();
+    new Vue({
+        el: '#app',
+        delimiters: ["<%", "%>"],
+        data: {
+            results: {},
+            userid: Number('{{ session.user_id }}')
+        },
+        created: function () {
+            socket.on('connect', msg => {
+                socket.emit('ready', this.user_id)
+            })
+
+            socket.on('disconnect', function () {
+                socket.emit('ready', this.user_id)
+            });
+
+            socket.on('data_result', msg => {
+                this.results = msg
+                console.log(this.results)
+            })
+
+            socket.on('new_result', msg => {
+                this.results = msg
+                console.log(this.results)
+            })
+        },
+        methods: {
+            pickban(set, map, type) {
+                socket.emit('pickban', { set, map, type })
+            }
+        }
     });
-    $('#ban2').click(function () {
-        $('#banimg-2').css('animation-name', 'ban-still')
-        $('#pickimg-1').css('animation-name', 'stroke-fade-pick').css('animation-duration', '1s').css('animation-iteration-count', 'infinite').css('animation-direction', 'alternate')
-    });
-    $('#pick1').click(function () {
-        $('#pickimg-1').css('animation-name', 'pick-still')
-        $('#pickimg-2').css('animation-name', 'stroke-fade-pick').css('animation-duration', '1s').css('animation-iteration-count', 'infinite').css('animation-direction', 'alternate')
-    });
-    $('#pick2').click(function () {
-        $('#pickimg-2').css('animation-name', 'pick-still')
-        $('#banimg-3').css('animation-name', 'stroke-fade-ban').css('animation-duration', '1s').css('animation-iteration-count', 'infinite').css('animation-direction', 'alternate')
-    });
-    $('#ban3').click(function () {
-        $('#banimg-3').css('animation-name', 'ban-still')
-        $('#banimg-4').css('animation-name', 'stroke-fade-ban').css('animation-duration', '1s').css('animation-iteration-count', 'infinite').css('animation-direction', 'alternate')
-    });
-    $('#ban4').click(function () {
-        $('#banimg-4').css('animation-name', 'ban-still')
-        $('#pickimg-3').css('animation-name', 'stroke-fade-pick').css('animation-duration', '1s').css('animation-iteration-count', 'infinite').css('animation-direction', 'alternate')   
-    });
-    $('#pick3').click(function () {
-        $('#pickimg-3').css('animation-name', 'pick-still')
-        $('#pickimg-4').css('animation-name', 'stroke-fade-pick').css('animation-duration', '1s').css('animation-iteration-count', 'infinite').css('animation-direction', 'alternate')   
-    });
-    $('#pick4').click(function () {
-        $('#pickimg-4').css('animation-name', 'pick-still')
-    });
-});
-</script> 
+</script>
 
 {% endblock %}

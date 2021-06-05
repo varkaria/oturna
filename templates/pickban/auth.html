@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting to Login</title>
+</head>
+<body class="text-center">
+    <script>
+        let login = 'https://osu.ppy.sh/oauth/authorize?response_type=code&client_id=7662&redirect_uri=http://localhost:5000/pickban/callback&state=login&scope=identify';
+        let href = login.replace(/&amp;/g, '&')
+        
+        window.location.href = href;
+    </script>
+</body>
+</html>

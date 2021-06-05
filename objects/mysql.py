@@ -159,3 +159,63 @@ class DB(object):
                 staff[s['th_name']] = []
             staff[s['th_name']].append(s)
         return staff
+
+    def get_match_ban_pick(self):
+        res = self.query_one(
+            """SELECT JSON_OBJECT(
+            'id', m.id,
+            'set_id', ms.id,
+            'round_id', r.id,
+            'mp_link', m.mp_link,
+            'team1', JSON_OBJECT('id', t1.id, 'full_name', t1.full_name, 'flag_name', t1.flag_name, 'acronym', t1.acronym, 'online', p1.online, 'leader_id', p1.user_id, 'leader_name', p1.username),
+            'team2', JSON_OBJECT('id', t2.id, 'full_name', t2.full_name, 'flag_name', t2.flag_name, 'acronym', t2.acronym, 'online', p2.online, 'leader_id', p2.user_id, 'leader_name', p2.username),
+            'banpicks', JSON_ARRAYAGG(JSON_OBJECT('id', pb.id, 'set_id', pb.set_id, 'type', pb.type, 'map_id', pb.map_id, 'from', s.full_name, 'info', mp.info, 'mods', mp.mods)),
+            'date', DATE_FORMAT(m.date, '%Y-%m-%d %H:%i')
+            ) AS `json`
+            FROM `match` m
+            LEFT JOIN `round` r ON r.id = m.round_id
+            LEFT JOIN `team` t1 ON t1.id = m.team1
+            LEFT JOIN `team` t2 ON t2.id = m.team2
+            LEFT JOIN `player` p1 ON p1.team = t1.id AND p1.leader = 1
+            LEFT JOIN `player` p2 ON p2.team = t2.id AND p2.leader = 1
+            LEFT JOIN `match_sets` ms ON ms.match_id = m.id 
+            LEFT JOIN `match_sets_banpick` pb ON pb.set_id = ms.id
+            LEFT JOIN `mappool` mp ON mp.beatmap_id = pb.map_id
+            LEFT JOIN `team` s ON s.id = pb.from
+            """)
+    
+        res = json.loads(res['json'])
+        mappool = self.query_all("SELECT id, mods, json FROM json_mappool where round_id = %s", res['round_id'])
+        available_maps = []
+        for s in mappool:
+            d = json.loads(s['json'])
+            if str(d['beatmap_id']) in str(res['banpicks']):
+                continue
+            else:
+                available_maps.append({
+                    'id': s['id'],
+                    'mods': s['mods'],
+                    'info': d
+                })
+        if res['banpicks']:
+            res['banpicks'] = res['banpicks'][::-1]
+            t = len(res['banpicks']) - 1
+            if res['banpicks'][0]['from'] != None:
+                if t == 0 or t == 3 or t == 4:
+                    res['status'] = 'ban'
+                else:
+                    res['status'] = 'pick'
+
+                if t == 2 or t == 4 or t == 5:
+                    res['picker'] = res['team1']['leader_id']
+                    res['picker_t'] = res['team1']['full_name']
+                elif t == 0 or t == 1 or t == 3 or t == 6:
+                    res['picker'] = res['team2']['leader_id']
+                    res['picker_t'] = res['team2']['full_name']
+            elif res['banpicks'][0]['from'] == None:
+                res['picker'] = res['team1']['leader_id']
+                res['picker_t'] = res['team1']['full_name']
+                res['status'] = 'ban'
+        res['available_maps'] = available_maps
+    
+        return res
