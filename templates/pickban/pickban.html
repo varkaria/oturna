@@ -62,7 +62,7 @@
         <div class="flex flex-col space-y-8">
             <div id="team1" class="flex flex-row justify-start">
                 <div class="w-1/9 overflow-hidden">
-                    <img src="{{ data.team1.flag_name | flag_url }}" class="avatar-picture">
+                    <img :src="'https://a.ppy.sh/' + results.team1.leader_id" class="avatar-picture">
                 </div>
                 <div class="w-1/9 overflow-hidden">
                     <div v-if="results.banpicks[0].info != null" class="b-block"
@@ -117,7 +117,7 @@
             </div>
             <div id="team2" class="flex flex-wrap overflow-hidden justify-start">
                 <div class="w-1/9 overflow-hidden">
-                    <img src="{{ data.team2.flag_name | flag_url }}" class="avatar-picture">
+                    <img :src="'https://a.ppy.sh/' + results.team2.leader_id" class="avatar-picture">
                 </div>
                 <div class="w-1/9 overflow-hidden blank-block">
                 </div>

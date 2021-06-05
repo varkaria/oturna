@@ -160,9 +160,9 @@ class DB(object):
             staff[s['th_name']].append(s)
         return staff
 
-    def get_match_ban_pick(self):
+    def get_match_sets_ban_pick(self, id):
         res = self.query_one(
-            """SELECT JSON_OBJECT(
+            f"""SELECT JSON_OBJECT(
             'id', m.id,
             'set_id', ms.id,
             'round_id', r.id,
@@ -182,6 +182,7 @@ class DB(object):
             LEFT JOIN `match_sets_banpick` pb ON pb.set_id = ms.id
             LEFT JOIN `mappool` mp ON mp.beatmap_id = pb.map_id
             LEFT JOIN `team` s ON s.id = pb.from
+            WHERE ms.id={id}
             """)
     
         res = json.loads(res['json'])
