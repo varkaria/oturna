@@ -16,20 +16,11 @@ nav {
     background-color: rgb(38, 38, 38);
 }
 
-#picking {
+.picking {
     animation-name: stroke-fade-pick;
     animation-duration: 1s;
     animation-iteration-count: infinite;
     animation-direction: alternate;
-}
-
-@keyframes pick-still {
-    0% {
-        border: 5px solid rgb(56, 65, 180);
-    }
-    100% {
-        border: 5px solid rgb(56, 65, 180);
-    }
 }
 
 @keyframes stroke-fade-pick {
@@ -41,20 +32,11 @@ nav {
     }
 }
 
-#baning {
+.banning {
     animation-name: stroke-fade-ban;
     animation-duration: 1s;
     animation-iteration-count: infinite;
     animation-direction: alternate;
-}
-
-@keyframes ban-still {
-    0% {
-        border: 5px solid rgb(172, 33, 33);
-    }
-    100% {
-        border: 5px solid rgb(172, 33, 33);
-    }
 }
 
 @keyframes stroke-fade-ban {
@@ -121,19 +103,20 @@ a {
     flex-direction: column;
     min-width: 0;
     word-wrap: break-word;
-    background-color: #ffffff;
-    background-clip: border-box;
     border-radius: 4px;
+    width: 20vw;
 }
 
 .card-title {
-    margin-bottom: 0.5rem;
-    color: white
+    margin-bottom: 0.2rem;
+    color: white;
+    font-size: 10pt;
 }
 
 .card-text:last-child {
     margin-bottom: 0;
-    color: white
+    color: white;
+    font-size: 8pt;
 }
 
 .card-img-overlay {
@@ -191,7 +174,7 @@ a {
 
 .mods {
     font-size: 34px;
-    padding: 8px;
+    padding: 0px 16px;
     background: #00000094;
     border-radius: 22px;
 }
@@ -199,4 +182,68 @@ a {
 .avatar {
     width: 42px;
     border-radius: 10px;
+}
+
+.mods-ele {
+    color: white;
+    font-weight: 400;
+    padding: 6px 10px;
+    background: #ffffff40;
+    border-radius: 31px;
+}
+
+.animated {
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+}
+
+.animated.faster {
+    -webkit-animation-duration: 500ms;
+    animation-duration: 500ms;
+}
+
+.fadeIn {
+    -webkit-animation-name: fadeIn;
+    animation-name: fadeIn;
+}
+
+.fadeOut {
+    -webkit-animation-name: fadeOut;
+    animation-name: fadeOut;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+#modal {
+    transition: 0.5s ease;
+    transition-delay: 5s;
+    pointer-events: none;
+}
+
+.unready-time {
+    opacity: 1;
+}
+
+.ready-time {
+    opacity: 0;
 }
