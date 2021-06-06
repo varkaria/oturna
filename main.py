@@ -79,26 +79,26 @@ def callback():
             next_url = request.args.get('state').split('->')
             user = osuapi.get2(u['access_token'], me='')
             print(next_url)
-            player = db.query('SELECT user_id from player WHERE `user_id`=%s', [user['id']])
+            player = db.query('SELECT id, user_id, username from player WHERE `user_id`=%s', [user['id']])
             staff = db.get_staff(user_id=user['id'])
             if staff:
                 let_login(staff)
                 print('Someone Logged to This Website With Staff Perm')
-                return redirect('http://localhost:5000' + next_url[1])
+                return redirect('https://omthpl.pro' + next_url[1])
             elif player:
                 let_login(player)
                 print('Someone Logged to This Website With Player Perm')
-                return redirect('http://localhost:5000' + next_url[1])
+                return redirect('https://omthpl.pro' + next_url[1])
             else:
-                return redirect('http://localhost:5000')
+                return redirect('https://omthpl.pro')
         except Exception as e:
             print(e)
-    return redirect('http://localhost:5000')
+    return redirect('https://omthpl.pro')
 
 @app.route('/logout')
 def logout():
     session.clear()
-    return redirect('http://localhost:5000')
+    return redirect('https://omthpl.pro')
 
 @app.route('/favicon.ico')
 def faviconico():
@@ -166,6 +166,6 @@ def page_not_foubd(error):
 if __name__ == '__main__':
     socketio.run(
         app,
-        host='127.0.0.1',
+        host='0.0.0.0',
         port=int(os.environ.get('PORT', 5000))
     )
