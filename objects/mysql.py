@@ -190,7 +190,7 @@ class DB(object):
         available_maps = []
         for s in mappool:
             d = json.loads(s['json'])
-            if str(d['beatmap_id']) in str(res['banpicks']):
+            if str(d['beatmap_id']) in str(res['banpicks']) or str(d['mods']) == 'TB':
                 continue
             else:
                 available_maps.append({
@@ -199,7 +199,6 @@ class DB(object):
                     'info': d
                 })
         if res['banpicks']:
-            res['banpicks'] = res['banpicks'][::-1]
             t = len(res['banpicks']) - 1
             if res['banpicks'][0]['from'] != None:
                 if t == 0 or t == 3 or t == 4:
