@@ -36,7 +36,7 @@ def pickban_main(code):
         print(session['user_id'])
         if str(session['user_id']) not in str(get_leaders_match(set_match['match_id'])):
             return "you aren't being the leader of this match"
-        return render_template('pickban/pickban.html', match_id=set_match['id'])
+        return render_template('pickban/pickban.html', match_code=code)
 
     return 'hi uwu 2'
     
