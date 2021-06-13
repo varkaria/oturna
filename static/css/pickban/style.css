@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500&display=swap');
-
 html {
     margin: 0;
     padding: 0;
@@ -17,92 +16,32 @@ nav {
     background-color: rgb(38, 38, 38);
 }
 
-@media only screen and (max-width: 1819px) {
-
-    #pick1, #pick3 {
-    padding-left: 50px;
-    }
-    
-    #pick2, #pick4 {
-        padding-left: 50px;
-    }
-
-    #ban2 {
-        padding-left: 50px;
-    }
-
-    #ban3, #ban4 {
-        padding-left: 50px;
-    }
-}
-
-@media only screen and (min-width: 1820px) {
-
-    #pick1, #pick3 {
-    padding-left: 100px;
-    }
-
-    #pick2, #pick4 {
-    padding-left: 450px;
-    }
-
-    #ban2 {
-    padding-left: 200px;
-    }
-
-    #ban3, #ban4 {
-    padding-left: 250px;
-    }
-}
-
-#pickimg-1, #pickimg-2, #pickimg-3, #pickimg-4, #banimg-1, #banimg-2, #banimg-3, #banimg-4 {
-    border-radius: 20px;
-}
-
-#pickanim {
+.picking {
     animation-name: stroke-fade-pick;
     animation-duration: 1s;
     animation-iteration-count: infinite;
     animation-direction: alternate;
 }
 
-@keyframes pick-still {
-    0% {
-        border: 5px solid rgb(56, 65, 180);
-    }
-    100% {
-        border: 5px solid rgb(56, 65, 180);
-    }
-}
-
 @keyframes stroke-fade-pick {
     0% {
-        border: 5px solid rgb(56, 65, 180, 0); 
+        border: 5px solid rgb(56, 65, 180, 0);
     }
     100% {
         border: 5px solid rgb(56, 65, 180);
     }
 }
 
-#banimg-1 {
+.banning {
     animation-name: stroke-fade-ban;
     animation-duration: 1s;
     animation-iteration-count: infinite;
     animation-direction: alternate;
 }
 
-@keyframes ban-still {
-    0% {
-        border: 5px solid rgb(172, 33, 33);
-    }
-    100% {
-        border: 5px solid rgb(172, 33, 33);
-    }
-}
-
 @keyframes stroke-fade-ban {
     0% {
-        border: 5px solid rgb(172, 33, 33, 0); 
+        border: 5px solid rgb(172, 33, 33, 0);
     }
     100% {
         border: 5px solid rgb(172, 33, 33);
@@ -117,7 +56,6 @@ nav {
     user-select: none;
 }
 
-
 .mod-icon {
     position: absolute;
     pointer-events: none;
@@ -128,4 +66,184 @@ nav {
 
 .card {
     background: linear-gradient( rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7))
+}
+
+a {
+    color: white
+}
+
+.dark-background {
+    background-color: rgb(0, 0, 0, 0.4);
+    transition: background-color 160ms;
+}
+
+.dark-background:hover {
+    background-color: rgb(0, 0, 0, 0.6);
+}
+
+.map-card {
+    background-position: center !important;
+    background-size: cover !important;
+    height: 90px !important;
+    border: 0px;
+    user-select: none;
+}
+
+.mod-icon {
+    position: absolute;
+    pointer-events: none;
+    right: 10px;
+    width: 60px;
+    height: 60px;
+}
+
+.card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    border-radius: 4px;
+    width: 20vw;
+}
+
+.card-title {
+    margin-bottom: 0.2rem;
+    color: white;
+    font-size: 10pt;
+}
+
+.card-text:last-child {
+    margin-bottom: 0;
+    color: white;
+    font-size: 8pt;
+}
+
+.card-img-overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding: 1rem;
+    border-radius: 3px;
+}
+
+.w-1\/9 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 11.111111%;
+}
+
+.b-block {
+    width: 7vw;
+    height: 20vh;
+    background: #00000075;
+    border-radius: 18px;
+    transition: 0.1s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.avatar-picture {
+    height: 12vh;
+    border-radius: 56px;
+}
+
+@media only screen and (max-width: 1140px) {
+    .blank-block {
+        display: none !important;
+    }
+    .w-1\/9 {
+        width: 19.111111%;
+    }
+    .b-block {
+        width: 14vw;
+        height: 22vh;
+        background: #00000075;
+        border-radius: 18px;
+    }
+}
+
+.disabled {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.mods {
+    font-size: 34px;
+    padding: 0px 16px;
+    background: #00000094;
+    border-radius: 22px;
+}
+
+.avatar {
+    width: 42px;
+    border-radius: 10px;
+}
+
+.mods-ele {
+    color: white;
+    font-weight: 400;
+    padding: 6px 10px;
+    background: #ffffff40;
+    border-radius: 31px;
+}
+
+.animated {
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+}
+
+.animated.faster {
+    -webkit-animation-duration: 500ms;
+    animation-duration: 500ms;
+}
+
+.fadeIn {
+    -webkit-animation-name: fadeIn;
+    animation-name: fadeIn;
+}
+
+.fadeOut {
+    -webkit-animation-name: fadeOut;
+    animation-name: fadeOut;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+#modal {
+    transition: 0.5s ease;
+    transition-delay: 5s;
+    pointer-events: none;
+}
+
+.unready-time {
+    opacity: 1;
+}
+
+.ready-time {
+    opacity: 0;
 }

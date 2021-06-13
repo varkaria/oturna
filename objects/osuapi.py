@@ -21,8 +21,8 @@ class V1Path:
     get_match = 'get_match'
     get_replay = 'get_replay'
 
-def authorize(state, scope):
-    return f"https://osu.ppy.sh/oauth/authorize?response_type=code&client_id={CLIENT_ID}&redirect_uri={REDIRECT_URL}&state={state}&scope={scope}"
+def authorize(state, scope, goto):
+    return f"https://osu.ppy.sh/oauth/authorize?response_type=code&client_id={CLIENT_ID}&redirect_uri={REDIRECT_URL}&state={state}->{goto}&scope={scope}"
 
 def toen_isactive(Token):
     url = 'https://osu.ppy.sh/api/v2/me'

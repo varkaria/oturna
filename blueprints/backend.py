@@ -1,13 +1,14 @@
 from config import Config
 from pymysql.err import *
 from blueprints.api import getdata
-from flask import Blueprint, render_template, redirect, url_for, flash, session, request, jsonify
+from flask import Blueprint, render_template, redirect, url_for, flash, session,request
 from objects.logger import log
 from objects.flag import Staff, Mods
 from rich.console import Console
 from functools import wraps
 from objects import osuapi, mysql
 from PIL import Image
+from objects.decorators import *
 import json, re, requests
 
 backend = Blueprint('backend', __name__)
@@ -38,25 +39,11 @@ def conv(x):
 
 @backend.context_processor
 def context():
-    if session == {}:
-        user = None
-    else:
-        user = get('view_staff', str(session['id']))
-
+    user = None if session == {} else get('view_staff', str(session['id']))
     return dict(
         cur_user=user,
         rounds=db.query_all("select * from round"),
     )
-
-def login_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        console.log(dict(session))
-        if session == {}:
-            return redirect(url_for('backend.gologin'))
-        return f(*args, **kwargs)
-    return decorated_function
-
 
 def need_privilege(privilege: Staff):
     def decorator(f):
@@ -73,14 +60,10 @@ def need_privilege(privilege: Staff):
         return decorated_function
     return decorator
 
-
 def check_privilege(id, privilege: Staff):
     user = db.get_staff(staff_id=id)
     user_privilege = Staff(user['privileges'])
     return bool(privilege in user_privilege)
-
-def log_activity(s_id:int,type,log):
-    ...
 
 @backend.route('/base')
 def base():
@@ -91,42 +74,6 @@ def base():
 def dashboard():
     return render_template('manager/dashboard.html')
 
-@backend.route('/login')
-def gologin():
-    return render_template('manager/auth.html')
-
-def login(user):
-    session.clear()
-    session.permanent = True
-    session['id'] = user['id']
-    session['user_id'] = user['user_id']
-    session['username'] = user['username']
-
-
-@backend.route('/callback')
-def callback():
-    if request.args.get('state') == 'login':
-        u = osuapi.get_token(request.args['code'])
-        try:
-            user = osuapi.get2(u['access_token'], me='')
-            sql = db.get_staff(user_id=user['id'])
-            if sql:
-                login(sql)
-                return redirect(url_for('backend.dashboard'))
-            else:
-                flash('It seems that you are not a staff, please go back.')
-                log.debug(user)
-                return redirect(url_for('index'))
-        except Exception as e:
-            log.exception(e)
-    return redirect(url_for('index'))
-
-
-@backend.route('/logout')
-def logout():
-    session.clear()
-    return redirect(url_for('frontend.index'))
-
 @backend.route('/planning/')
 @login_required
 def planning():
@@ -136,16 +83,14 @@ def planning():
 @login_required
 def matchs():
     teams = db.query_all('select * from team')
-    if check_privilege(session['id'], Staff.ADMIN): isadmin = True
-    else: isadmin = False
-
+    isadmin = bool(check_privilege(session['id'], Staff.ADMIN))
     staffs = {}
     for s in get('view_staff', '*'):
         for a in str(Staff(s['privileges']))[6:].split('|'):
             if not staffs.get(a):
                 staffs[a] = []
             staffs[a].append(s)
-    
+
     return render_template('manager/schedule.html', matchs=db.get_matchs(), isadmin=isadmin, teams=teams, staffs=staffs)
 
 @backend.route('/schedule/match/', methods=['POST'])
@@ -424,22 +369,6 @@ def team_delete(id):
         flash('An error occurred: {}'.format(e.args), 'danger')
         return redirect(url_for('backend.teams'))
 
-
-@backend.route('/team/<id>/players/add', methods=['POST'])
-@login_required
-def team_players_add(id):
-    return '', 200
-
-@backend.route('/team/<id>/players/<uid>/delete', methods=['POST'])
-@login_required
-def team_players_update(id, uid):
-    return '', 200
-
-@backend.route('/team/<id>/players/<uid>/update', methods=['POST'])
-@login_required
-def team_players_delete(id):
-    return '', 200
-
 @backend.route('/rounds/', methods=['GET', 'POST'])
 @login_required
 @need_privilege(Staff.ADMIN)
@@ -524,7 +453,13 @@ def staff():
                 privileges = int(request.form['privileges'])
                 username = osuapi.get(osuapi.V1Path.get_user, u=user_id)[0]['username']
                 if postype == 'add':
-                    if db.query_one("Select user_id from staff where user_id = %s", (user_id)) == None:
+                    if (
+                        db.query_one(
+                            "Select user_id from staff where user_id = %s",
+                            (user_id),
+                        )
+                        is None
+                    ):
                         db.query("Insert into staff (user_id, username, group_id, privileges) Values (%s, %s, %s, %s)", (user_id, username, group, privileges))
                     else:
                         db.query("Update staff Set group_id = %s, privileges = %s, username = %s, active = 1 Where user_id = %s", (group, privileges, username, user_id))
@@ -547,19 +482,16 @@ def staff():
 @login_required
 @need_privilege(Staff.HOST)
 def settings():
-    if request.method == 'POST':
-        if request.form:
-            update_text = ''
-            for k, v in request.form.items():
-                if v.isdigit():
-                    update_text += f"{k}={v},"
-                else:
-                    update_text += f"{k}='{v}',"
-            
-            db.query(f"UPDATE tourney SET {update_text[:-1]} WHERE id = 1")
-            flash('Save Success', 'success')
-            return redirect(url_for('backend.settings'))
-    return render_template('manager/settings.html', settings=db.query_one('select * from tourney where id = 1'))
+    if request.method != 'POST' or not request.form:
+        return render_template('manager/settings.html', settings=db.query_one('select * from tourney where id = 1'))
+    update_text = ''.join(
+        f"{k}={v}," if v.isdigit() else f"{k}='{v}',"
+        for k, v in request.form.items()
+    )
+
+    db.query(f"UPDATE tourney SET {update_text[:-1]} WHERE id = 1")
+    flash('Save Success', 'success')
+    return redirect(url_for('backend.settings'))
 
 # view
 @backend.route('/mappool/')
@@ -689,3 +621,20 @@ def mappool_del(id, round):
         log.exception(e)
     finally:
         return redirect(url_for('backend.mappool', round_id=round))
+
+@backend.route('/match/<id>/')
+@login_required
+@need_privilege(Staff.REFEREE)
+def refree_helper(id:int):
+    # check match is have it?
+    match = db.query("SELECT * FROM `match` WHERE id = %s",[id])
+    if not match:
+        flash("Couldn't found match did you put it", 'danger')
+        return redirect(url_for('backend.matchs'))
+
+    # check referee you be in this match?
+    if match['referee'] != session['id']:
+        flash("You didn't be refree in this match. you can be refree by click option and be referee it : )", 'danger')
+        return redirect(url_for('backend.matchs'))
+
+    return render_template('/manager/refree_tools.html',match=db.get_matchs(id=int(id)))
