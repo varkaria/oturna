@@ -1,0 +1,49 @@
+{% extends '/stream/base.html' %}
+{% block title %}JSON Upload{% endblock %}
+{% block header %}
+<link rel="stylesheet" href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" type="text/css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap">
+{% endblock %}
+{% block content %}
+<style>
+    html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgb(44, 45, 44);
+    overflow: hidden;
+}
+    body {
+        font-family: 'Varela Round'
+    }
+    nav {
+        background-color: rgb(38, 38, 38);
+}
+    img {
+        width: 5vh;
+        height: 5vh;
+}
+</style>
+<div id="main">
+    <nav class="mx-auto px-8">
+        <div class="flex h-14 justify-between items-center">
+            <div class="flex-row justify-start text-white text-3xl">
+                <a href="/stream/json">JSON Uploader</a>
+            </div>
+            <div class="flex-row justify-end text-white text-3xl">
+                <div class='flex gap-4 items-center'>
+                    <img src="https://a.ppy.sh/{{ session.user_id }}" class="avatar">
+                    <a href="/" class="text-xl right-16 top-4">{{ session.username }}</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <section id="upload" class="flex h-screen justify-center items-center">
+        <form class="flex flex-col space-y-8" action="/stream/json/upload" method="POST" enctype="multipart/form-data">
+            <input type="file" name="file">
+            <input type="submit">
+        </form>
+    </section>
+</div>
+{% endblock %}
