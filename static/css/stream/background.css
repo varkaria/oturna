@@ -1,0 +1,197 @@
+body {
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+   overflow:hidden;
+   background: #2C2D2C;
+}
+
+section {
+   position: absolute;
+   width: 1366px;
+   height: 768px;
+   overflow: hidden;
+   z-index: 3;
+}
+
+section .wave {
+   position: absolute;
+   bottom: 0;
+   left: 0;
+   width: 100%;
+   height: 198px;
+   background: url(/static/img/stream/wave.svg);
+}
+
+section .wave {
+   animation: animate-wave-1 30s linear infinite;
+   opacity: 1;
+   animation-delay: 0s;
+   bottom: 0;
+}
+
+@keyframes animate-wave-1 {
+   0% {
+      background-position-x: 0;
+   }
+   100% {
+      background-position-x: 1600px;
+   }
+}
+
+.song-display {
+   position: absolute;
+   width: 1237px;
+   height: 50px;
+   left: 64px;
+   top: 672px;
+   z-index: 5;
+}
+
+.song-display .title {
+   position: absolute;
+   width: 1237px;
+   height: 22px;
+   left: 0px;
+   top: 0px;
+   font-family: "DB Helvethaica X";
+   font-style: normal;
+   font-weight: 500;
+   font-size: 18px;
+   line-height: 22px;
+   /* identical to box height */
+   text-align: left;
+   color: #DBDBDB;
+   z-index: 5;
+}
+
+.song-display .song-data {
+   position: absolute;
+   width: 1237px;
+   height: 37px;
+   left: 0px;
+   top: 13px;
+   font-family: "DB Helvethaica X";
+   font-style: normal;
+   font-weight: 500;
+   font-size: 31px;
+   line-height: 37px;
+   color: #FFFFFF;
+   z-index: 5;
+}
+
+.title-sub {
+   position: absolute;
+   width: 441px;
+   height: 103px;
+   left: 65px;
+   top: 45px;
+   z-index: 300;
+}
+
+.title-sub .title {
+   position: absolute;
+   width: 441px;
+   height: 82px;
+   left: 0px;
+   top: 0px;
+   font-family: "DB Helvethaica X";
+   font-style: normal;
+   font-weight: 500;
+   font-size: 72px;
+   line-height: 86px;
+   letter-spacing: -0.011em;
+   color: #FFFFFF;
+}
+
+.title-sub .subtitle {
+   position: absolute;
+   width: 441px;
+   height: 36px;
+   left: 0px;
+   top: 67px;
+   font-family: "DB Helvethaica X";
+   font-style: normal;
+   font-weight: normal;
+   font-size: 31px;
+   line-height: 37px;
+   letter-spacing: -0.011em;
+   color: #FFFFFF;
+}
+
+#particles-js {
+   position: absolute;
+   width: 1366px;
+   height: 768px;
+   background-image: url("");
+   background-repeat: no-repeat;
+   background-size: cover;
+   background-position: 50% 50%;
+}
+
+/* ---- stats.js ---- */
+
+.count-particles {
+   background: #000022;
+   position: absolute;
+   top: 48px;
+   left: 0;
+   width: 80px;
+   color: #13E8E9;
+   font-size: .8em;
+   text-align: left;
+   text-indent: 4px;
+   line-height: 14px;
+   padding-bottom: 2px;
+   font-family: Helvetica, Arial, sans-serif;
+   font-weight: bold;
+}
+
+.js-count-particles {
+   font-size: 1.1em;
+}
+
+#stats, .count-particles {
+   margin-top: 5px;
+   margin-left: 5px;
+}
+
+#stats {
+   border-radius: 3px 3px 0 0;
+   overflow: hidden;
+}
+
+.count-particles {
+   border-radius: 0 0 3px 3px;
+}
+
+.logo {
+   position: absolute;
+   width: 307px;
+   height: 275px;
+   left: 898px;
+   top: 245px;
+   background: url(/static/img/stream/logo.png);
+}
+
+#song-background {
+  position: absolute;
+  width: 1366px;
+  height: 768px;
+  overflow: hidden;
+  opacity: 0.15;
+}
+
+img {
+   transition: 0.5s ease;
+   transition-delay: 3s;
+   position: absolute;
+   width: 1366px;
+   height: 768px;
+   object-fit: cover;
+   filter: blur(2px);
+}
+
+.hide {
+   opacity: 0;
+}
