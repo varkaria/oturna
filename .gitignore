@@ -65,6 +65,9 @@ db.sqlite3-journal
 instance/
 .webassets-cache
 
+# JSON file
+.data/brackets/*.json
+
 # Scrapy stuff:
 .scrapy
 
