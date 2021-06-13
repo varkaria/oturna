@@ -220,7 +220,7 @@ def match_delete(id):
 
 @backend.route('/schedule/job', methods=['POST'])
 @login_required
-def matchs_job():
+def matchs_job():  # sourcery no-metrics
     mid = int(request.form['id'])
     uid = session['id']
     job = request.form['job']
