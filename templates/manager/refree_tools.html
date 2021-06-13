@@ -1,0 +1,231 @@
+{% extends 'manager/base.html' %}
+{% block title %}Home{% endblock title %}
+{% block page_title %}
+OM{{ match[0].code }} | {{ match[0].team1.full_name }} vs {{ match[0].team2.full_name }}
+{% endblock page_title %}
+{% block content %}
+
+<style>
+    .red-pick {
+        background-color: rgba(141, 6, 6, 0.4);
+        transition: background-color 160ms;
+    }
+
+    .map-card {
+        background-position: center !important;
+        background-size: cover !important;
+        height: 90px !important;
+        border: 0px;
+        user-select: none;
+    }
+
+    .mod-icon {
+        position: absolute;
+        pointer-events: none;
+        right: 10px;
+        width: 60px;
+        height: 60px;
+    }
+</style>
+
+<div class="row mb-3">
+    <div class="col-lg-8">
+        <div class="card-tabs mb-5">
+            <ul class="nav nav-tabs">
+                <li class="nav-item"><a href="#tab-top-set-1-i" class="nav-link active"
+                        data-bs-toggle="tab">Infomation</a></li>
+                <li class="nav-item"><a href="#tab-top-set-1-1" class="nav-link" data-bs-toggle="tab">Round 1</a></li>
+                <li class="nav-item"><a href="#tab-top-set-1-2" class="nav-link" data-bs-toggle="tab">Round 2</a></li>
+                <li class="nav-item"><a href="#tab-top-set-1-3" class="nav-link" data-bs-toggle="tab">Round 3</a></li>
+                <li class="nav-item"><a href="#tab-top-set-1-4" class="nav-link" data-bs-toggle="tab">Round 4</a></li>
+                <li class="nav-item"><a href="#tab-top-set-1-5" class="nav-link" data-bs-toggle="tab">Tiebreaker</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div id="tab-top-set-1-i" class="card tab-pane show active">
+                    <div class="card-body">
+                        <h2 class="text-left">Varkaria Bans</h2>
+                        <div class="row">
+                            <div class="col">
+                                <div class="card bg-dark map-card text-start mb-3"
+                                    style="background: url(https://assets.ppy.sh/beatmaps/1342172/covers/cover.jpg);">
+                                    <a class="text-light" href="https://osu.ppy.sh/b/2785749"
+                                        target="_blank">
+                                        <div class="card-img-overlay red-pick">
+                                            <img class="mod-icon" src="/static/img/mods/HD.png">
+                                            <div class="text-truncate">
+                                                <h4 class="card-title fw-bold">Doradura [Cup]</h4>
+                                                <p class="card-text">dora || MAPPER: Nelly</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="card bg-dark map-card text-start mb-3"
+                                    style="background: url(https://assets.ppy.sh/beatmaps/1342172/covers/cover.jpg);">
+                                    <a class="text-light" href="https://osu.ppy.sh/b/2785749"
+                                        target="_blank">
+                                        <div class="card-img-overlay red-pick">
+                                            <img class="mod-icon" src="/static/img/mods/HD.png">
+                                            <div class="text-truncate">
+                                                <h4 class="card-title fw-bold">Doradura [Cup]</h4>
+                                                <p class="card-text">dora || MAPPER: Nelly</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h2 class="text-left">Gusbell Bans</h2>
+                        <div class="row">
+                            <div class="col">
+                                <div class="card bg-dark map-card text-start mb-3"
+                                    style="background: url(https://assets.ppy.sh/beatmaps/1342172/covers/cover.jpg);">
+                                    <a class="text-light" href="https://osu.ppy.sh/b/2785749"
+                                        target="_blank">
+                                        <div class="card-img-overlay red-pick">
+                                            <img class="mod-icon" src="/static/img/mods/HD.png">
+                                            <div class="text-truncate">
+                                                <h4 class="card-title fw-bold">Doradura [Cup]</h4>
+                                                <p class="card-text">dora || MAPPER: Nelly</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="card bg-dark map-card text-start mb-3"
+                                    style="background: url(https://assets.ppy.sh/beatmaps/1342172/covers/cover.jpg);">
+                                    <a class="text-light" href="https://osu.ppy.sh/b/2785749"
+                                        target="_blank">
+                                        <div class="card-img-overlay red-pick">
+                                            <img class="mod-icon" src="/static/img/mods/HD.png">
+                                            <div class="text-truncate">
+                                                <h4 class="card-title fw-bold">Doradura [Cup]</h4>
+                                                <p class="card-text">dora || MAPPER: Nelly</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="tab-top-set-1-1" class="card tab-pane">
+                    <div class="card-body">
+                        <div class="card bg-dark map-card text-start mb-3"
+                            style="background: url(https://assets.ppy.sh/beatmaps/1342172/covers/cover.jpg);">
+                            <a class="text-light" href="https://osu.ppy.sh/b/2785749" target="_blank">
+                                <div class="card-img-overlay red-pick">
+                                    <img class="mod-icon" src="/static/img/mods/HD.png">
+                                    <div class="text-truncate">
+                                        <h4 class="card-title fw-bold">Doradura [Cup]</h4>
+                                        <p class="card-text">dora || MAPPER: Nelly</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="result">
+                            <table class="table table-vcenter">
+                                <thead>
+                                    <tr>
+                                        <th>Avatar</th>
+                                        <th>Player</th>
+                                        <th>Team</th>
+                                        <th>Score</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="w-1">
+                                            <span class="avatar avatar-sm"
+                                                style="background-image: url(https://a.ppy.sh/5)"></span>
+                                        </td>
+                                        <td>
+                                            <div class="text-truncate">
+                                                Varkaria
+                                            </div>
+                                        </td>
+                                        <td class="td-truncate">
+                                            <div class="text-truncate">
+                                                Stelalium
+                                            </div>
+                                        </td>
+                                        <td class="text-nowrap text-muted">3415874</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="w-1">
+                                            <span class="avatar avatar-sm"
+                                                style="background-image: url(https://a.ppy.sh/5)"></span>
+                                        </td>
+                                        <td>
+                                            <div class="text-truncate">
+                                                Gusbell
+                                            </div>
+                                        </td>
+                                        <td class="td-truncate">
+                                            <div class="text-truncate">
+                                                Stelalium
+                                            </div>
+                                        </td>
+                                        <td class="text-nowrap text-muted">165151</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <h2 class="text-center">Varkaria wins from this round</h2>
+                        </div>
+                    </div>
+                </div>
+                <div id="tab-top-set-1-2" class="card tab-pane">
+                    <div class="card-body">
+                        <div class="card-title">Round 2</div>
+                    </div>
+                </div>
+                <div id="tab-top-set-1-3" class="card tab-pane">
+                    <div class="card-body">
+                        <div class="card-title">Round 3</div>
+                    </div>
+                </div>
+                <div id="tab-top-set-1-4" class="card tab-pane">
+                    <div class="card-body">
+                        <div class="card-title">Round 4</div>
+                    </div>
+                </div>
+                <div id="tab-top-set-1-5" class="card tab-pane">
+                    <div class="card-body">
+                        <div class="card-title">Tiebreaker</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="mb-3">
+            <label class="form-label">Multiplayer Creation</label>
+            <input type="text" class="form-control mb-1" name="example-disabled-input" placeholder="Readonly..."
+                value="!mp make OMTHPL : (Varkaria) vs (Varkaria)" readonly="">
+            <input type="text" class="form-control mb-1" name="example-disabled-input" placeholder="Readonly..."
+                value="!mp addref [Hakura_San]" readonly="">
+            <input type="text" class="form-control" name="example-disabled-input" placeholder="Readonly..."
+                value="!mp set 2 3 16" readonly="">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Multiplayer Link</label>
+            <div class="input-group mb-2">
+                <input type="text" class="form-control" placeholder="Please Insert MP Link before do any thing">
+                <button class="btn" type="button">Go!</button>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Pick / Ban Link</label>
+            <div class="input-group mb-2">
+                <input type="text" class="form-control" value="https://omthpl.pro/pick_ban/iwd8b5q6i5wd1b41q"
+                    readonly="">
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
