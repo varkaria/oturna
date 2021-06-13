@@ -13,13 +13,25 @@ socket.onerror = error => {
 	console.log("Socket Error: ", error);
 };
 
+let side = "left";
 let tempState;
-let bassDensity = 0;
 socket.onmessage = event => {
 	let data = JSON.parse(event.data);
 	if (tempState !== data.menu.bm.path.full) {
 		tempState = data.menu.bm.path.full
 		document.querySelector('.song-data').innerHTML = `${data.menu.bm.metadata.artist} - ${data.menu.bm.metadata.title}`
+
+        if (side == 'left') {
+            document.getElementById("one").src = `http://127.0.0.1:24050/Songs/${data.menu.bm.path.full}?a=${Math.random(10000)}`;
+            document.getElementById("two").className = 'hide'
+            document.getElementById("one").className = ''
+            side = 'right'
+        } else if (side == 'right') {
+            document.getElementById("two").src = `http://127.0.0.1:24050/Songs/${data.menu.bm.path.full}?a=${Math.random(10000)}`;
+            document.getElementById("one").className = 'hide'
+            document.getElementById("two").className = ''
+            side = 'left'
+        }
 	}
 }
 
