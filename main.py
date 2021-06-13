@@ -24,11 +24,13 @@ app = Flask(__name__, instance_relative_config=True)
 app.config.from_object(Config)
 socketio = SocketIO(app)
 
-@socketio.on('firstdata')
+
+# Pick ban Socket.io
+@socketio.on('firstdata', namespace='/pickban')
 def handle_data(d):
     emit('data_result', db.get_match_sets_ban_pick())
 
-@socketio.on('pickban')
+@socketio.on('pickban', namespace='/pickban')
 def handle_data(d):
     if not session:
         return emit('new_result', 'You are not login yet?')
@@ -36,21 +38,22 @@ def handle_data(d):
     db.query('INSERT INTO match_sets_banpick (`set_id`, `map_id`, `from`, `type`) VALUES (%s, %s, %s, %s);', [d['set'], d['map'], t_data['id'], d['type']])
     emit('new_result', db.get_match_sets_ban_pick(session['match_set_id']), broadcast=True)
 
-@socketio.on('ready')
+@socketio.on('ready', namespace='/pickban')
 def handle_data(d):
     if not session:
         return emit('new_result', 'You are not login yet?')
     emit('new_result', db.get_match_sets_ban_pick(session['match_set_id']), broadcast=True)
 
-@socketio.on('disconnect')
+@socketio.on('disconnect', namespace='/pickban')
 def handle_dis():
     db.query("UPDATE `tourney`.`player` SET `online`='0' WHERE  `user_id`=%s;", session['user_id'])
     emit('new_result', db.get_match_sets_ban_pick(session['match_set_id']), broadcast=True)
 
-@socketio.on('connect')
+@socketio.on('connect', namespace='/pickban')
 def handle_dis():
     db.query("UPDATE `tourney`.`player` SET `online`='1' WHERE  `user_id`=%s;", session['user_id'])
     emit('new_result', db.get_match_sets_ban_pick(session['match_set_id']), broadcast=True)
+# End of Pick ban Socket.io
 
 from blueprints.stream import stream
 app.register_blueprint(stream, url_prefix='/stream')
