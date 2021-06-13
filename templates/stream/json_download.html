@@ -1,0 +1,10 @@
+{% extends '/stream/base.html' %}
+{% block title %}JSON Download{% endblock %}
+{% block content %}
+{% for filename in list_brackets %}
+<!--
+    <a class="label label-primary" href="/stream/json/download/{{ filename }}" target="_blank" style="margin-right: 5px;">{{ filename }}</a>
+    -->
+    <a class="label label-primary" href="{{ url_for('stream.download', filename=filename) }}" target="_blank" style="margin-right: 5px;">{{ filename }}</a>
+{% endfor %}
+{% endblock %}
