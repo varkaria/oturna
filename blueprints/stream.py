@@ -43,3 +43,7 @@ def m_showcase():
 @stream.route('/match')
 def match():
     return render_template('stream/match.html')
+
+@stream.route('/countdown')
+def countdown():
+    return render_template('stream/countdown.html')

@@ -1,0 +1,203 @@
+p {
+  margin: 0;
+  padding: 0;
+}
+
+.varkaria-body {
+  margin: 0;
+  height: 720px;
+}
+
+.varkaria-mainFrame {
+  background-color: #2C2D2C;
+  height: 720px;
+  width: 1280px;
+  position: relative;
+  overflow: hidden;
+}
+
+.now_playing {
+  position: absolute;
+  width: 1220px;
+  height: 44px;
+  top: 616px;
+  background-color: rgba(0, 0, 0, 0);
+  transition: 0.2s ease;
+}
+
+.now_title {
+  position: absolute;
+  flex-flow: row;
+  width: 1160px;
+  height: 22px;
+  top: 0px;
+  left: 60px;
+  color: rgba(179, 177, 177, 1);
+  font-family: "DB Helvethaica X";
+  font-weight: 400;
+  font-size: 18px;
+  text-align: center;
+  align-items: flex-start;
+  line-height: 21.09375px;
+  transition: 0.2s ease;
+}
+
+.song_data {
+  position: absolute;
+  flex-flow: row;
+  width: 1160px;
+  height: 22px;
+  top: 22px;
+  left: 60px;
+  color: rgba(255, 255, 255, 1);
+  font-family: "DB Helvethaica X";
+  font-weight: 600;
+  font-size: 18px;
+  text-align: center;
+  align-items: flex-start;
+  line-height: 21.09375px;
+  transition: 0.2s ease;
+}
+
+.mascot {
+  position: absolute;
+  box-sizing: border-box;
+  width: 478px;
+  height: 1006px;
+  top: 24px;
+  left: 781px;
+  background-image: url("images/e97aa762537ef01425959e60001aaf077f612d0c.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.coffeebg {
+  position: absolute;
+  box-sizing: border-box;
+  width: 1279px;
+  height: 717px;
+  top: 3px;
+  left: 1px;
+  background-image: url("images/6a85df16f60ed168e7c7d3d0ecd3a7111c8ed8dc.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.logo {
+  position: absolute;
+  width: 588.5px;
+  height: 101px;
+  top: 310px;
+  left: 60px;
+  background-color: rgba(0, 0, 0, 0);
+}
+
+.coffeelogo {
+  position: absolute;
+  box-sizing: border-box;
+  width: 95px;
+  height: 85px;
+  top: 8px;
+  left: 0px;
+  background-image: url("/static/img/stream/logo_notitle.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.logotitle {
+  position: absolute;
+  width: 580px;
+  height: 101px;
+  top: 0px;
+  left: 115.5px;
+  background-color: rgba(0, 0, 0, 0);
+}
+
+.osutext {
+  position: absolute;
+  flex-flow: row;
+  width: 323px;
+  height: 43px;
+  top: 0px;
+  left: 0px;
+  color: rgba(255, 255, 255, 1);
+  font-family: DB Helvethaica X;
+  font-weight: bold;
+  font-size: 36px;
+  text-align: LEFT;
+  align-items: flex-start;
+  line-height: 70.1875px;
+}
+
+.thailandtext {
+  position: absolute;
+  flex-flow: row;
+  width: 820px;
+  height: 58px;
+  top: 43px;
+  left: 0px;
+  color: rgba(255, 255, 255, 1);
+  font-family: "DB Helvethaica X";
+  font-weight: 600;
+  font-size: 48px;
+  text-align: LEFT;
+  align-items: flex-start;
+  line-height: 56.25px;
+}
+
+.count-number {
+  position: absolute;
+  flex-flow: row;
+  width: 1280px;
+  height: 173px;
+  top: 273px;
+  left: 0px;
+  color: rgba(255, 255, 255, 1);
+  font-family: "DB Helvethaica X";
+  font-weight: 600;
+  font-size: 144px;
+  text-align: center;
+  align-items: flex-start;
+  line-height: 168.75px;
+  opacity: 0;
+}
+
+.countdown {
+  opacity: 1;
+}
+
+.started {
+  opacity: 0;
+}
+
+.console {
+  position: absolute;
+  left: 4.69%;
+  right: 0%;
+  top: 58.61%;
+  bottom: 8.33%;
+  font-family: "DB Helvethaica X";
+  font-weight: 1;
+  font-size: 22px;
+  line-height: 22px;
+  /* identical to box height */
+  color: #ffffff;
+}
+
+.console2 {
+    position: absolute;
+    left: 4.69%;
+    right: 0%;
+    top: 88.61%;
+    bottom: 8.33%;
+  
+    font-family: "DB Helvethaica X";
+    font-weight: 1;
+    font-size: 16px;
+    line-height: 22px;
+    /* identical to box height */
+  
+    color: #ffffff;
+  }
+  
