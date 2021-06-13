@@ -24,7 +24,6 @@ app = Flask(__name__, instance_relative_config=True)
 app.config.from_object(Config)
 socketio = SocketIO(app)
 
-
 # Pick ban Socket.io
 @socketio.on('firstdata', namespace='/pickban')
 def handle_data(d):
@@ -87,21 +86,21 @@ def callback():
             if staff:
                 let_login(staff)
                 print('Someone Logged to This Website With Staff Perm')
-                return redirect('https://omthpl.pro' + next_url[1])
+                return redirect(Config.BASE_URL + next_url[1])
             elif player:
                 let_login(player)
                 print('Someone Logged to This Website With Player Perm')
-                return redirect('https://omthpl.pro' + next_url[1])
+                return redirect(Config.BASE_URL + next_url[1])
             else:
-                return redirect('https://omthpl.pro')
+                return redirect(Config.BASE_URL)
         except Exception as e:
             print(e)
-    return redirect('https://omthpl.pro')
+    return redirect(Config.BASE_URL)
 
 @app.route('/logout')
 def logout():
     session.clear()
-    return redirect('https://omthpl.pro')
+    return redirect(Config.BASE_URL)
 
 @app.route('/favicon.ico')
 def faviconico():
