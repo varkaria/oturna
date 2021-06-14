@@ -60,7 +60,7 @@ def json_upload():
     if request.method == 'POST':
         file = request.files['file']
         if file.filename == '':
-            error = 'No file selected'
+            error = 'No file chosen'
             return render_template('stream/json_upload.html', error=error)
         if file and allowed_file(file.filename):
             try:
