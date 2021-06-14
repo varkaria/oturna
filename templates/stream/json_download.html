@@ -23,6 +23,14 @@
         width: 5vh;
         height: 5vh;
     }
+    a {
+        transform: scale(1);
+        transition: transform .2 ease-in-out;
+    }
+    a:hover {
+        transform: scale(1.05);
+        transition: transform .2 ease-in-out;
+    }
 </style>
 <nav class="mx-auto px-8">
     <div class="flex h-14 justify-between items-center">
@@ -37,16 +45,18 @@
         </div>
     </div>
 </nav>
-<div class="pt-5 flex flex-col">
-    <div class="flex justify-center items-center mx-auto">
-        <h1 class="text-3xl text-white">{{ error }}</h1>
+<section id="file-list">
+    <div class="pt-5 flex flex-col">
+        <div class="flex justify-center items-center mx-auto">
+            <h1 class="text-3xl text-white">{{ error }}</h1>
+        </div>
+        <div class="grid grid-cols-6 auto-cols-auto gap-1 gap-y-10 items-center">
+            {% for filename in list_brackets %}
+                <a class="text-white text-lg pl-5" href="/stream/json/download/{{ filename }}" target="_blank">{{ filename }}</a>
+            {% endfor %}
+        </div>
     </div>
-    <div class="grid grid-cols-6 auto-cols-auto space-y-5">
-        {% for filename in list_brackets %}
-        <a class="text-white text-lg pl-5" href="/stream/json/download/{{ filename }}" target="_blank" style="margin-right: 5px;">{{ filename }}</a>
-        {% endfor %}
-    </div>
-</div>
+</section>
 <footer>
     <div class="flex flex-row justify-center items-center text-white">
         <div class="py-3">
