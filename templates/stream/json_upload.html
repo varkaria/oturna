@@ -1,8 +1,6 @@
 {% extends '/stream/base.html' %}
 {% block title %}JSON Upload{% endblock %}
 {% block header %}
-<link rel="stylesheet" href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" type="text/css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap">
 {% endblock %}
 {% block content %}
 <style>
@@ -40,9 +38,10 @@
         </div>
     </nav>
     <section id="upload" class="flex h-screen justify-center items-center">
-        <form class="flex flex-col space-y-8" action="/stream/json/upload" method="POST" enctype="multipart/form-data">
-            <input type="file" name="file">
-            <input type="submit">
+        <form class="flex flex-col space-y-8 justify-center items-center" action="/stream/json/upload" method="POST" enctype="multipart/form-data">
+            <input class="text-white" type="file" name="file">
+            <button class="bg-white hover:text-white hover:bg-black text-black font-bold py-2 px-4 rounded-full" style="outline: none;" type="submit">Upload</button>
+            <h2 class="text-3xl text-white">{{ error }}</h2>
         </form>
     </section>
 </div>
