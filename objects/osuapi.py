@@ -3,7 +3,7 @@ from config import Config
 
 CLIENT_ID = Config.OSU_CLIENT_ID
 CLIENT_SCERET = Config.OSU_CLIENT_SCERET
-REDIRECT_URL = Config.OSU_REDIRECT_URL
+REDIRECT_URL = Config.BASE_URL + '/login'
 API_KEY = Config.OSU_API_KEY
 
 def todata(value):

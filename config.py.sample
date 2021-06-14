@@ -14,7 +14,7 @@ class Config(object):
     OSU_API_KEY = getenv('OSU_API_KEY','')
     OSU_CLIENT_ID = getenv('OSU_CLIENT_ID','')
     OSU_CLIENT_SCERET = getenv('OSU_CLIENT_SCERET','')
-    OSU_REDIRECT_URL = getenv('OSU_REDIRECT_URL','')
+    BASE_URL = getenv('BASE_URL','')
 
     HOST=getenv('HOST','')
     PORT=int(getenv('PORT',0))
