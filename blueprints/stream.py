@@ -99,7 +99,7 @@ def download_file():
     
 @stream.route('/json/download/<path:filename>', methods=['GET', 'POST'])
 def download(filename):
-    file = os.path.join(current_app.root_path, BRACKETS_FOLDER) + '/' +filename
+    file = os.path.join(current_app.root_path, BRACKETS_FOLDER) + '/' + filename
     response = send_file(file, mimetype='application/json',attachment_filename='brackets.json', as_attachment=True)
     response.headers["x-filename"] = 'brackets.json'
     response.headers["Access-Control-Expose-Headers"] = 'x-filename'
