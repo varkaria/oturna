@@ -3,6 +3,9 @@
 {% block page_title %}
 OM{{ match[0].code }} | {{ match[0].team1.full_name }} vs {{ match[0].team2.full_name }}
 {% endblock page_title %}
+{% block head %}
+<script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+{% endblock head %}
 {% block content %}
 
 <style>
@@ -28,7 +31,7 @@ OM{{ match[0].code }} | {{ match[0].team1.full_name }} vs {{ match[0].team2.full
     }
 </style>
 
-<div class="row mb-3">
+<div class="row mb-3" id="app">
     <div class="col-lg-8">
         <div class="card-tabs mb-5">
             <ul class="nav nav-tabs">
@@ -45,69 +48,19 @@ OM{{ match[0].code }} | {{ match[0].team1.full_name }} vs {{ match[0].team2.full
                 <div id="tab-top-set-1-i" class="card tab-pane show active">
                     <div class="card-body">
                         <h2 class="text-left">Varkaria Bans</h2>
-                        <div class="row">
-                            <div class="col">
-                                <div class="card bg-dark map-card text-start mb-3"
-                                    style="background: url(https://assets.ppy.sh/beatmaps/1342172/covers/cover.jpg);">
-                                    <a class="text-light" href="https://osu.ppy.sh/b/2785749"
-                                        target="_blank">
-                                        <div class="card-img-overlay red-pick">
-                                            <img class="mod-icon" src="/static/img/mods/HD.png">
-                                            <div class="text-truncate">
-                                                <h4 class="card-title fw-bold">Doradura [Cup]</h4>
-                                                <p class="card-text">dora || MAPPER: Nelly</p>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="card bg-dark map-card text-start mb-3"
-                                    style="background: url(https://assets.ppy.sh/beatmaps/1342172/covers/cover.jpg);">
-                                    <a class="text-light" href="https://osu.ppy.sh/b/2785749"
-                                        target="_blank">
-                                        <div class="card-img-overlay red-pick">
-                                            <img class="mod-icon" src="/static/img/mods/HD.png">
-                                            <div class="text-truncate">
-                                                <h4 class="card-title fw-bold">Doradura [Cup]</h4>
-                                                <p class="card-text">dora || MAPPER: Nelly</p>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <h2 class="text-left">Gusbell Bans</h2>
-                        <div class="row">
-                            <div class="col">
-                                <div class="card bg-dark map-card text-start mb-3"
-                                    style="background: url(https://assets.ppy.sh/beatmaps/1342172/covers/cover.jpg);">
-                                    <a class="text-light" href="https://osu.ppy.sh/b/2785749"
-                                        target="_blank">
-                                        <div class="card-img-overlay red-pick">
-                                            <img class="mod-icon" src="/static/img/mods/HD.png">
-                                            <div class="text-truncate">
-                                                <h4 class="card-title fw-bold">Doradura [Cup]</h4>
-                                                <p class="card-text">dora || MAPPER: Nelly</p>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="card bg-dark map-card text-start mb-3"
-                                    style="background: url(https://assets.ppy.sh/beatmaps/1342172/covers/cover.jpg);">
-                                    <a class="text-light" href="https://osu.ppy.sh/b/2785749"
-                                        target="_blank">
-                                        <div class="card-img-overlay red-pick">
-                                            <img class="mod-icon" src="/static/img/mods/HD.png">
-                                            <div class="text-truncate">
-                                                <h4 class="card-title fw-bold">Doradura [Cup]</h4>
-                                                <p class="card-text">dora || MAPPER: Nelly</p>
-                                            </div>
-                                        </div>
-                                    </a>
+                        <div>
+                            <div class="matchBan" style="background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)) center center / cover no-repeat, 
+                                        url(https://assets.ppy.sh/beatmaps/1276349/covers/cover.jpg);">
+                                <a href="https://osu.ppy.sh/b/2651829">
+                                    <div class="matchMapArtist">Nasty Children</div>
+                                </a> <a href="https://osu.ppy.sh/b/2651829">
+                                    <div class="matchMapTitle">SCARLET TEMPEST</div>
+                                </a>
+                                <div class="matchMapDiff">[Corsace]</div>
+                                <div class="matchBanHover">
+                                    <div class="mapID">DOUBLE TIME MAP 2</div>
+                                    <div class="pickBanBy">BANNED BY</div>
+                                    <div class="pickBanTeam">Starbound</div>
                                 </div>
                             </div>
                         </div>
@@ -115,17 +68,19 @@ OM{{ match[0].code }} | {{ match[0].team1.full_name }} vs {{ match[0].team2.full
                 </div>
                 <div id="tab-top-set-1-1" class="card tab-pane">
                     <div class="card-body">
-                        <div class="card bg-dark map-card text-start mb-3"
-                            style="background: url(https://assets.ppy.sh/beatmaps/1342172/covers/cover.jpg);">
-                            <a class="text-light" href="https://osu.ppy.sh/b/2785749" target="_blank">
-                                <div class="card-img-overlay red-pick">
-                                    <img class="mod-icon" src="/static/img/mods/HD.png">
-                                    <div class="text-truncate">
-                                        <h4 class="card-title fw-bold">Doradura [Cup]</h4>
-                                        <p class="card-text">dora || MAPPER: Nelly</p>
-                                    </div>
-                                </div>
+                        <div class="matchBan" style="background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)) center center / cover no-repeat, 
+                        url(https://assets.ppy.sh/beatmaps/1276349/covers/cover.jpg);">
+                            <!----> <a href="https://osu.ppy.sh/b/2651829">
+                                <div class="matchMapArtist">Nasty Children</div>
+                            </a> <a href="https://osu.ppy.sh/b/2651829">
+                                <div class="matchMapTitle">SCARLET TEMPEST</div>
                             </a>
+                            <div class="matchMapDiff">[Corsace]</div>
+                            <div class="matchBanHover">
+                                <div class="mapID">DOUBLE TIME MAP 2</div>
+                                <div class="pickBanBy">BANNED BY</div>
+                                <div class="pickBanTeam">Starbound</div>
+                            </div>
                         </div>
                         <div class="result">
                             <table class="table table-vcenter">
@@ -228,4 +183,24 @@ OM{{ match[0].code }} | {{ match[0].team1.full_name }} vs {{ match[0].team2.full
         </div>
     </div>
 </div>
+
+<script>
+    new Vue({
+        el: '#app',
+        delimiters: ["<%", "%>"],
+        data: {
+            results: {},
+        },
+        created: function () {
+            
+        },
+        methods: {
+            FetchData() {
+                fetch('http://example.com/movies.json')
+                .then(response => response.json())
+                .then(data => console.log(data));
+            }
+        }
+    });
+</script>
 {% endblock content %}
