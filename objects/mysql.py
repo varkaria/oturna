@@ -108,7 +108,7 @@ class DB(object):
             'id', m.id,
             'code', m.code,
             'date', DATE_FORMAT(m.date, '%Y-%m-%d %H:%i'),
-            'round', JSON_OBJECT('id', r.id, 'name', r.name, 'description', r.description, 'best_of', r.best_of, 'start_date', DATE_FORMAT(r.start_date, '%Y-%m-%d %H:%i')),
+            'round', JSON_OBJECT('id', r.id, 'name', r.name, 'description', r.description, 'start_date', DATE_FORMAT(r.start_date, '%Y-%m-%d %H:%i')),
             'team1', JSON_OBJECT('id', t1.id, 'full_name', t1.full_name, 'flag_name', t1.flag_name, 'acronym', t1.acronym, 'score', m.team1_score),
             'team2', JSON_OBJECT('id', t2.id, 'full_name', t2.full_name, 'flag_name', t2.flag_name, 'acronym', t2.acronym, 'score', m.team2_score),
             'referee', JSON_OBJECT('id', ref.id, 'group_id', ref.group_id, 'user_id', ref.user_id, 'username', ref.username),
@@ -120,8 +120,7 @@ class DB(object):
             'live', (m.date < NOW()),
             'loser', (m.loser = 1),
             'stats', m.stats,
-            'note', m.note,
-            'winpoint', CEIL(r.best_of/2+1)
+            'note', m.note
             ) AS `json`
             FROM `match` m
             LEFT JOIN `round` r ON r.id = m.round_id

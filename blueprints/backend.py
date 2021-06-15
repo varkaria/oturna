@@ -394,11 +394,10 @@ def rounds():
         values = (
             request.form.get('name', type=str),
             request.form.get('description', None, str),
-            request.form.get('best_of', type=int),
             request.form.get('start_date', type=str)
         )
         try:
-            db.query("INSERT INTO `round` (name, description, best_of, start_date) VALUES (%s, %s, %s, %s)", values)
+            db.query("INSERT INTO `round` (name, description, start_date) VALUES (%s, %s, %s)", values)
             flash('Round: {} added successfully'.format(values[0]), 'success')
             return redirect(url_for('backend.rounds'))
         except Exception as e:
@@ -414,7 +413,6 @@ def rounds_update(round_id):
         id=request.form.get('id', type=int),
         name=request.form.get('name', type=str),
         description=request.form.get('description', None, str),
-        best_of=request.form.get('best_of', type=int),
         start_date=request.form.get('start_date', None, str),
         pool_publish=request.form.get('pool_publish', 0, int)
     )
