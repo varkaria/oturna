@@ -138,6 +138,61 @@ class DB(object):
         query = self.query_all(query_text)
         return [json.loads(m['json']) for m in query]
 
+    def get_full_match(self, id=None):
+        query_text = """SELECT JSON_OBJECT(
+        'id', m.id,
+        'code', m.code,
+        'date', DATE_FORMAT(m.date, '%Y-%m-%d %H:%i'),
+        'round', JSON_OBJECT('id', r.id, 'name', r.name, 'description', r.description, 'start_date', DATE_FORMAT(r.start_date, '%Y-%m-%d %H:%i')),
+        'team1', JSON_OBJECT('id', t1.id, 'full_name', t1.full_name, 'flag_name', t1.flag_name, 'acronym', t1.acronym, 'score', m.team1_score),
+        'team2', JSON_OBJECT('id', t2.id, 'full_name', t2.full_name, 'flag_name', t2.flag_name, 'acronym', t2.acronym, 'score', m.team2_score),
+        'referee', JSON_OBJECT('id', ref.id, 'group_id', ref.group_id, 'user_id', ref.user_id, 'username', ref.username),
+        'streamer', JSON_OBJECT('id', str.id, 'group_id', str.group_id, 'user_id', str.user_id, 'username', str.username),
+        'commentator', JSON_OBJECT('id', com.id, 'group_id', com.group_id, 'user_id', com.user_id, 'username', com.username),
+        'commentator2', JSON_OBJECT('id', com2.id, 'group_id', com2.group_id, 'user_id', com2.user_id, 'username', com2.username),
+        'mp_link', m.mp_link,
+        'video_link', m.video_link,
+        'live', (m.date < NOW()),
+        'loser', (m.loser = 1),
+        'stats', m.stats,
+        'note', m.note
+        ) AS `json`
+        FROM `match` m
+        LEFT JOIN `round` r ON r.id = m.round_id
+        LEFT JOIN team t1 ON t1.id = m.team1
+        LEFT JOIN team t2 ON t2.id = m.team2
+        LEFT JOIN staff ref ON ref.id = m.referee
+        LEFT JOIN staff str ON str.id = m.streamer
+        LEFT JOIN staff com ON com.id = m.commentator
+        LEFT JOIN staff com2 ON com2.id = m.commentator2
+        """
+        if not id:
+            return 'no owo'
+        else:
+            query_text += " WHERE "
+        if id: query_text += "m.id = %d " % id
+        query = self.query_one(query_text)
+        fulldata = json.loads(query['json'])
+        l_sets = self.query_all("SELECT id FROM match_sets WHERE match_id=%s", [id])
+        o_sets = []
+        for s in l_sets:
+            bans = []
+            picks = []
+            pickbans = self.query_all("SELECT `id`, `map_id`, `from`, `type` FROM match_sets_banpick WHERE set_id=%s", [s['id']])
+            for m in pickbans:
+                if m['type'] == 'ban':
+                    bans.append(m)
+                elif m['type'] == 'pick':
+                    picks.append(m)
+
+            o_sets.append({
+                'ban': bans,
+                'pick': picks
+            })
+        fulldata['sets'] = o_sets
+
+        return fulldata
+
     def get_staff(self, staff_id=None, user_id=None, format=True, viewall=False):
         if user_id:
             query = self.query_one('select * from staff where user_id = %s and active = 1', (user_id,))
