@@ -644,3 +644,9 @@ def refree_helper(id:int):
 @need_privilege(Staff.REFEREE)
 def refree_helper_api(id:int):
     return db.get_full_match(id=int(id))
+
+@backend.route('/matchapi2/<id>/')
+@login_required
+@need_privilege(Staff.REFEREE)
+def refree_helper_api2(id:int):
+    return db.get_match_sets_ban_pick_full(id=int(id))

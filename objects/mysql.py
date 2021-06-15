@@ -178,12 +178,16 @@ class DB(object):
         for s in l_sets:
             bans = []
             picks = []
-            pickbans = self.query_all("SELECT `id`, `map_id`, `from`, `type` FROM match_sets_banpick WHERE set_id=%s", [s['id']])
+            pickbans = self.query_all("SELECT m.id, m.map_id, m.from, m.type, p.info FROM match_sets_banpick `m` LEFT JOIN `mappool` `p` ON p.beatmap_id = m.map_id WHERE set_id=%s", [s['id']])
             for m in pickbans:
+                m['info'] = json.loads(m['info'])
                 if m['type'] == 'ban':
                     bans.append(m)
                 elif m['type'] == 'pick':
                     picks.append(m)
+
+                if 'scoreteam1' >= 2 and 'scoreteam2' >= 2: # add tiebreaker picks
+                    ...
 
             o_sets.append({
                 'ban': bans,
