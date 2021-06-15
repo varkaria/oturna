@@ -1,19 +1,19 @@
 .dark-background {
-    background-color: rgb(0,0,0,0.4);
+    background-color: rgb(0, 0, 0, 0.4);
     transition: background-color 160ms;
 }
 
 .dark-background:hover {
-    background-color: rgb(0,0,0,0.6);
+    background-color: rgb(0, 0, 0, 0.6);
 }
 
 .hover-dark {
-    background-color: rgb(0,0,0,0);
+    background-color: rgb(0, 0, 0, 0);
     transition: background-color 160ms;
 }
 
 .hover-dark:hover {
-    background-color: rgb(0,0,0,0.1);
+    background-color: rgb(0, 0, 0, 0.1);
 }
 
 .hover-light {
@@ -28,4 +28,651 @@
 .song-banner {
     background-color: rgb(178, 178, 178);
     transition: all 160ms;
+}
+
+
+.matchResultTeamPlayer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative
+}
+
+.matchTeamPlayerInfo {
+    display: grid;
+    align-items: center;
+    grid-auto-flow: column;
+    grid-gap: 6px;
+    position: relative
+}
+
+.matchTeamPlayerInfoInput {
+    width: 6em
+}
+
+.matchTeamPlayerName,
+.matchTeamPlayerName::placeholder {
+    font-size: 22px;
+    white-space: nowrap
+}
+
+.matchTeamPlayerNameInput {
+    width: 6em
+}
+
+.matchTeamPlayerMods,
+.matchTeamPlayerMods::placeholder {
+    font-size: 13px;
+    background: 0;
+    outline: 0;
+    border: 0;
+    font-family: inherit
+}
+
+.matchTeamPlayerModsInput {
+    width: 5em
+}
+
+.score {
+    display: flex;
+    align-items: flex-end;
+    flex-direction: column
+}
+
+.fullScore {
+    font-size: 16px;
+    text-align: right
+}
+
+.scoreSpecs {
+    font-size: 12px;
+    display: grid;
+    grid-auto-flow: column;
+    grid-gap: 6px
+}
+
+.scoreSpecsInput {
+    width: 8em
+}
+
+.matchTeamPlayerMods,
+.matchTeamPlayerMods::placeholder,
+.scoreSpecs {
+    color: #866662;
+    font-weight: 700
+}
+
+.fullScore,
+.fullScore::placeholder,
+.matchTeamPlayerName,
+.matchTeamPlayerName::placeholder {
+    letter-spacing: .3px;
+    color: #c8cfd5;
+    text-shadow: 0 0 10px rgba(200, 207, 213, .75);
+    border: 0;
+    outline: 0;
+    background: 0;
+    font-family: inherit
+}
+
+.modResults {
+    left: 0;
+    top: 115%
+}
+
+.scoreAcc,
+.scoreAcc::placeholder,
+.scoreCombo,
+.scoreCombo::placeholder,
+.scoreMiss,
+.scoreMiss::placeholder {
+    background: 0;
+    border: 0;
+    outline: 0;
+    font: inherit;
+    color: inherit
+}
+
+.scoreComboInput {
+    width: 2em
+}
+
+.scoreAccInput {
+    width: 3em
+}
+
+.scoreMissInput {
+    width: 1.5em;
+    padding: 0 3px
+}
+
+.enterScore {
+    cursor: pointer;
+    margin: auto;
+    left: 0;
+    top: 0;
+    right: 0;
+    position: relative;
+    width: 7px;
+    height: 7px;
+    border-radius: 5px;
+    background-color: #0090ff
+}
+
+.scoreInput {
+    z-index: 2
+}
+
+.matchPickWrapper {
+    padding-left: 9px;
+    grid-column: 1/3;
+    grid-row: span 5;
+    background-size: cover
+}
+
+.matchResult {
+    padding-top: 9px;
+    padding-right: 9px;
+    padding-bottom: 20px
+}
+
+.matchTeams {
+    display: grid;
+    grid-auto-flow: column;
+    grid-gap: 20px;
+    font-style: italic;
+    grid-template-columns: 1fr 1fr
+}
+
+.matchTeam {
+    display: grid;
+    grid-gap: 6px;
+    background-color: rgba(0, 0, 0, .5);
+    border: 0;
+    border-radius: 10px;
+    padding: 12px
+}
+
+.matchTeamAScore {
+    grid-row: 2/3;
+    justify-self: center;
+    font-size: 20px;
+    font-style: normal
+}
+
+.matchResultTeamName {
+    justify-self: center;
+    font-size: 24px;
+    letter-spacing: .3px;
+    font-style: normal
+}
+
+.Winner {
+    font-weight: 700
+}
+
+.setResult {
+    display: grid;
+    flex-direction: column;
+    justify-items: center;
+    grid-gap: 10px
+}
+
+.matchTotalScore,
+.setScore {
+    display: grid;
+    grid-auto-flow: column;
+    grid-gap: 20px
+}
+
+.show-enter-active {
+    max-height: 100%
+}
+
+.show-enter-active,
+.show-leave-active {
+    transition: .3s cubic-bezier(0, 0, .25, 1)
+}
+
+.show-enter,
+.show-leave-to {
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden
+}
+
+.show-enter-to,
+.show-leave {
+    opacity: 1;
+    overflow: hidden
+}
+
+.mapLink,
+.mapLink::placeholder {
+    background: none;
+    border: none;
+    outline: none;
+    font: inherit;
+    font-size: 18px;
+    color: #fff
+}
+
+.matchSet {
+    display: grid;
+    grid-template-columns: 1fr 1fr
+}
+
+.matchBan,
+.matchPick {
+    position: relative;
+    display: grid;
+    grid-template-rows: repeat(3, 0.8fr);
+    overflow: hidden;
+    margin-bottom: 12px;
+    border-radius: 6px;
+}
+
+.matchBan {
+    padding: 14px;
+}
+
+.matchPick {
+    padding: 9px 9px 9px 0
+}
+
+.matchMapArtist {
+    font-size: 15px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: normal;
+    overflow: hidden;
+    width: 50%;
+    height: 25px;
+    color: white;
+}
+
+.matchMapTitle {
+    font-size: 24px;
+    height: 33px
+}
+
+.matchMapDiff,
+.matchMapTitle {
+    font-weight: 700;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: normal;
+    overflow: hidden;
+    width: 50%;
+    color: white;
+}
+
+.matchMapDiff {
+    grid-row: 4/5;
+    font-size: 20px
+}
+
+.matchMapWinner {
+    position: absolute;
+    font-size: 30px;
+    right: 8%;
+    align-self: center;
+    font-weight: 700;
+    letter-spacing: .3px;
+    margin-top: 10px;
+    width: 11em
+}
+
+.matchPickHover {
+    grid-template-areas: "filler1 mapID""pickBanShow pickBanBy"
+}
+
+.matchBanHover,
+.matchPickHover {
+    position: absolute;
+    display: grid;
+    padding: 10px 10px 10px 32px;
+    height: 84%;
+    right: 0;
+    transition: transform .35s cubic-bezier(0, 0, 0, .96);
+    width: 45%;
+    transform: translateX(85.5%);
+}
+
+.matchBan:hover > .matchBanHover,
+.matchPick:hover > .matchPickHover {
+    transform: translateX(0px);
+}
+
+.matchBanHover {
+    grid-template-areas: "mapID""pickBanBy";
+    text-align: right;
+    grid-template-rows: 4fr 1fr 1fr;
+    background-color: #ff4848
+}
+
+.matchPickHover {
+    background-color: #5ec949
+}
+
+.mapID {
+    font-weight: 700;
+    grid-area: mapID;
+    font-size: 18px;
+    text-align: right
+}
+
+.pickBanBy {
+    font-size: 16px;
+    grid-area: pickBanBy;
+    line-height: 20px;
+    margin-top: auto;
+    text-align: right
+}
+
+.pickBanTeam {
+    font-size: 20px;
+    font-weight: 700;
+    align-self: center
+}
+
+.filler1 {
+    grid-area: filler1
+}
+
+.pickBanShow {
+    grid-area: pickBanShow;
+    font-size: 12px;
+    margin-top: auto;
+    cursor: pointer
+}
+
+.matchPageWrapper {
+    position: relative;
+    display: grid;
+    grid-gap: 15px;
+    margin-top: 40px;
+    padding: 40px 80px;
+    justify-self: center;
+    background-color: #202020;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    width: 800px
+}
+
+.matchSubheader {
+    display: grid;
+    grid-auto-flow: column;
+    align-items: center
+}
+
+.firstInfo {
+    font-size: 18px;
+    font-style: italic
+}
+
+.first,
+.second {
+    cursor: pointer;
+    font-weight: 700
+}
+
+.second {
+    color: #5f5f5f
+}
+
+.first {
+    color: #b64c4c
+}
+
+.staffEditMatch {
+    color: #866662;
+    cursor: pointer;
+    font-size: 24px;
+    display: grid;
+    grid-column-gap: 5px;
+    grid-auto-flow: column;
+    justify-self: end
+}
+
+.matchHeader {
+    display: grid;
+    position: relative;
+    grid-column-gap: 20px
+}
+
+.matchDemerits {
+    right: 0;
+    top: 53%
+}
+
+.matchTitle {
+    font-size: 64px;
+    font-weight: 700;
+    white-space: nowrap
+}
+
+.matchID {
+    color: #b64c4c
+}
+
+.matchDateandInfo {
+    grid-column: 2/3;
+    grid-row: 1/3;
+    justify-self: end;
+    text-align: right
+}
+
+.matchDate,
+.matchDate::placeholder {
+    font-size: 24px;
+    font-weight: 700;
+    background: none;
+    border: 0;
+    outline: 0;
+    font-family: inherit;
+    color: #fff
+}
+
+.matchDateEdit {
+    font-style: italic;
+    width: 4em;
+    height: 1em;
+    text-align: start
+}
+
+.matchDateEditWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end
+}
+
+.matchSearchResults {
+    width: 200px;
+    z-index: 100;
+    margin: auto;
+    left: 80%;
+    top: 9%
+}
+
+.matchLinkInputWrapper,
+.matchLinks {
+    margin-top: 9px
+}
+
+.matchLinkInputWrapper {
+    display: flex;
+    flex-direction: column
+}
+
+.matchBans {
+    text-align: center;
+    font-weight: 700;
+    font-size: 30px
+}
+
+.matchLinkInput,
+.matchLinkInput::placeholder {
+    text-align: right;
+    padding: 0 2px;
+    font-size: 12px;
+    color: #b64c4c;
+    line-height: 15px;
+    font-style: italic;
+    background: 0;
+    border: 0;
+    outline: 0;
+    font-family: inherit
+}
+
+.matchVs {
+    font-size: 28px;
+    font-weight: 700
+}
+
+.matchVsTeam {
+    color: #b64c4c;
+    background: 0;
+    border: 0;
+    outline: 0;
+    font: inherit;
+    width: 296px
+}
+
+.matchStaffList {
+    background-color: rgba(0, 0, 0, .5);
+    font-size: 20px;
+    font-weight: 700;
+    padding: 15px;
+    display: grid;
+    grid-template-areas: "matchRef matchRef matchStream matchStream""matchComm matchComm matchComm matchComm";
+    grid-auto-flow: row;
+    grid-row-gap: 8px;
+    grid-template: 1fr 1fr 1fr 1fr;
+    min-width: 0;
+    min-height: 0
+}
+
+.matchRef {
+    grid-area: matchRef
+}
+
+.matchStream {
+    grid-area: matchStream
+}
+
+.matchComm {
+    grid-area: matchComm
+}
+
+.matchStaffer {
+    font-weight: 400;
+    color: #b64c4c
+}
+
+.bold {
+    font-weight: 700
+}
+
+.matchResultFinalSpoiler {
+    cursor: pointer;
+    justify-items: center;
+    align-items: center;
+    height: 4em
+}
+
+.matchResultFinal,
+.matchResultFinalSpoiler {
+    background: rgba(0, 0, 0, .5);
+    display: grid;
+    padding: 9px
+}
+
+.matchResultFinal {
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto;
+    grid-row-gap: 10px
+}
+
+.matchScoreFinal {
+    display: grid;
+    grid-auto-flow: column;
+    grid-gap: 20px;
+    justify-self: center;
+    grid-column: 2/3
+}
+
+.matchWinnerFinal {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: .2px;
+    text-align: center;
+    grid-column: 2/3
+}
+
+.matchToBottom {
+    justify-self: end;
+    text-align: right;
+    color: #5f5f5f;
+    font-size: 12px;
+    cursor: pointer;
+    grid-row: 1/2;
+    grid-column: 3/4
+}
+
+.filler1 {
+    grid-area: filler1
+}
+
+.filler2 {
+    grid-area: filler2
+}
+
+.mainMatchSection {
+    display: grid;
+    grid-gap: 75px
+}
+
+.refDemerit {
+    cursor: pointer
+}
+
+.matchTeamSelection {
+    bottom: -60px
+}
+
+.resetButton {
+    position: absolute;
+    cursor: pointer;
+    height: 10px;
+    width: 10px;
+    background-color: red;
+    border-radius: 50%
+}
+
+.teamAMatchScoreFinal,
+.teamBMatchScoreFinal {
+    display: grid;
+    grid-auto-flow: column;
+    grid-gap: 5px
+}
+
+.demeritAmountDropdown {
+    border: 0;
+    outline: 0;
+    background-color: #000;
+    color: #fff;
+    font: inherit;
+    font-size: 20px
+}
+
+.potentials {
+    padding: 10px 0;
+    margin: 10px 0;
+    border-radius: 10px;
+    background-color: #000;
+    text-align: center;
+    cursor: pointer
 }
