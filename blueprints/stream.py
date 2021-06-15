@@ -40,7 +40,7 @@ def greeting_cm():
     return render_template('stream/greeting_cm.html')
 
 @stream.route('/greeting_host')
-def greeting_daniel():
+def greeting_host():
     return render_template('stream/greeting_host.html')
 
 @stream.route('/showcase')
@@ -80,7 +80,7 @@ def json_upload():
     return render_template('stream/json_upload.html')
 
 @stream.route('/json/download/', methods=['GET', 'POST'])
-def download_file():
+def json_download():
     path = BRACKETS_FOLDER
     list_brackets = {}
     try:
@@ -88,7 +88,6 @@ def download_file():
         if os.listdir(path) != []:
             for filename in os.listdir(path):
                 list_brackets[filename] = filename
-                print(filename)
             return render_template('stream/json_download.html', filename=filename, list_brackets=list_brackets)
         else:
             error = 'No json uploaded'
@@ -97,10 +96,8 @@ def download_file():
         error = 'You need to login to view the file'
         return render_template('stream/json_download.html', error=error)
     
-@stream.route('/json/download/<path:filename>', methods=['GET', 'POST'])
+@stream.route('/json/download/<path:filename>')
 def download(filename):
     file = os.path.join(current_app.root_path, BRACKETS_FOLDER) + '/' + filename
-    response = send_file(file, mimetype='application/json',attachment_filename='brackets.json', as_attachment=True)
-    response.headers["x-filename"] = 'brackets.json'
-    response.headers["Access-Control-Expose-Headers"] = 'x-filename'
+    response = send_file(file, mimetype='application/json', attachment_filename='brackets.json', as_attachment=True)
     return response

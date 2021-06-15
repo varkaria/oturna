@@ -46,7 +46,6 @@
     .file-name {
         position: absolute;
         bottom: -30px;
-        left: -10px;
         font-size: 0.85rem;
         color: rgb(180, 180, 180);
         width: 100vh;
@@ -90,19 +89,19 @@
                 <a href="/stream/json/upload">JSON Uploader</a>
             </div>
             <div class="flex-row justify-end text-white text-3xl">
-                <div class='flex gap-4 items-center'>
-                    <img src="https://a.ppy.sh/{{ session.user_id }}" class="avatar">
-                    <a href="/" class="text-xl right-16 top-4">{{ session.username }}</a>
+                <div class='flex gap-4 items-center'></a>
+                    <a href="https://osu.ppy.sh/u/{{ session.user_id }}" target="_blank"><img src="https://a.ppy.sh/{{ session.user_id }}" class="avatar"></a>
+                    <a href="https://osu.ppy.sh/u/{{ session.user_id }}" target="_blank" class="text-xl right-16 top-4">{{ session.username }}</a>
                 </div>
             </div>
         </div>
     </nav>
-    <section id="upload" class="flex h-screen justify-center items-center pb-56">
+    <section id="upload" class="flex h-screen justify-center items-center pb-60">
         <form class="flex flex-col space-y-8 justify-center items-center" action="/stream/json/upload" method="POST" enctype="multipart/form-data">
             <h2 class="text-3xl text-white">{{ error }}</h2>
             <div class="file-input">
                 <input name="file" type="file" id="file" class="file">
-                <label for="file">
+                <label for="file" style="outline: none;">
                     Select file
                     <p class="file-name"></p>
                 </label>

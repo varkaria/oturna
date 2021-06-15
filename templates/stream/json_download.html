@@ -23,11 +23,11 @@
         width: 5vh;
         height: 5vh;
     }
-    a {
+    .json-file {
         transform: scale(1);
         transition: transform .2 ease-in-out;
     }
-    a:hover {
+    .json-file:hover {
         transform: scale(1.05);
         transition: transform .2 ease-in-out;
     }
@@ -39,8 +39,8 @@
         </div>
         <div class="flex-row justify-end text-white text-3xl">
             <div class='flex gap-4 items-center'>
-                <img src="https://a.ppy.sh/{{ session.user_id }}" class="avatar">
-                <a href="/" class="text-xl right-16 top-4">{{ session.username }}</a>
+                <a href="https://osu.ppy.sh/u/{{ session.user_id }}" target="_blank"><img src="https://a.ppy.sh/{{ session.user_id }}" class="avatar"></a>
+                <a href="https://osu.ppy.sh/u/{{ session.user_id }}" target="_blank" class="text-xl right-16 top-4">{{ session.username }}</a>
             </div>
         </div>
     </div>
@@ -52,7 +52,7 @@
         </div>
         <div class="grid grid-cols-6 auto-cols-auto gap-1 gap-y-10 items-center">
             {% for filename in list_brackets %}
-                <a class="text-white text-lg pl-5" href="/stream/json/download/{{ filename }}" target="_blank">{{ filename }}</a>
+                <a class="json-file text-white text-lg pl-5" href="/stream/json/download/{{ filename }}" target="_blank">{{ filename }}</a>
             {% endfor %}
         </div>
     </div>

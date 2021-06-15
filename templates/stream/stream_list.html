@@ -20,6 +20,14 @@
         width: 5vh;
         height: 5vh;
     }
+    li {
+        transform: scale(1);
+        transition: transform .2 ease-in-out;
+    }
+    li:hover {
+        transform: scale(1.05);
+        transition: transform .2 ease-in-out;
+    }
 </style>
 <nav class="mx-auto px-8">
     <div class="flex h-14 justify-between items-center">
@@ -28,8 +36,8 @@
         </div>
         <div class="flex-row justify-end text-white text-3xl">
             <div class='flex gap-4 items-center'>
-                <img src="https://a.ppy.sh/{{ session.user_id }}" class="avatar">
-                <a href="/" class="text-xl right-16 top-4">{{ session.username }}</a>
+                <a href="https://osu.ppy.sh/u/{{ session.user_id }}" target="_blank"><img src="https://a.ppy.sh/{{ session.user_id }}" class="avatar"></a>
+                <a href="https://osu.ppy.sh/u/{{ session.user_id }}" target="_blank" class="text-xl right-16 top-4">{{ session.username }}</a>
             </div>
         </div>
     </div>
