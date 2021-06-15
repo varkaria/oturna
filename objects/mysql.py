@@ -160,7 +160,7 @@ class DB(object):
             staff[s['th_name']].append(s)
         return staff
 
-    def get_match_sets_ban_pick(self, id):
+    def get_match_sets_ban_pick_full(self, id): # for socket.io client
         res = self.query_one(
             f"""SELECT JSON_OBJECT(
             'id', m.id,
