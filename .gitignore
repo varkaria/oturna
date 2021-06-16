@@ -143,3 +143,5 @@ static/css/fonts-front/DBSodaX-DemiBold.woff
 static/css/fonts-front/DBSodaX-Bold.woff2
 static/css/fonts-front/DBSodaX-Bold.woff
 config.py
+
+.data/team_pics/*
