@@ -181,6 +181,23 @@ class DB(object):
             pickbans = self.query_all("SELECT m.id, m.map_id, m.from, m.type, p.info FROM match_sets_banpick `m` LEFT JOIN `mappool` `p` ON p.beatmap_id = m.map_id WHERE set_id=%s", [s['id']])
             for m in pickbans:
                 m['info'] = json.loads(m['info'])
+
+        with open('sample.json', 'r') as readfile:
+            man = json.load(readfile)
+
+        for s in l_sets:
+            bans = []
+            picks = [] # , p.info hiding
+            score = {"teama" : 0,"teamb" : 0}
+            pointtowin = 3
+            pickbans = self.query_all("""
+            SELECT m.id, m.map_id, m.from, m.type 
+            FROM match_sets_banpick `m` 
+            LEFT JOIN `mappool` `p` ON p.beatmap_id = m.map_id 
+            WHERE set_id=%s""", [s['id']])
+            
+            for m in pickbans: #filtering about picks and bans
+                # m['info'] = json.loads(m['info'])
                 if m['type'] == 'ban':
                     bans.append(m)
                 elif m['type'] == 'pick':
@@ -192,6 +209,17 @@ class DB(object):
             o_sets.append({
                 'ban': bans,
                 'pick': picks
+                if score['teama'] >= pointtowin - 1 and score['teamb'] >= pointtowin - 1: # add tiebreaker picks if it's tiebreaker
+                    self.query_one("SELECT id, beatmap_id AS map_id, 'tiebreaker' AS 'from', 'pick' AS 'type', info FROM mappool WHERE round_id=%s",[fulldata['round']['id']])
+
+                print(man)
+
+            
+
+            o_sets.append({
+                'ban': bans,
+                'pick': picks,
+                'score': score
             })
         fulldata['sets'] = o_sets
 
