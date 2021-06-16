@@ -65,6 +65,10 @@ db.sqlite3-journal
 instance/
 .webassets-cache
 
+# JSON file
+.data/brackets/*.json
+.data/team_pics/*
+
 # Scrapy stuff:
 .scrapy
 
@@ -140,5 +144,3 @@ static/css/fonts-front/DBSodaX-DemiBold.woff
 static/css/fonts-front/DBSodaX-Bold.woff2
 static/css/fonts-front/DBSodaX-Bold.woff
 config.py
-
-.data/team_pics/*

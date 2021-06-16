@@ -4,10 +4,20 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>OMTHPL2021 | {% block title %}{% endblock %}</title>
+        <title>{% block title %}{% endblock %} | OMTHPL2021</title>
         {% block header %}{% endblock %}
+        <link rel="stylesheet" href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" type="text/css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap">
     </head>
     <body>
+        <style>
+            footer {
+                position: absolute;
+                bottom: 0;
+                width: 100%;
+                background-color: rgb(38, 38, 38);
+            }
+        </style>
         {% block content %}
         {% endblock %}
     </body>

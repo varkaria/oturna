@@ -1,5 +1,5 @@
 {% extends '/stream/base.html' %}
-{% block title %}Lists{% endblock %}
+{% block title %}JSON Download{% endblock %}
 {% block content %}
 <style>
     html {
@@ -10,21 +10,24 @@
         background-color: rgb(44, 45, 44);
         overflow: hidden;
     }
+
     body {
         font-family: 'Varela Round'
     }
+
     nav {
         background-color: rgb(38, 38, 38);
     }
+
     img {
         width: 5vh;
         height: 5vh;
     }
-    li {
+    .json-file {
         transform: scale(1);
         transition: transform .2 ease-in-out;
     }
-    li:hover {
+    .json-file:hover {
         transform: scale(1.05);
         transition: transform .2 ease-in-out;
     }
@@ -32,7 +35,7 @@
 <nav class="mx-auto px-8">
     <div class="flex h-14 justify-between items-center">
         <div class="flex-row justify-start text-white text-3xl">
-            <a href="/stream/">Streamer Tools</a>
+            <a href="/stream/json/download">JSON Download</a>
         </div>
         <div class="flex-row justify-end text-white text-3xl">
             <div class='flex gap-4 items-center'>
@@ -42,21 +45,16 @@
         </div>
     </div>
 </nav>
-<section id="main" class="h-5/6">
-    <div class="flex flex col justify-center space-x-32">
-        <ul class="text-white text-lg mt-10">
-            <h1 class="text-3xl pb-5">Stream Elements</h1>
-            <li><a href="/stream/greeting_cm">- greeting_commentator</a></li>
-            <li><a href="/stream/greeting_host">- greeting_host</a></li>
-            <li><a href="/stream/showcase">- showcase</a></li>
-            <li><a href="/stream/match">- match</a></li>
-            <li><a href="/stream/">- ඞ</a></li>
-        </ul>
-        <ul class="text-white text-lg mt-10">
-            <h1 class="text-3xl pb-5">JSON stuff</h1>
-            <li><a href="/stream/json/upload">- json upload</a></li>
-            <li><a href="/stream/json/download">- json download</a></li>
-        </ul>
+<section id="file-list">
+    <div class="pt-5 flex flex-col">
+        <div class="flex justify-center items-center mx-auto">
+            <h1 class="text-3xl text-white">{{ error }}</h1>
+        </div>
+        <div class="grid grid-cols-6 auto-cols-auto gap-1 gap-y-10 items-center">
+            {% for filename in list_brackets %}
+                <a class="json-file text-white text-lg pl-5" href="/stream/json/download/{{ filename }}" target="_blank">{{ filename }}</a>
+            {% endfor %}
+        </div>
     </div>
 </section>
 <footer>

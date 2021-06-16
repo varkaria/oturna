@@ -1,0 +1,132 @@
+{% extends '/stream/base.html' %}
+{% block title %}JSON Upload{% endblock %}
+{% block header %}
+{% endblock %}
+{% block content %}
+<style>
+    html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgb(44, 45, 44);
+    overflow: hidden;
+}
+    body {
+        font-family: 'Varela Round'
+    }
+    nav {
+        background-color: rgb(38, 38, 38);
+}
+    img {
+        width: 5vh;
+        height: 5vh;
+}
+    button {
+        background-color: white;
+        transform: scale(1);
+        transition: background-color ease-in-out 0.3s;
+        transition: color ease-in-out 0.3s;
+        transition: transform .2s ease-in-out;
+}
+    button:hover {
+        color: white;
+        background-color: black;
+        transform: scale(1.05);
+        transition: background-color ease-in-out 0.3s;
+        transition: color ease-in-out 0.3s;
+        transition: transform .2s ease-in-out;
+}
+    .file {
+        opacity: 0;
+        width: 0.1px;
+        height: 0.1px;
+        position: absolute;
+}
+    .file-name {
+        position: absolute;
+        bottom: -30px;
+        font-size: 0.85rem;
+        color: rgb(180, 180, 180);
+        width: 100vh;
+}
+    .file-input label {
+        display: block;
+        position: relative;
+        width: 200px;
+        height: 50px;
+        border-radius: 5px;
+        background-color: white;
+        box-shadow: 0 4px 7px rgba(0, 0, 0, 0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: black;
+        font-weight: bold;
+        cursor: pointer;
+        transform: scale(1);
+        transition: background-color ease-in-out 0.3s;
+        transition: color ease-in-out 0.3s;
+        transition: transform .2s ease-in-out;
+}
+    input:hover + label, input:focus + label {
+        transform: scale(1.05);
+        color: white;
+        background-color: black;
+        transition: background-color ease-in-out 0.3s;
+        transition: color ease-in-out 0.3s;
+        transition: transform .2s ease-in-out;
+}
+    input:focus + label {
+        outline: 1px solid #000;
+        outline: -webkit-focus-ring-color auto 2px;
+}
+</style>
+<div id="main">
+    <nav class="mx-auto px-8">
+        <div class="flex h-14 justify-between items-center">
+            <div class="flex-row justify-start text-white text-3xl">
+                <a href="/stream/json/upload">JSON Uploader</a>
+            </div>
+            <div class="flex-row justify-end text-white text-3xl">
+                <div class='flex gap-4 items-center'></a>
+                    <a href="https://osu.ppy.sh/u/{{ session.user_id }}" target="_blank"><img src="https://a.ppy.sh/{{ session.user_id }}" class="avatar"></a>
+                    <a href="https://osu.ppy.sh/u/{{ session.user_id }}" target="_blank" class="text-xl right-16 top-4">{{ session.username }}</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <section id="upload" class="flex h-screen justify-center items-center pb-60">
+        <form class="flex flex-col space-y-8 justify-center items-center" action="/stream/json/upload" method="POST" enctype="multipart/form-data">
+            <h2 class="text-3xl text-white">{{ error }}</h2>
+            <div class="file-input">
+                <input name="file" type="file" id="file" class="file">
+                <label for="file" style="outline: none;">
+                    Select file
+                    <p class="file-name"></p>
+                </label>
+            </div>
+            <div class="pt-2">
+                <button class="text-black font-bold py-2 px-4 rounded-full" style="outline: none;" type="submit">Upload</button>
+            </div>
+        </form>
+    </section>
+    <footer>
+        <div class="flex flex-row justify-center items-center text-white">
+            <div class="py-3">
+                @ 2021 Made by <b>Varkaria & Gusbell</b>
+            </div>
+        </div>
+    </footer>
+</div>
+<script>
+    const file = document.querySelector('#file');
+    file.addEventListener('change', (e) => {
+        const [file] = e.target.files;
+        const { name: fileName, size } = file;
+        const fileSize = (size / 1000).toFixed(2);
+        const fileNameAndSize = `${fileName} - ${fileSize}KB`;
+        document.querySelector('.file-name').textContent = fileNameAndSize;
+    });
+</script>
+{% endblock %}
