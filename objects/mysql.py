@@ -273,17 +273,41 @@ class DB(object):
     
         res = json.loads(res['json'])
         mappool = self.query_all("SELECT id, mods, json FROM json_mappool where round_id = %s", res['round_id'])
+
+        # checking it's sets 2?
+        prev = self.query_all("SELECT id FROM match_sets WHERE match_id=%s", res['id'])
+        if len(prev) >= 2:
+            prevbanspicks = self.query_one("""SELECT JSON_ARRAYAGG(JSON_OBJECT('id', pb.id, 'set_id', pb.set_id, 'type', pb.type, 'map_id', pb.map_id, 'from', s.full_name, 'info', mp.info, 'mods', mp.mods)) AS 'last' 
+            FROM match_sets ms
+            LEFT JOIN `match_sets_banpick` pb ON pb.set_id = ms.id
+            LEFT JOIN `mappool` mp ON mp.beatmap_id = pb.map_id
+            LEFT JOIN `team` s ON s.id = pb.from
+            WHERE ms.id=%s""", res['id'])
+
         available_maps = []
         for s in mappool:
             d = json.loads(s['json'])
-            if str(d['beatmap_id']) in str(res['banpicks']) or str(d['mods']) == 'TB':
+            e = json.loads(prevbanspicks['last'])
+            if str(d['beatmap_id']) in str(res['banpicks']) or str(d['mods']) == 'TB' or str(d['mods']) == 'TBSET':
                 continue
             else:
+                if len(prev) >= 2:
+                    if res['banpicks'][0]['from'] != None:
+                        try:
+                            if d['beatmap_id'] == e[len(res['banpicks'])]['map_id']:
+                                continue
+                        except IndexError:
+                            continue
+                    else:
+                        if d['beatmap_id'] == e[0]['map_id']:
+                            continue
+
                 available_maps.append({
                     'id': s['id'],
                     'mods': s['mods'],
                     'info': d
                 })
+
         if res['banpicks']:
             t = len(res['banpicks']) - 1
             if res['banpicks'][0]['from'] != None:
