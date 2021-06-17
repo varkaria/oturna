@@ -7,15 +7,16 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   <title>{% block title %}ThisIsTitle{% endblock title %} | Tournament Manager</title>
   <!-- CSS files -->
-  <link href="/static/css/framework/tabler.css" rel="stylesheet" />
-  <link href="/static/css/style.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/@tabler/core@latest/dist/css/tabler.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/@tabler/icons@latest/iconfont/tabler-icons.min.css">
+  <link rel="stylesheet" href="/static/css/framework/tabler.mod.css">
   {% block head %}
 
   {% endblock head %}
 </head>
 
 <body class="antialiased">
-  <div class="page">
+  <div class="page-wrapper">
     <header class="navbar navbar-expand-md navbar-dark d-print-none">
       <div class="container-xl">
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
@@ -28,15 +29,6 @@
         </h1>
         <div class="navbar-nav flex-row order-md-last">
           <div class="nav-item dropdown d-none d-md-flex me-3">
-            <!-- <a href="#" class="nav-link px-0" data-bs-toggle="dropdown" tabindex="-1" aria-label="Show notifications">
-              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
-                stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                <path d="M10 5a2 2 0 0 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6" />
-                <path d="M9 17v1a3 3 0 0 0 6 0v-1" />
-              </svg>
-              <span class="badge bg-red"></span>
-            </a> -->
             <div class="dropdown-menu dropdown-menu-end dropdown-menu-card">
             </div>
           </div>
@@ -51,11 +43,6 @@
               </div>
             </a>
             <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-              <!-- <a href="#" class="dropdown-item">Set status</a>
-              <a href="#" class="dropdown-item">Profile & account</a>
-              <a href="#" class="dropdown-item">Feedback</a>
-              <div class="dropdown-divider"></div>
-              <a href="#" class="dropdown-item">Settings</a> -->
               <a href="/manager/logout" class="dropdown-item">Logout</a>
             </div>
           </div>
@@ -235,11 +222,6 @@
     </div>
     <div class="content">
       <div id="alert-aera">
-        <!-- <div class="alert alert-danger alert-dismissible position-absolute top-0 start-50 translate-middle-x my-3" role="alert">
-          <h4 class="alert-title">無法執行此操作!</h4>
-          <div class="text-muted">該階段已有場次，無法Delete，若要Delete請將該階段所有場次Delete。</div>
-          <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
-        </div> -->
       </div>
       <div class="container-xl">
         <div class="page-header d-print-none">
@@ -276,9 +258,11 @@
             </div>
           </div>
         </div>
-        {% block content %}
-        Content
-        {% endblock content %}
+        <div class="page-body">
+          {% block content %}
+          Content
+          {% endblock content %}
+        </div>
       </div>
       <footer class="footer footer-transparent d-print-none">
         <div class="container">
@@ -307,8 +291,7 @@
   </div>
   <!-- Tabler Core -->
   <script src="/static/js/framework/jquery.min.js"></script>
-  <script src="/static/js/framework/popper.min.js"></script>
-  <script src="/static/js/framework/tabler.js"></script>
+  <script src="https://unpkg.com/@tabler/core@latest/dist/js/tabler.min.js"></script>
   <script src="/static/js/framework/sort-table.js"></script>
   <script src="/static/js/framework/choices.js"></script>
   {% block script %}
