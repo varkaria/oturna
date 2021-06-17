@@ -1,6 +1,7 @@
 import pymysql, json
 from pymysql.cursors import DictCursor
 from config import Config
+from objects.objects import *
 
 class DB(object):
     def __init__(self):
@@ -173,38 +174,50 @@ class DB(object):
         if id: query_text += "m.id = %d " % id
         query = self.query_one(query_text)
         fulldata = json.loads(query['json'])
-        l_sets = self.query_all("SELECT id FROM match_sets WHERE match_id=%s", [id])
-        o_sets = []
-        for s in l_sets:
-            bans = []
-            picks = []
-            pickbans = self.query_all("SELECT m.id, m.map_id, m.from, m.type, p.info FROM match_sets_banpick `m` LEFT JOIN `mappool` `p` ON p.beatmap_id = m.map_id WHERE set_id=%s", [s['id']])
-            for m in pickbans:
-                m['info'] = json.loads(m['info'])
+        l_sets = self.query_all("SELECT id FROM match_sets WHERE match_id=%s", [id]) # ดึงข้อมูล sets จาก database
+        o_sets = [] # แสดงตัวแปรที่จะออกในแต่ละ sets
 
+        # ดึงข้อมูลจาก osu!api (ตอนนี้ใช้ json โง่ๆไปก่อน)
         with open('sample.json', 'r') as readfile:
             man = json.load(readfile)
+        multi_games_data = man['games']
 
         for s in l_sets:
+            print("new sets")
             bans = []
-            picks = [] # , p.info hiding
-            score = {"teama" : 0,"teamb" : 0}
-            pointtowin = 3
+            picks = []
+            score = [0,0]
+            points_to_win = 3
             pickbans = self.query_all("""
-            SELECT m.id, m.map_id, m.from, m.type 
+            SELECT m.id, m.map_id, m.from, m.type, p.info
             FROM match_sets_banpick `m` 
             LEFT JOIN `mappool` `p` ON p.beatmap_id = m.map_id 
             WHERE set_id=%s""", [s['id']])
             
             for m in pickbans: #filtering about picks and bans
-                # m['info'] = json.loads(m['info'])
+                m['info'] = json.loads(m['info'])
                 if m['type'] == 'ban':
                     bans.append(m)
                 elif m['type'] == 'pick':
                     picks.append(m)
+            
+            # Put scores to picks
+            for p in picks:
+                dupli = []
+                if score[0] == points_to_win or score[1] == points_to_win:
+                    break
+                for idx, g in enumerate(multi_games_data):
+                    if str(p['map_id']) == str(g['beatmap_id']) and str(p['map_id']) not in str(dupli):
+                        dupli.append(str(p['map_id']))
+                        p['result'] = g['scores']
 
-                if score['teama'] >= pointtowin - 1 and score['teamb'] >= pointtowin - 1: # add tiebreaker picks if it's tiebreaker
-                    self.query_one("SELECT id, beatmap_id AS map_id, 'tiebreaker' AS 'from', 'pick' AS 'type', info FROM mappool WHERE round_id=%s",[fulldata['round']['id']])
+                        win = check_team_win(g['scores'])
+                        score[win] = score[win] + 1
+                        multi_games_data.pop(idx)
+
+            if score[0] == points_to_win - 1 and score[1] == points_to_win - 1: # add tiebreaker picks if it's tiebreaker
+                tiem = self.query_one("SELECT id, beatmap_id AS map_id, 'tiebreaker' AS 'from', 'pick' AS 'type', info FROM mappool WHERE round_id=%s",[fulldata['round']['id']])
+                print("TIEBREAKERRRRRR")
 
             o_sets.append({
                 'ban': bans,
