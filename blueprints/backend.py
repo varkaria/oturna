@@ -82,10 +82,10 @@ def dashboard():
     if time_delta == '':
         time_delta = 'Ending Today'
         colour = 'text-green'
-    if reg_end > currentDate:
+    if reg_end < currentDate:
         time_delta = 'Ended'
         colour = 'text-red'
-    if reg_end < currentDate:
+    if reg_end > currentDate:
         colour = 'text-green'
 
     team_get = db.query_one("""SELECT m.id, t1.full_name AS `team1_name`, t2.full_name AS `team2_name`, 
@@ -94,9 +94,13 @@ def dashboard():
     LEFT JOIN `team` `t1` ON t1.id = m.team1
     LEFT JOIN `team` `t2` ON t2.id = m.team2
     WHERE m.date > NOW()""")
-    print(team_get)
+    team1_flag = team_get['team1_flag']
+    team2_flag = team_get['team2_flag']
+    team1_name = team_get['team1_name']
+    team2_name = team_get['team2_name']
+
     players = db.query_one('select count(*) as count from player')['count']
-    return render_template('manager/dashboard.html', players=players, time_delta=time_delta.strip('-'), colour=colour)
+    return render_template('manager/dashboard.html', players=players, time_delta=time_delta.strip('-'), colour=colour, team1_name=team1_name, team2_name=team2_name, team1_flag=team1_flag, team2_flag=team2_flag)
 
 @backend.route('/planning/')
 @login_required
