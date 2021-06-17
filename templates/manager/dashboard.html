@@ -70,14 +70,17 @@ Dashboard:
             </div>
             <div class="card-body">
                 <div class="flex flex-col">
-                    <div class="flex flex-row justify-between items-center">
+                    <div class="flex flex-row justify-between items-center gap-x-24">
                         <img src="{{ team1_flag | flag_url }}" alt="" height="80" width="80">
-                        <h1 class="text-2xl"><b>VS</b></h1>
+                        <p class="text-2xl"><b>VS</b></p>
                         <img src="{{ team2_flag | flag_url }}" alt="" height="80" width="80">
                     </div>
-                    <div class="flex flex-row justify-between items-center gap-60">
-                        <h1 class="text-xl">{{ team1_name }}</h1>
-                        <h1 class="text-xl">{{ team2_name }}</h1>
+                    <div class="flex flex-row justify-between items-center">
+                        <p class="text-xl">{{ team1_name }}</p>
+                        <p class="text-xl">{{ team2_name }}</p>
+                    </div>
+                    <div class="flex flex-row justify-center items-center pt-2">
+                        <p class="text-lg"><b>{{ match_time }}</b></p>
                     </div>
                 </div>
             </div>

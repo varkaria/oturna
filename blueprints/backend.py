@@ -98,9 +98,9 @@ def dashboard():
     team2_flag = team_get['team2_flag']
     team1_name = team_get['team1_name']
     team2_name = team_get['team2_name']
-
+    match_time = str(team_get['date'])
     players = db.query_one('select count(*) as count from player')['count']
-    return render_template('manager/dashboard.html', players=players, time_delta=time_delta.strip('-'), colour=colour, team1_name=team1_name, team2_name=team2_name, team1_flag=team1_flag, team2_flag=team2_flag)
+    return render_template('manager/dashboard.html', players=players, time_delta=time_delta.strip('-'), colour=colour, team1_name=team1_name, team2_name=team2_name, team1_flag=team1_flag, team2_flag=team2_flag, match_time=match_time)
 
 @backend.route('/planning/')
 @login_required
