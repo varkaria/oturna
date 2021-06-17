@@ -174,6 +174,7 @@ class DB(object):
         if id: query_text += "m.id = %d " % id
         query = self.query_one(query_text)
         fulldata = json.loads(query['json'])
+        o_score = [0,0]
         l_sets = self.query_all("SELECT id FROM match_sets WHERE match_id=%s", [id]) # ดึงข้อมูล sets จาก database
         o_sets = [] # แสดงตัวแปรที่จะออกในแต่ละ sets
 
@@ -183,11 +184,11 @@ class DB(object):
         multi_games_data = man['games']
 
         for s in l_sets:
-            print("new sets")
             bans = []
             picks = []
             score = [0,0]
             points_to_win = 3
+            state = 1
             pickbans = self.query_all("""
             SELECT m.id, m.map_id, m.from, m.type, p.info
             FROM match_sets_banpick `m` 
@@ -205,26 +206,43 @@ class DB(object):
             for p in picks:
                 dupli = []
                 if score[0] == points_to_win or score[1] == points_to_win:
+                    if score[0] == points_to_win:
+                        o_score[0] = o_score[0] + 1
+                    else:
+                        o_score[1] = o_score[1] + 1
+                    state = 10
                     break
                 for idx, g in enumerate(multi_games_data):
                     if str(p['map_id']) == str(g['beatmap_id']) and str(p['map_id']) not in str(dupli):
                         dupli.append(str(p['map_id']))
                         p['result'] = g['scores']
-
                         win = check_team_win(g['scores'])
                         score[win] = score[win] + 1
+                        state = state + 1
+                        print(g['beatmap_id'])
                         multi_games_data.pop(idx)
 
             if score[0] == points_to_win - 1 and score[1] == points_to_win - 1: # add tiebreaker picks if it's tiebreaker
-                tiem = self.query_one("SELECT id, beatmap_id AS map_id, 'tiebreaker' AS 'from', 'pick' AS 'type', info FROM mappool WHERE round_id=%s",[fulldata['round']['id']])
-                print("TIEBREAKERRRRRR")
+                tie_m = self.query_one("SELECT id, beatmap_id AS map_id, 'tiebreaker' AS 'from', 'pick' AS 'type', info FROM mappool WHERE round_id=%s AND mods='TB'",[fulldata['round']['id']])
+                tie_m['info'] = json.loads(tie_m['info'])
+                for idx, g in enumerate(multi_games_data):
+                    if str(tie_m['map_id']) == str(g['beatmap_id']) and str(tie_m['map_id']) not in str(dupli):
+                        print('tiebreak on', (g['beatmap_id']))
+                        tie_m['result'] = g['scores']
+                        win = check_team_win(g['scores'])
+                        score[win] = score[win] + 1
+                        state = 10
+                        multi_games_data.pop(idx)
+                picks.append(tie_m)
 
             o_sets.append({
                 'ban': bans,
                 'pick': picks,
-                'score': score
+                'score': score,
+                'state': state # state : map on 1 2 3 4 5 (Tiebreaker) 10 (Finished)
             })
         fulldata['sets'] = o_sets
+        fulldata['']
 
         return fulldata
 
