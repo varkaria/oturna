@@ -203,18 +203,8 @@ class DB(object):
                 elif m['type'] == 'pick':
                     picks.append(m)
 
-                if 'scoreteam1' >= 2 and 'scoreteam2' >= 2: # add tiebreaker picks
-                    ...
-
-            o_sets.append({
-                'ban': bans,
-                'pick': picks
                 if score['teama'] >= pointtowin - 1 and score['teamb'] >= pointtowin - 1: # add tiebreaker picks if it's tiebreaker
                     self.query_one("SELECT id, beatmap_id AS map_id, 'tiebreaker' AS 'from', 'pick' AS 'type', info FROM mappool WHERE round_id=%s",[fulldata['round']['id']])
-
-                print(man)
-
-            
 
             o_sets.append({
                 'ban': bans,
