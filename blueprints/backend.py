@@ -9,7 +9,8 @@ from functools import wraps
 from objects import osuapi, mysql
 from PIL import Image
 from objects.decorators import *
-import json, re, requests
+import json, re, requests, datetime
+from datetime import date
 
 backend = Blueprint('backend', __name__)
 db = mysql.DB()
@@ -72,7 +73,30 @@ def base():
 @backend.route('/')
 @login_required
 def dashboard():
-    return render_template('manager/dashboard.html')
+    colour = ''
+    currentDate = datetime.date.today()
+    reg_get = str(db.query_one('select register_end_date as reg_end from tourney where id=1')['reg_end'])[:10]
+    reg_end_year, reg_end_month, reg_end_day = reg_get[:4], reg_get[5:7], reg_get[8:10]
+    reg_end = datetime.date(int(reg_end_year), int(reg_end_month), int(reg_end_day))
+    time_delta = str(reg_end - currentDate).strip(', 0:00:00')
+    if time_delta == '':
+        time_delta = 'Ending Today'
+        colour = 'text-green'
+    if reg_end > currentDate:
+        time_delta = 'Ended'
+        colour = 'text-red'
+    if reg_end < currentDate:
+        colour = 'text-green'
+
+    team_get = db.query_one("""SELECT m.id, t1.full_name AS `team1_name`, t2.full_name AS `team2_name`, 
+    t1.flag_name AS `team1_flag`, t2.flag_name AS `team2_flag`, m.date
+    FROM `match` `m`
+    LEFT JOIN `team` `t1` ON t1.id = m.team1
+    LEFT JOIN `team` `t2` ON t2.id = m.team2
+    WHERE m.date > NOW()""")
+    print(team_get)
+    players = db.query_one('select count(*) as count from player')['count']
+    return render_template('manager/dashboard.html', players=players, time_delta=time_delta.strip('-'), colour=colour)
 
 @backend.route('/planning/')
 @login_required
