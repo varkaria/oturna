@@ -183,67 +183,71 @@ class DB(object):
             man = json.load(readfile)
         multi_games_data = man['games']
 
-        for s in l_sets:
+        """
+        This part need HowtoplayLN to improve it 
+        """
+
+        for s in l_sets: # นำข้อมูล sets มาเรียง
             bans = []
             picks = []
             score = [0,0]
-            points_to_win = 3
-            state = 1
+            points_to_win = 3 # i'll add in mysql soon
+            state = 1 # state : map on 1 2 3 4 5 (Tiebreaker) 10 (Finished)
             pickbans = self.query_all("""
             SELECT m.id, m.map_id, m.from, m.type, p.info
             FROM match_sets_banpick `m` 
             LEFT JOIN `mappool` `p` ON p.beatmap_id = m.map_id 
-            WHERE set_id=%s""", [s['id']])
+            WHERE set_id=%s""", [s['id']]) # ดึงข้อมูลการแบนและการเลือกของรอบนั้น
             
-            for m in pickbans: #filtering about picks and bans
+            # คัดแยกว่าแมพไหนคือแบนหรือเลือก
+            for m in pickbans:
                 m['info'] = json.loads(m['info'])
                 if m['type'] == 'ban':
                     bans.append(m)
                 elif m['type'] == 'pick':
                     picks.append(m)
             
-            # Put scores to picks
+            # นำคะแนนที่ได้มาจาก osu!api มาใส่ในการเลือกของเซ็ต
             for p in picks:
-                dupli = []
-                if score[0] == points_to_win or score[1] == points_to_win:
+                dupli = [] # แมพที่ใช้ไปแล้วจะมาอยู่ในนี้ เพื่อกันว่าจะใส่ในแมพซ้ำหรือปล่าว
+                if score[0] == points_to_win or score[1] == points_to_win: # ถ้าคะแนนของทีมครบตามที่กำหนด จะยกเลิกการทำงานของ picks sets นี้ทันที
+                    # มอบคะแนนให้กับทีมนั้นๆ 🧶
                     if score[0] == points_to_win:
                         o_score[0] = o_score[0] + 1
                     else:
                         o_score[1] = o_score[1] + 1
+                    # เปลี่ยนสถานะของเซ็ตนี้ให้กลายเป็น 10 (เซ็ตนี้จบแล้ว)
                     state = 10
                     break
-                for idx, g in enumerate(multi_games_data):
-                    if str(p['map_id']) == str(g['beatmap_id']) and str(p['map_id']) not in str(dupli):
-                        dupli.append(str(p['map_id']))
-                        p['result'] = g['scores']
-                        win = check_team_win(g['scores'])
-                        score[win] = score[win] + 1
-                        state = state + 1
-                        print(g['beatmap_id'])
-                        multi_games_data.pop(idx)
+                for idx, g in enumerate(multi_games_data): # นำผลที่ได้มาจาก osu!api มาเรัยง
+                    if str(p['map_id']) == str(g['beatmap_id']) and str(p['map_id']) not in str(dupli): # ถ้าแมพใน pick(ทีละอัน) เท่ากันกับ osu!api map(ทีละอัน) และไม่อยู่ในแมพที่ใช้ไปแล้ว
+                        dupli.append(str(p['map_id'])) # เอาแมพนั้นไปใส่ในแมพที่ใช้แล้ว
+                        p['result'] = g['scores'] # เอาผลของคะแนนใส่ใน pick นั้นๆ
+                        win = check_team_win(g['scores']) # เช็คว่าทีมไหนคะแนนเยอะกว่า
+                        score[win] = score[win] + 1 # เพิ่มคะแนนของทีมในเซ้ตๆนั้น
+                        state = state + 1 # เพิ่มสถานะของเซ็ตนี้
+                        multi_games_data.pop(idx) # เอาผลการแข่งนี้ออก
 
-            if score[0] == points_to_win - 1 and score[1] == points_to_win - 1: # add tiebreaker picks if it's tiebreaker
+            if score[0] == points_to_win - 1 and score[1] == points_to_win - 1: # ถ้าคะแนนของทีมแต่ละทีม เท่ากันกับ คะแนนที่ต้องการ - 1 (Tiebreaker)
+                # หาว่า Tiebreaker คือแมพอะไร
                 tie_m = self.query_one("SELECT id, beatmap_id AS map_id, 'tiebreaker' AS 'from', 'pick' AS 'type', info FROM mappool WHERE round_id=%s AND mods='TB'",[fulldata['round']['id']])
                 tie_m['info'] = json.loads(tie_m['info'])
-                for idx, g in enumerate(multi_games_data):
-                    if str(tie_m['map_id']) == str(g['beatmap_id']) and str(tie_m['map_id']) not in str(dupli):
-                        print('tiebreak on', (g['beatmap_id']))
-                        tie_m['result'] = g['scores']
-                        win = check_team_win(g['scores'])
-                        score[win] = score[win] + 1
-                        state = 10
-                        multi_games_data.pop(idx)
+                for idx, g in enumerate(multi_games_data): # นำผลที่ได้มาจาก osu!api มาเรียง
+                    if str(tie_m['map_id']) == str(g['beatmap_id']) and str(tie_m['map_id']) not in str(dupli): # ถ้าแมพใน pick(ทีละอัน) เท่ากันกับ osu!api map(ทีละอัน) และไม่อยู่ในแมพที่ใช้ไปแล้ว
+                        tie_m['result'] = g['scores'] # เอาผลของคะแนนใส่ใน pick นั้นๆ
+                        win = check_team_win(g['scores']) # เช็คว่าทีมไหนคะแนนเยอะกว่า
+                        score[win] = score[win] + 1 # เพิ่มคะแนนของทีมในเซ้ตๆนั้น
+                        state = 10 # ปรับสถานะของเซ็ตนี้ให้จบไปแล้ว เพราะรอบนี้คือรอบสุดท้าย
+                        multi_games_data.pop(idx) # เอาผลการแข่งนี้ออก
                 picks.append(tie_m)
 
             o_sets.append({
                 'ban': bans,
                 'pick': picks,
                 'score': score,
-                'state': state # state : map on 1 2 3 4 5 (Tiebreaker) 10 (Finished)
+                'state': state
             })
         fulldata['sets'] = o_sets
-        fulldata['']
-
         return fulldata
 
     def get_staff(self, staff_id=None, user_id=None, format=True, viewall=False):
@@ -291,6 +295,10 @@ class DB(object):
             LEFT JOIN `team` s ON s.id = pb.from
             WHERE ms.id={id}
             """)
+
+        """
+        This part need HowtoplayLN to improve it 
+        """
     
         res = json.loads(res['json'])
         mappool = self.query_all("SELECT id, mods, json FROM json_mappool where round_id = %s", res['round_id'])
