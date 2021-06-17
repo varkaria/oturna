@@ -1,5 +1,8 @@
 {% extends 'manager/base.html' %}
 {% block title %}Home{% endblock title %}
+{% block head %}
+<link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+{% endblock %}
 {% block page_title %}
 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-list-check" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
     <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
@@ -13,5 +16,101 @@
 Dashboard:
 {% endblock page_title %}
 {% block content %}
-man
+<div class="row row-deck">
+    <div class="col-md-6">
+        <div class="card card-md align-items-center">
+            <div class="card-header">
+                <p class="text-2xl">Number of Applicants</p><br>
+            </div>
+            <div class="card-body">
+                <p class="text-blue text-3xl">{{ players }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card card-md align-items-center">
+            <div class="card-header">
+                <p class="text-2xl">Registration Countdown</p>
+            </div>
+            <div class="card-body">
+                <p class="text-3xl {{ colour }}">{{ time_delta }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row row-deck pt-8">
+    <div class="col-md-16">
+        <div class="card card-md align-items-center">
+            <div class="card-header">
+                <p class="text-2xl">Current Competition Process Progress</p><br>
+            </div>
+            <div class="card-body">
+                <p class="text-3xl text-black">WIP</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row row-deck pt-8">
+    <div class="col-md-16">
+        <div class="card card-md align-items-center">
+            <div class="card-header">
+                <p class="text-2xl">Overview of Recently Closed Sessions</p><br>
+            </div>
+            <div class="card-body">
+                <p class="text-3xl text-black">WIP</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row row-deck pt-8">
+    <div class="col-md-6">
+        <div class="card card-md align-items-center">
+            <div class="card-header">
+                <p class="text-2xl">Upcoming Session Overview</p><br>
+            </div>
+            <div class="card-body">
+                <div class="flex flex-col pb-4">
+                    <!-- should have for loop here poggers -->
+                    {% for m in matchs %}
+                    <div class="flex flex-row gap-28">
+                        <img src="/static/img/logo.png" width="80" height="80" alt="">
+                        <h1 class="text-2xl"><b>VS</b></h1>
+                        <img src="/static/img/logo.png" width="80" height="80" alt="">
+                    </div>
+                    <div class="flex flex-row gap-28">
+                        <img src="/static/img/logo.png" width="80" height="80" alt="">
+                        <h1 class="text-2xl"><b>VS</b></h1>
+                        <img src="/static/img/logo.png" width="80" height="80" alt="">
+                    </div>
+                    <div class="flex flex-row gap-28">
+                        <img src="/static/img/logo.png" width="80" height="80" alt="">
+                        <h1 class="text-2xl"><b>VS</b></h1>
+                        <img src="/static/img/logo.png" width="80" height="80" alt="">
+                    </div>
+                    <div class="flex flex-row gap-28">
+                        <img src="/static/img/logo.png" width="80" height="80" alt="">
+                        <h1 class="text-2xl"><b>VS</b></h1>
+                        <img src="/static/img/logo.png" width="80" height="80" alt="">
+                    </div>
+                    <div class="flex flex-row gap-28">
+                        <img src="/static/img/logo.png" width="80" height="80" alt="">
+                        <h1 class="text-2xl"><b>VS</b></h1>
+                        <img src="/static/img/logo.png" width="80" height="80" alt="">
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card card-md align-items-center">
+            <div class="card-header">
+                <p class="text-2xl">Data Analysis</p><br>
+            </div>
+            <div class="card-body">
+
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock content %}
