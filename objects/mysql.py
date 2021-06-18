@@ -342,17 +342,18 @@ class DB(object):
         if res['banpicks']:
             t = len(res['banpicks']) - 1
             if res['banpicks'][0]['from'] != None:
-                if t == 0 or t == 3 or t == 4:
+                if t in [1,3,4]:
                     res['status'] = 'ban'
                 else:
                     res['status'] = 'pick'
 
-                if t == 2 or t == 4 or t == 5:
+                if t in [2,4,5]:
                     res['picker'] = res['team1']['leader_id']
                     res['picker_t'] = res['team1']['full_name']
-                elif t == 0 or t == 1 or t == 3 or t == 6:
+                elif t <= 6:
                     res['picker'] = res['team2']['leader_id']
                     res['picker_t'] = res['team2']['full_name']
+                
             elif res['banpicks'][0]['from'] == None:
                 res['picker'] = res['team1']['leader_id']
                 res['picker_t'] = res['team1']['full_name']
