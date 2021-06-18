@@ -16,6 +16,19 @@
 Dashboard:
 {% endblock page_title %}
 {% block content %}
+<style>
+    body::-webkit-scrollbar {
+    width: 6px;
+    }
+
+    body::-webkit-scrollbar-track {
+    background: rgb(255, 255, 255);
+    }
+
+    body::-webkit-scrollbar-thumb {
+    background-color: rgb(100, 100, 100);
+    }
+</style>
 <div class="row row-deck">
     <div class="col-md-6">
         <div class="card card-md align-items-center">
@@ -46,12 +59,39 @@ Dashboard:
             </div>
             <div class="card-body w-full h-full">
                 <div id="progress-container"></div>
-                <div class="pt-10 flex flex-row justify-evenly items-center md:gap-x-24 gap-x-6">
-                    <h1 id="reg" class="md:text-xl sm:text-md text-black">Registration</h1>
-                    <h1 id="ply" class="md:text-xl sm:text-md text-black">Playoff</h1>
-                    <h1 id="reg1"  class="md:text-xl sm:text-md text-black">Regular Phase 1</h1>
-                    <h1 id="reg2"  class="md:text-xl sm:text-md text-black">Regular Phase 2</h1>
-                    <h1 id="chp" class="md:text-xl sm:text-md text-black">Championship</h1>
+                <div class="pt-3 grid grid-flow-col grid-cols-5 justify-items-center md:gap-x-24 gap-x-6">
+                    <svg width="9" height="8" viewBox="0 0 9 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M8.32405 7.45232C8.25071 7.58133 8.14431 7.68848 8.01581 7.76272C7.88731 7.83696 7.74135 7.87562 7.59294 7.87472H1.40706C1.25886 7.87477 1.11326 7.83576 0.984923 7.76164C0.85659 7.68751 0.750052 7.58088 0.676039 7.45248C0.602025 7.32409 0.563149 7.17845 0.563325 7.03025C0.5635 6.88205 0.602722 6.73651 0.677039 6.60829L3.76995 1.26482H3.7697C3.84384 1.13678 3.95033 1.03048 4.07851 0.956584C4.20669 0.882687 4.35205 0.843788 4.5 0.843788C4.64795 0.843788 4.79331 0.882687 4.92149 0.956584C5.04967 1.03048 5.15616 1.13678 5.2303 1.26482L8.323 6.60829C8.39816 6.73619 8.43787 6.88181 8.43806 7.03016C8.43824 7.17851 8.39889 7.32423 8.32405 7.45232V7.45232Z"
+                            fill="black" />
+                    </svg>
+                    <svg width="9" height="8" viewBox="0 0 9 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M8.32405 7.45232C8.25071 7.58133 8.14431 7.68848 8.01581 7.76272C7.88731 7.83696 7.74135 7.87562 7.59294 7.87472H1.40706C1.25886 7.87477 1.11326 7.83576 0.984923 7.76164C0.85659 7.68751 0.750052 7.58088 0.676039 7.45248C0.602025 7.32409 0.563149 7.17845 0.563325 7.03025C0.5635 6.88205 0.602722 6.73651 0.677039 6.60829L3.76995 1.26482H3.7697C3.84384 1.13678 3.95033 1.03048 4.07851 0.956584C4.20669 0.882687 4.35205 0.843788 4.5 0.843788C4.64795 0.843788 4.79331 0.882687 4.92149 0.956584C5.04967 1.03048 5.15616 1.13678 5.2303 1.26482L8.323 6.60829C8.39816 6.73619 8.43787 6.88181 8.43806 7.03016C8.43824 7.17851 8.39889 7.32423 8.32405 7.45232V7.45232Z"
+                            fill="black" />
+                    </svg>
+                    <svg width="9" height="8" viewBox="0 0 9 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M8.32405 7.45232C8.25071 7.58133 8.14431 7.68848 8.01581 7.76272C7.88731 7.83696 7.74135 7.87562 7.59294 7.87472H1.40706C1.25886 7.87477 1.11326 7.83576 0.984923 7.76164C0.85659 7.68751 0.750052 7.58088 0.676039 7.45248C0.602025 7.32409 0.563149 7.17845 0.563325 7.03025C0.5635 6.88205 0.602722 6.73651 0.677039 6.60829L3.76995 1.26482H3.7697C3.84384 1.13678 3.95033 1.03048 4.07851 0.956584C4.20669 0.882687 4.35205 0.843788 4.5 0.843788C4.64795 0.843788 4.79331 0.882687 4.92149 0.956584C5.04967 1.03048 5.15616 1.13678 5.2303 1.26482L8.323 6.60829C8.39816 6.73619 8.43787 6.88181 8.43806 7.03016C8.43824 7.17851 8.39889 7.32423 8.32405 7.45232V7.45232Z"
+                            fill="black" />
+                    </svg>
+                    <svg width="9" height="8" viewBox="0 0 9 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M8.32405 7.45232C8.25071 7.58133 8.14431 7.68848 8.01581 7.76272C7.88731 7.83696 7.74135 7.87562 7.59294 7.87472H1.40706C1.25886 7.87477 1.11326 7.83576 0.984923 7.76164C0.85659 7.68751 0.750052 7.58088 0.676039 7.45248C0.602025 7.32409 0.563149 7.17845 0.563325 7.03025C0.5635 6.88205 0.602722 6.73651 0.677039 6.60829L3.76995 1.26482H3.7697C3.84384 1.13678 3.95033 1.03048 4.07851 0.956584C4.20669 0.882687 4.35205 0.843788 4.5 0.843788C4.64795 0.843788 4.79331 0.882687 4.92149 0.956584C5.04967 1.03048 5.15616 1.13678 5.2303 1.26482L8.323 6.60829C8.39816 6.73619 8.43787 6.88181 8.43806 7.03016C8.43824 7.17851 8.39889 7.32423 8.32405 7.45232V7.45232Z"
+                            fill="black" />
+                    </svg>
+                    <svg width="9" height="8" viewBox="0 0 9 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M8.32405 7.45232C8.25071 7.58133 8.14431 7.68848 8.01581 7.76272C7.88731 7.83696 7.74135 7.87562 7.59294 7.87472H1.40706C1.25886 7.87477 1.11326 7.83576 0.984923 7.76164C0.85659 7.68751 0.750052 7.58088 0.676039 7.45248C0.602025 7.32409 0.563149 7.17845 0.563325 7.03025C0.5635 6.88205 0.602722 6.73651 0.677039 6.60829L3.76995 1.26482H3.7697C3.84384 1.13678 3.95033 1.03048 4.07851 0.956584C4.20669 0.882687 4.35205 0.843788 4.5 0.843788C4.64795 0.843788 4.79331 0.882687 4.92149 0.956584C5.04967 1.03048 5.15616 1.13678 5.2303 1.26482L8.323 6.60829C8.39816 6.73619 8.43787 6.88181 8.43806 7.03016C8.43824 7.17851 8.39889 7.32423 8.32405 7.45232V7.45232Z"
+                            fill="black" />
+                    </svg>
+                </div>
+                <div class="pt-1 grid grid-flow-col grid-cols-5 justify-items-center md:gap-x-24 gap-x-6">
+                    <p class="text-black md:text-xl sm:text-md">Registration</p>
+                    <p class="text-black md:text-xl sm:text-md">Playoff</p>
+                    <p class="text-black md:text-xl sm:text-md">Regular Phase 1</p>
+                    <p class="text-black md:text-xl sm:text-md">Regular Phase 2</p>
+                    <p class="text-black md:text-xl sm:text-md">Championship</p>
                 </div>
             </div>
         </div>
@@ -81,7 +121,7 @@ Dashboard:
                         </div>
                         <div class="flex flex-col justify-center items-center pt-2">
                             <p class="text-lg"><b>{{ last_data.l_match_time }}</b></p>
-                            {% if cancel %}
+                            {% if last_data.cancel %}
                             <p class="text-xl pt-4 text-red"><b>Cancelled</b></p>
                             {% endif %}
                         </div>
@@ -129,6 +169,7 @@ Dashboard:
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/progressbar.js/0.6.1/progressbar.min.js"></script>
 <script>
+    var current_prog = '{{ progress_data.current_progress }}'
     var bar = new ProgressBar.Line('#progress-container', {
         strokeWidth: 0.8,
         easing: 'easeInOut',
@@ -139,7 +180,7 @@ Dashboard:
         }
         });
 
-        bar.animate(0.2);
+        bar.animate(current_prog);
 </script>
 <style>
     #progress-container svg {

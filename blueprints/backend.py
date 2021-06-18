@@ -92,22 +92,34 @@ def dashboard():
         'stats': int(last_match['stats']),
         'l_team1_flag': last_match['team1_flag'],
         'l_team2_flag': last_match['team2_flag'],
+        'l_team1_name': last_match['team1_name'],
+        'l_team2_name': last_match['team2_name'],
         'team1_score': last_match['team1_score'],
         'team2_score': last_match['team2_score'],
-        'l_match_time': str(last_match['date'])
+        'l_match_time': str(last_match['date']),
+        'cancel': False
     }
-    cancel = False # set default value
     if last_data['stats'] == 1: # match not cancelled
         pass
     if last_data['stats'] == 2: # match cancelled
-        cancel = True
+        last_data['cancel'] = True
         last_data['team1_score'] = ''
         last_data['team2_score'] = ''
         last_data['l_match_time'] = str(last_match['date'])
 
+    progress_data = {
+        'current_progress': 0.5
+    }
+
+    # reg: 0.07
+    # playoff: 0.285
+    # regular 1: 0.5
+    # regular 2: 0.715 
+    # champ: 0.935
+
     players = db.query_one('select count(*) as count from player')['count']
 
-    return render_template('manager/dashboard.html', players=players, time_delta=time_delta.strip('-'), colour=colour, next_data=next_data, last_data=last_data, cancel=cancel)
+    return render_template('manager/dashboard.html', players=players, time_delta=time_delta.strip('-'), colour=colour, next_data=next_data, last_data=last_data, progress_data=progress_data)
 
 @backend.route('/planning/')
 @login_required
