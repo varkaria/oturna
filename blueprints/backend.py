@@ -88,19 +88,46 @@ def dashboard():
     if reg_end > currentDate:
         colour = 'text-green'
 
-    team_get = db.query_one("""SELECT m.id, t1.full_name AS `team1_name`, t2.full_name AS `team2_name`, 
+    next_match = db.query_one("""SELECT m.id, t1.full_name AS `team1_name`, t2.full_name AS `team2_name`, 
     t1.flag_name AS `team1_flag`, t2.flag_name AS `team2_flag`, m.date
     FROM `match` `m`
     LEFT JOIN `team` `t1` ON t1.id = m.team1
     LEFT JOIN `team` `t2` ON t2.id = m.team2
     WHERE m.date > NOW()""")
-    team1_flag = team_get['team1_flag']
-    team2_flag = team_get['team2_flag']
-    team1_name = team_get['team1_name']
-    team2_name = team_get['team2_name']
-    match_time = str(team_get['date'])
+    n_team1_flag = next_match['team1_flag']
+    n_team2_flag = next_match['team2_flag']
+    n_team1_name = next_match['team1_name']
+    n_team2_name = next_match['team2_name']
+    n_match_time = str(next_match['date'])
+
+    last_match = db.query_one("""SELECT m.id, t1.full_name AS `team1_name`, t2.full_name AS `team2_name`, 
+    t1.flag_name AS `team1_flag`, t2.flag_name AS `team2_flag`, team1_score, team2_score, m.date, m.stats
+    FROM `match` `m`
+    LEFT JOIN `team` `t1` ON t1.id = m.team1
+    LEFT JOIN `team` `t2` ON t2.id = m.team2
+    WHERE m.date <= NOW()""")
+    stats = int(last_match['stats'])
+    l_team1_flag = last_match['team1_flag']
+    l_team2_flag = last_match['team2_flag']
+    l_team1_name = last_match['team1_name']
+    l_team2_name = last_match['team2_name']
+    team1_score = last_match['team1_score']
+    team2_score = last_match['team2_score']
+    l_match_time = str(last_match['date'])
+    cancel = False
+    if stats == 1:
+        pass
+    if stats == 2:
+        cancel = True
+        team1_score = ''
+        team2_score = ''
+        l_match_time = str(last_match['date'])
+
     players = db.query_one('select count(*) as count from player')['count']
-    return render_template('manager/dashboard.html', players=players, time_delta=time_delta.strip('-'), colour=colour, team1_name=team1_name, team2_name=team2_name, team1_flag=team1_flag, team2_flag=team2_flag, match_time=match_time)
+
+    return render_template('manager/dashboard.html', players=players, time_delta=time_delta.strip('-'), colour=colour, 
+                            n_team1_name=n_team1_name, n_team2_name=n_team2_name, n_team1_flag=n_team1_flag, n_team2_flag=n_team2_flag, n_match_time=n_match_time,
+                            l_team1_name=l_team1_name, l_team2_name=l_team2_name, l_team1_flag=l_team1_flag, l_team2_flag=l_team2_flag, l_match_time=l_match_time, team1_score=team1_score, team2_score=team2_score, cancel=cancel)
 
 @backend.route('/planning/')
 @login_required
