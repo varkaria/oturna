@@ -46,26 +46,6 @@ def context():
         rounds=db.query_all("select * from round"),
     )
 
-def need_privilege(privilege: Staff):
-    def decorator(f):
-        @wraps(f)
-        def decorated_function(*args, **kwargs):
-            user = db.get_staff(user_id=session['user_id'])
-            if user == None:
-                return redirect(url_for('backend.gologin'))
-            user_privilege = Staff(user['privileges'])
-            if privilege not in user_privilege:
-                flash(f"You don't have {privilege.name} authority!", 'danger')
-                return redirect(url_for('backend.dashboard'))
-            return f(*args, **kwargs)
-        return decorated_function
-    return decorator
-
-def check_privilege(id, privilege: Staff):
-    user = db.get_staff(staff_id=id)
-    user_privilege = Staff(user['privileges'])
-    return bool(privilege in user_privilege)
-
 @backend.route('/base')
 def base():
     return render_template('/manager/base.html')
