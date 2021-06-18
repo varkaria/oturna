@@ -42,7 +42,7 @@ Dashboard:
     <div class="col-md-16">
         <div class="card card-md align-items-center">
             <div class="card-header">
-                <p class="text-2xl">Current Competition Process Progress</p><br>
+                <p class="text-2xl">Current Competition Progress</p><br>
             </div>
             <div class="card-body">
                 <p class="text-3xl text-black">WIP</p>
@@ -57,7 +57,29 @@ Dashboard:
                 <p class="text-2xl">Overview of Recently Closed Sessions</p><br>
             </div>
             <div class="card-body">
-                <p class="text-3xl text-black">WIP</p>
+                <div class="card-body">
+                    <div class="flex flex-col">
+                        <div class="flex flex-row justify-between items-center gap-x-24">
+                            <img src="{{ l_team1_flag | flag_url }}" alt="" height="80" width="80">
+                            <p class="text-2xl"><b>VS</b></p>
+                            <img src="{{ l_team2_flag | flag_url }}" alt="" height="80" width="80">
+                        </div>
+                        <div class="flex flex-row justify-between items-center">
+                            <p class="text-xl">{{ l_team1_name }}</p>
+                            <p class="text-xl">{{ l_team2_name }}</p>
+                        </div>
+                        <div class="flex flex-row justify-between items-center pt-2 pl-8 pr-8">
+                            <p class="text-3xl text-blue"><b>{{ team1_score }}</b></p>
+                            <p class="text-3xl text-blue"><b>{{ team2_score }}</b></p>
+                        </div>
+                        <div class="flex flex-col justify-center items-center pt-2">
+                            <p class="text-lg"><b>{{ l_match_time }}</b></p>
+                            {% if cancel %}
+                            <p class="text-xl pt-4 text-red"><b>Cancelled</b></p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -71,16 +93,16 @@ Dashboard:
             <div class="card-body">
                 <div class="flex flex-col">
                     <div class="flex flex-row justify-between items-center gap-x-24">
-                        <img src="{{ team1_flag | flag_url }}" alt="" height="80" width="80">
+                        <img src="{{ n_team1_flag | flag_url }}" alt="" height="80" width="80">
                         <p class="text-2xl"><b>VS</b></p>
-                        <img src="{{ team2_flag | flag_url }}" alt="" height="80" width="80">
+                        <img src="{{ n_team2_flag | flag_url }}" alt="" height="80" width="80">
                     </div>
                     <div class="flex flex-row justify-between items-center">
-                        <p class="text-xl">{{ team1_name }}</p>
-                        <p class="text-xl">{{ team2_name }}</p>
+                        <p class="text-xl">{{ n_team1_name }}</p>
+                        <p class="text-xl">{{ n_team2_name }}</p>
                     </div>
                     <div class="flex flex-row justify-center items-center pt-2">
-                        <p class="text-lg"><b>{{ match_time }}</b></p>
+                        <p class="text-lg"><b>{{ n_match_time }}</b></p>
                     </div>
                 </div>
             </div>
