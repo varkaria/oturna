@@ -105,9 +105,18 @@ def dashboard():
 
     players = db.query_one('select count(*) as count from player')['count']
 
+    progress = 40
+
+    #20 Reg
+    #40 playoff
+    #55 reg 1
+    #70 reg 2
+    #90 champ
+
     return render_template('manager/dashboard.html', players=players, time_delta=time_delta.strip('-'), colour=colour, 
                             n_team1_name=n_team1_name, n_team2_name=n_team2_name, n_team1_flag=n_team1_flag, n_team2_flag=n_team2_flag, n_match_time=n_match_time,
-                            l_team1_name=l_team1_name, l_team2_name=l_team2_name, l_team1_flag=l_team1_flag, l_team2_flag=l_team2_flag, l_match_time=l_match_time, team1_score=team1_score, team2_score=team2_score, cancel=cancel)
+                            l_team1_name=l_team1_name, l_team2_name=l_team2_name, l_team1_flag=l_team1_flag, l_team2_flag=l_team2_flag, l_match_time=l_match_time, team1_score=team1_score, team2_score=team2_score, cancel=cancel,
+                            progress=progress)
 
 @backend.route('/planning/')
 @login_required

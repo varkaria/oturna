@@ -44,8 +44,18 @@ Dashboard:
             <div class="card-header">
                 <p class="text-2xl">Current Competition Progress</p><br>
             </div>
-            <div class="card-body">
-                <p class="text-3xl text-black">WIP</p>
+            <div class="card-body w-full h-full flex flex-col">
+                <div class="progress">
+                    <div class="progress-bar" style="width: {{ progress }}%">
+                    </div>
+                </div>
+                <div class="pt-10 flex flex-row justify-center md:gap-x-24 gap-6 w-full">
+                    <h1 class="md:text-xl sm:text-sm text-black">Registeration</h1>
+                    <h1 class="md:text-xl sm:text-sm text-black">Playoff</h1>
+                    <h1 class="md:text-xl sm:text-sm text-black">Regular 1</h1>
+                    <h1 class="md:text-xl sm:text-sm text-black">Regular 2</h1>
+                    <h1 class="md:text-xl sm:text-sm text-black">Championship</h1>
+                </div>
             </div>
         </div>
     </div>
