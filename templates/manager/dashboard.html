@@ -44,17 +44,14 @@ Dashboard:
             <div class="card-header">
                 <p class="text-2xl">Current Competition Progress</p><br>
             </div>
-            <div class="card-body w-full h-full flex flex-col">
-                <div class="progress">
-                    <div class="progress-bar" style="width: {{ progress }}%">
-                    </div>
-                </div>
-                <div class="pt-10 flex flex-row justify-center md:gap-x-24 gap-6 w-full">
-                    <h1 class="md:text-xl sm:text-sm text-black">Registeration</h1>
-                    <h1 class="md:text-xl sm:text-sm text-black">Playoff</h1>
-                    <h1 class="md:text-xl sm:text-sm text-black">Regular 1</h1>
-                    <h1 class="md:text-xl sm:text-sm text-black">Regular 2</h1>
-                    <h1 class="md:text-xl sm:text-sm text-black">Championship</h1>
+            <div class="card-body w-full h-full">
+                <div id="progress-container"></div>
+                <div class="pt-10 flex flex-row justify-evenly items-center md:gap-x-24 gap-x-6">
+                    <h1 id="reg" class="md:text-xl sm:text-md text-black">Registration</h1>
+                    <h1 id="ply" class="md:text-xl sm:text-md text-black">Playoff</h1>
+                    <h1 id="reg1"  class="md:text-xl sm:text-md text-black">Regular Phase 1</h1>
+                    <h1 id="reg2"  class="md:text-xl sm:text-md text-black">Regular Phase 2</h1>
+                    <h1 id="chp" class="md:text-xl sm:text-md text-black">Championship</h1>
                 </div>
             </div>
         </div>
@@ -70,20 +67,20 @@ Dashboard:
                 <div class="card-body">
                     <div class="flex flex-col">
                         <div class="flex flex-row justify-between items-center gap-x-24">
-                            <img src="{{ l_team1_flag | flag_url }}" alt="" height="80" width="80">
+                            <img src="{{ last_data.l_team1_flag | flag_url }}" alt="" height="80" width="80">
                             <p class="text-2xl"><b>VS</b></p>
-                            <img src="{{ l_team2_flag | flag_url }}" alt="" height="80" width="80">
+                            <img src="{{ last_data.l_team2_flag | flag_url }}" alt="" height="80" width="80">
                         </div>
                         <div class="flex flex-row justify-between items-center">
-                            <p class="text-xl">{{ l_team1_name }}</p>
-                            <p class="text-xl">{{ l_team2_name }}</p>
+                            <p class="text-xl">{{ last_data.l_team1_name }}</p>
+                            <p class="text-xl">{{ last_data.l_team2_name }}</p>
                         </div>
                         <div class="flex flex-row justify-between items-center pt-2 pl-8 pr-8">
-                            <p class="text-3xl text-blue"><b>{{ team1_score }}</b></p>
-                            <p class="text-3xl text-blue"><b>{{ team2_score }}</b></p>
+                            <p class="text-3xl text-blue"><b>{{ last_data.team1_score }}</b></p>
+                            <p class="text-3xl text-blue"><b>{{ last_data.team2_score }}</b></p>
                         </div>
                         <div class="flex flex-col justify-center items-center pt-2">
-                            <p class="text-lg"><b>{{ l_match_time }}</b></p>
+                            <p class="text-lg"><b>{{ last_data.l_match_time }}</b></p>
                             {% if cancel %}
                             <p class="text-xl pt-4 text-red"><b>Cancelled</b></p>
                             {% endif %}
@@ -103,16 +100,16 @@ Dashboard:
             <div class="card-body">
                 <div class="flex flex-col">
                     <div class="flex flex-row justify-between items-center gap-x-24">
-                        <img src="{{ n_team1_flag | flag_url }}" alt="" height="80" width="80">
+                        <img src="{{ next_data.n_team1_flag | flag_url }}" alt="" height="80" width="80">
                         <p class="text-2xl"><b>VS</b></p>
-                        <img src="{{ n_team2_flag | flag_url }}" alt="" height="80" width="80">
+                        <img src="{{ next_data.n_team2_flag | flag_url }}" alt="" height="80" width="80">
                     </div>
                     <div class="flex flex-row justify-between items-center">
-                        <p class="text-xl">{{ n_team1_name }}</p>
-                        <p class="text-xl">{{ n_team2_name }}</p>
+                        <p class="text-xl">{{ next_data.n_team1_name }}</p>
+                        <p class="text-xl">{{ next_data.n_team2_name }}</p>
                     </div>
                     <div class="flex flex-row justify-center items-center pt-2">
-                        <p class="text-lg"><b>{{ n_match_time }}</b></p>
+                        <p class="text-lg"><b>{{ next_data.n_match_time }}</b></p>
                     </div>
                 </div>
             </div>
@@ -130,4 +127,25 @@ Dashboard:
         </div>
     </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/progressbar.js/0.6.1/progressbar.min.js"></script>
+<script>
+    var bar = new ProgressBar.Line('#progress-container', {
+        strokeWidth: 0.8,
+        easing: 'easeInOut',
+        duration: 1400,
+        color: '#206bc4',
+        svgStyle: {
+            strokeLinecap: 'round'
+        }
+        });
+
+        bar.animate(0.2);
+</script>
+<style>
+    #progress-container svg {
+        height: 100%;
+        width: 100%;
+        border-radius: 25px;
+    }
+</style>
 {% endblock content %}

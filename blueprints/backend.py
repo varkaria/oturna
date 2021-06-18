@@ -74,11 +74,13 @@ def dashboard():
     LEFT JOIN `team` `t1` ON t1.id = m.team1
     LEFT JOIN `team` `t2` ON t2.id = m.team2
     WHERE m.date > NOW()""")
-    n_team1_flag = next_match['team1_flag']
-    n_team2_flag = next_match['team2_flag']
-    n_team1_name = next_match['team1_name']
-    n_team2_name = next_match['team2_name']
-    n_match_time = str(next_match['date'])
+    next_data = {
+        'n_team1_flag': next_match['team1_flag'],
+        'n_team2_flag': next_match['team2_flag'],
+        'n_team1_name': next_match['team1_name'],
+        'n_team2_name': next_match['team2_name'],
+        'n_match_time': str(next_match['date'])
+    }
 
     last_match = db.query_one("""SELECT m.id, t1.full_name AS `team1_name`, t2.full_name AS `team2_name`, 
     t1.flag_name AS `team1_flag`, t2.flag_name AS `team2_flag`, team1_score, team2_score, m.date, m.stats
@@ -86,37 +88,26 @@ def dashboard():
     LEFT JOIN `team` `t1` ON t1.id = m.team1
     LEFT JOIN `team` `t2` ON t2.id = m.team2
     WHERE m.date <= NOW()""")
-    stats = int(last_match['stats'])
-    l_team1_flag = last_match['team1_flag']
-    l_team2_flag = last_match['team2_flag']
-    l_team1_name = last_match['team1_name']
-    l_team2_name = last_match['team2_name']
-    team1_score = last_match['team1_score']
-    team2_score = last_match['team2_score']
-    l_match_time = str(last_match['date'])
-    cancel = False
-    if stats == 1:
+    last_data = {
+        'stats': int(last_match['stats']),
+        'l_team1_flag': last_match['team1_flag'],
+        'l_team2_flag': last_match['team2_flag'],
+        'team1_score': last_match['team1_score'],
+        'team2_score': last_match['team2_score'],
+        'l_match_time': str(last_match['date'])
+    }
+    cancel = False # set default value
+    if last_data['stats'] == 1: # match not cancelled
         pass
-    if stats == 2:
+    if last_data['stats'] == 2: # match cancelled
         cancel = True
-        team1_score = ''
-        team2_score = ''
-        l_match_time = str(last_match['date'])
+        last_data['team1_score'] = ''
+        last_data['team2_score'] = ''
+        last_data['l_match_time'] = str(last_match['date'])
 
     players = db.query_one('select count(*) as count from player')['count']
 
-    progress = 40
-
-    #20 Reg
-    #40 playoff
-    #55 reg 1
-    #70 reg 2
-    #90 champ
-
-    return render_template('manager/dashboard.html', players=players, time_delta=time_delta.strip('-'), colour=colour, 
-                            n_team1_name=n_team1_name, n_team2_name=n_team2_name, n_team1_flag=n_team1_flag, n_team2_flag=n_team2_flag, n_match_time=n_match_time,
-                            l_team1_name=l_team1_name, l_team2_name=l_team2_name, l_team1_flag=l_team1_flag, l_team2_flag=l_team2_flag, l_match_time=l_match_time, team1_score=team1_score, team2_score=team2_score, cancel=cancel,
-                            progress=progress)
+    return render_template('manager/dashboard.html', players=players, time_delta=time_delta.strip('-'), colour=colour, next_data=next_data, last_data=last_data, cancel=cancel)
 
 @backend.route('/planning/')
 @login_required
