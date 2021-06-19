@@ -176,6 +176,7 @@ class DB(object):
         query = self.query_one(query_text)
         fulldata = json.loads(query['json'])
         o_score = [0,0]
+        o_score_to_win = 2
         l_sets = self.query_all("SELECT id FROM match_sets WHERE match_id=%s", [id]) # ดึงข้อมูล sets จาก database
         o_sets = [] # แสดงตัวแปรที่จะออกในแต่ละ sets
         
@@ -263,6 +264,26 @@ class DB(object):
         self.query_one("UPDATE `tourney`.`match` SET `team1_score`='%s', `team2_score`='%s' WHERE  `id`=%s;",(o_score[0],o_score[1],fulldata['id']))
         
         fulldata['currentround'] = [len(o_sets)-1,o_sets[len(o_sets)-1]['state']-1]
+        if o_score[0] == o_score[1] and o_score[0] == o_score_to_win - 1:
+            # match tb
+            tiebreaker_match = self.query_one("SELECT id, beatmap_id AS map_id, 'tiebreaker' AS 'from', 'pick' AS 'type', info FROM mappool WHERE round_id=%s AND mods='TBS'",[fulldata['round']['id']])
+            tiebreaker_match['info'] = json.loads(tiebreaker_match['info'])
+
+            last_score = [0,0]
+            if str(tiebreaker_match['map_id']) == str(g['beatmap_id']) and str(tiebreaker_match['map_id']) not in str(dupli):
+                tiebreaker_match['result'] = g['scores'] # เอาผลของคะแนนใส่ใน pick นั้นๆ
+                win = check_team_win(g['scores']) # เช็คว่าทีมไหนคะแนนเยอะกว่า
+                o_score[win] += 1 
+                last_score[win] += 1
+                state = 10
+
+            o_sets.append({
+                'ban': [],
+                'pick': [], # map data of tb match or something
+                'score': last_score,
+                'state': state
+            })
+
         fulldata['sets'] = o_sets
         return fulldata
 
