@@ -1,7 +1,7 @@
 from config import Config
 from pymysql.err import *
 from blueprints.api import getdata
-from flask import Blueprint, render_template, redirect, url_for, flash, session,request
+from flask import Blueprint, render_template, redirect, url_for, flash, session,request, jsonify
 from objects.logger import log
 from objects.flag import Staff, Mods
 from rich.console import Console
@@ -617,7 +617,7 @@ def refree_helper(id:int):
 
     print(db.get_full_match(id=int(id)))
 
-    return render_template('/manager/refree_tools.html',match=db.get_matchs(id=int(id)))
+    return render_template('/manager/refree_tools.html',match=db.get_matchs(id=int(id)), id=id)
 
 @backend.route('/matchapi/<id>/')
 @login_required
@@ -630,3 +630,9 @@ def refree_helper_api(id:int):
 @need_privilege(Staff.REFEREE)
 def refree_helper_api2(id:int):
     return db.get_match_sets_ban_pick_full(id=int(id))
+
+@backend.route('/matchapi3/')
+@login_required
+@need_privilege(Staff.REFEREE)
+def refree_helper_api3():
+    return jsonify(db.get_matchs())

@@ -5,173 +5,113 @@ OM{{ match[0].code }} | {{ match[0].team1.full_name }} vs {{ match[0].team2.full
 {% endblock page_title %}
 {% block head %}
 <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+<link rel="stylesheet" href="/static/css/manager/ref-tools.css">
 {% endblock head %}
 {% block content %}
 
-<style>
-    .red-pick {
-        background-color: rgba(141, 6, 6, 0.4);
-        transition: background-color 160ms;
-    }
-
-    .map-card {
-        background-position: center !important;
-        background-size: cover !important;
-        height: 90px !important;
-        border: 0px;
-        user-select: none;
-    }
-
-    .mod-icon {
-        position: absolute;
-        pointer-events: none;
-        right: 10px;
-        width: 60px;
-        height: 60px;
-    }
-</style>
-
 <div class="row mb-3" id="app">
     <div class="col-lg-8">
-        <div class="card-tabs mb-5">
-            <ul class="nav nav-tabs">
-                <li class="nav-item"><a href="#tab-top-set-1-i" class="nav-link active"
-                        data-bs-toggle="tab">Infomation</a></li>
-                <li class="nav-item"><a href="#tab-top-set-1-1" class="nav-link" data-bs-toggle="tab">Round 1</a></li>
-                <li class="nav-item"><a href="#tab-top-set-1-2" class="nav-link" data-bs-toggle="tab">Round 2</a></li>
-                <li class="nav-item"><a href="#tab-top-set-1-3" class="nav-link" data-bs-toggle="tab">Round 3</a></li>
-                <li class="nav-item"><a href="#tab-top-set-1-4" class="nav-link" data-bs-toggle="tab">Round 4</a></li>
-                <li class="nav-item"><a href="#tab-top-set-1-5" class="nav-link" data-bs-toggle="tab">Tiebreaker</a>
-                </li>
-            </ul>
-            <div class="tab-content">
-                <div id="tab-top-set-1-i" class="card tab-pane show active">
-                    <div class="card-body">
-                        <h2 class="text-left">Varkaria Bans</h2>
-                        <div>
-                            <div class="matchBan" style="background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)) center center / cover no-repeat, 
-                                        url(https://assets.ppy.sh/beatmaps/1276349/covers/cover.jpg);">
-                                <a href="https://osu.ppy.sh/b/2651829">
-                                    <div class="matchMapArtist">Nasty Children</div>
-                                </a> <a href="https://osu.ppy.sh/b/2651829">
-                                    <div class="matchMapTitle">SCARLET TEMPEST</div>
-                                </a>
-                                <div class="matchMapDiff">[Corsace]</div>
-                                <div class="matchBanHover">
-                                    <div class="mapID">DOUBLE TIME MAP 2</div>
-                                    <div class="pickBanBy">BANNED BY</div>
-                                    <div class="pickBanTeam">Starbound</div>
-                                </div>
+        <h1 class="text-center ref-header">Next Round</h1>
+        <div class="mp-history-game">
+            <a class="mpheader" :style="ConvertSetToURL(data.sets[`${current[0]}`].pick[`${current[1]}`].info.beatmapset_id)">
+                <div class="mpheader-overlay"></div>
+                <div class="mpstats-box"></div>
+                <div class="mpmetadata-box">
+                    <h1 class="mpmetadata title"><% data.sets[`${current[0] }`].pick[`${current[1] }`].info.title %> [<% data.sets[`${current[0] }`].pick[`${current[1] }`].info.version %>]</h1>
+                    <h2 class="mpmetadata artist"><% data.sets[`${current[0] }`].pick[`${current[1] }`].info.artist %></h2>
+                </div>
+            </a>
+        </div>
+        <h1 class="text-center ref-header">Last Round Result</h1>
+        <div class="mp-history-game">
+            <a class="mpheader" href="https://osu.ppy.sh/beatmaps/2065029" 
+            :style="ConvertSetToURL(data.sets[`${current[0]-1}`].pick[`${current[1]-1}`].info.beatmapset_id)">
+                <div class="mpheader-overlay"></div>
+                <div class="mpstats-box"></div>
+                <div class="mpmetadata-box">
+                    <h1 class="mpmetadata title"><% data.sets[`${current[0]-1}`].pick[`${current[1]-1}`].info.title %> [<% data.sets[`${current[0]-1}`].pick[`${current[1]-1}`].info.version %>]</h1>
+                    <h2 class="mpmetadata artist"><% data.sets[`${current[0]-1}`].pick[`${current[1]-1}`].info.artist %></h2>
+                </div>
+                <div class="mpmods"></div>
+            </a>
+            <div class="mpplayer-scores">
+                <div class="mpplayer-score mp-history-player-score" v-for="s in data.sets[`${current[0]-1}`].pick[`${current[1]-1}`].result">
+                    <div class="mpsshapes">
+                        <img :src="'https://a.ppy.sh/'+s.user_id" class="mpsavatar">
+                    </div>
+                    <div class="mpsmain">
+                        <div class="mpsinfo-box mpsinfo-box user">
+                            <div class="mpsusername-box">
+                                <a class="mpsusername"><% s.username %></a>
+                                <a class="mpsteam">team of <% s.teamname %></a>
+                            </div>
+                        </div>
+                        <div class="mpsinfo-box mpsinfo-box stats">
+                            <div class="mpsstat-row mpsstat-row first">
+                                <div class="mpsstat combo">
+                                    <span class="mpsstat-label small">คอมโบ</span>
+                                    <span class="mpsstat-number medium"><% s.maxcombo %></span></div>
+                                <div class="mpsstat score">
+                                    <span class="mpsstat-label small">คะแนน</span>
+                                    <span class="mpsstat-number large"><% s.score %></span></div>
+                            </div>
+                            <div class="mpsstat-row">
+                                <div class="mpsstat small">
+                                    <span class="mpsstat-label large">MAX</span>
+                                    <span class="mpsstat-number small"><% s.countgeki %></span></div>
+                                <div class="mpsstat small">
+                                    <span class="mpsstat-label large">300</span>
+                                    <span class="mpsstat-number small"><% s.count300 %></span></div>
+                                <div class="mpsstat small">
+                                    <span class="mpsstat-label large">200</span>
+                                    <span class="mpsstat-number small"><% s.countkatu %></span></div>
+                                <div class="mpsstat small">
+                                    <span class="mpsstat-label large">100</span>
+                                    <span class="mpsstat-number small"><% s.count100 %></span></div>
+                                <div class="mpsstat small">
+                                    <span class="mpsstat-label large">50</span>
+                                    <span class="mpsstat-number small"><% s.count50 %></span></div>
+                                <div class="mpsstat small">
+                                    <span class="mpsstat-label large">Miss</span>
+                                    <span class="mpsstat-number small"><% s.countmiss %></span></div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div id="tab-top-set-1-1" class="card tab-pane">
-                    <div class="card-body">
-                        <div class="matchBan" style="background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)) center center / cover no-repeat, 
-                        url(https://assets.ppy.sh/beatmaps/1276349/covers/cover.jpg);">
-                            <!----> <a href="https://osu.ppy.sh/b/2651829">
-                                <div class="matchMapArtist">Nasty Children</div>
-                            </a> <a href="https://osu.ppy.sh/b/2651829">
-                                <div class="matchMapTitle">SCARLET TEMPEST</div>
-                            </a>
-                            <div class="matchMapDiff">[Corsace]</div>
-                            <div class="matchBanHover">
-                                <div class="mapID">DOUBLE TIME MAP 2</div>
-                                <div class="pickBanBy">BANNED BY</div>
-                                <div class="pickBanTeam">Starbound</div>
-                            </div>
-                        </div>
-                        <div class="result">
-                            <table class="table table-vcenter">
-                                <thead>
-                                    <tr>
-                                        <th>Avatar</th>
-                                        <th>Player</th>
-                                        <th>Team</th>
-                                        <th>Score</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="w-1">
-                                            <span class="avatar avatar-sm"
-                                                style="background-image: url(https://a.ppy.sh/5)"></span>
-                                        </td>
-                                        <td>
-                                            <div class="text-truncate">
-                                                Varkaria
-                                            </div>
-                                        </td>
-                                        <td class="td-truncate">
-                                            <div class="text-truncate">
-                                                Stelalium
-                                            </div>
-                                        </td>
-                                        <td class="text-nowrap text-muted">3415874</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="w-1">
-                                            <span class="avatar avatar-sm"
-                                                style="background-image: url(https://a.ppy.sh/5)"></span>
-                                        </td>
-                                        <td>
-                                            <div class="text-truncate">
-                                                Gusbell
-                                            </div>
-                                        </td>
-                                        <td class="td-truncate">
-                                            <div class="text-truncate">
-                                                Stelalium
-                                            </div>
-                                        </td>
-                                        <td class="text-nowrap text-muted">165151</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-
-                            <h2 class="text-center">Varkaria wins from this round</h2>
-                        </div>
-                    </div>
-                </div>
-                <div id="tab-top-set-1-2" class="card tab-pane">
-                    <div class="card-body">
-                        <div class="card-title">Round 2</div>
-                    </div>
-                </div>
-                <div id="tab-top-set-1-3" class="card tab-pane">
-                    <div class="card-body">
-                        <div class="card-title">Round 3</div>
-                    </div>
-                </div>
-                <div id="tab-top-set-1-4" class="card tab-pane">
-                    <div class="card-body">
-                        <div class="card-title">Round 4</div>
-                    </div>
-                </div>
-                <div id="tab-top-set-1-5" class="card tab-pane">
-                    <div class="card-body">
-                        <div class="card-title">Tiebreaker</div>
-                    </div>
+            </div>
+            <div>
+                <div class="mpresults">
+                    <span class="mpresults-text"><% data.sets[`${current[0]-1}`].pick[`${current[1]-1}`].winner.teamname %> Wins</span>
+                    <span class="mpresults-text mpresults-text score">Now Score <% data.sets[`${current[0]-1}`].score[0] %> | <% data.sets[`${current[0]-1}`].score[1] %></span>
                 </div>
             </div>
         </div>
     </div>
+    
     <div class="col-lg-4">
         <div class="mb-3">
             <label class="form-label">Multiplayer Creation</label>
             <input type="text" class="form-control mb-1" name="example-disabled-input" placeholder="Readonly..."
-                value="!mp make OMTHPL : (Varkaria) vs (Varkaria)" readonly="">
+                :value="'!mp make OMTHPL : ('+ data.team1.full_name +') vs (' + data.team2.full_name + ')'" readonly="">
             <input type="text" class="form-control mb-1" name="example-disabled-input" placeholder="Readonly..."
-                value="!mp addref [Hakura_San]" readonly="">
+                :value="'!mp addref ' + data.streamer.username" readonly="">
             <input type="text" class="form-control" name="example-disabled-input" placeholder="Readonly..."
                 value="!mp set 2 3 16" readonly="">
         </div>
         <div class="mb-3">
+            <label class="form-label">Paste Commands</label>
+            <div class="input-group mb-2">
+                <input type="text" class="form-control"
+                    :value="'!mp map ' + data.sets[`${data.currentround[0]}`].pick[`${data.currentround[1]}`].map_id"
+                    readonly="">
+            </div>
+        </div>
+        <div class="mb-3">
             <label class="form-label">Multiplayer Link</label>
             <div class="input-group mb-2">
-                <input type="text" class="form-control" placeholder="Please Insert MP Link before do any thing">
-                <button class="btn" type="button">Go!</button>
+                <input type="text" class="form-control" name="example-disabled-input" placeholder="Waiting MP_Link"
+                    :value="data.mp_link" readonly="">
             </div>
         </div>
         <div class="mb-3">
@@ -186,21 +126,32 @@ OM{{ match[0].code }} | {{ match[0].team1.full_name }} vs {{ match[0].team2.full
 
 <script>
     new Vue({
-        el: '#app',
+        el: "#app",
         delimiters: ["<%", "%>"],
-        data: {
-            results: {},
+        data() {
+            return {
+                data: {},
+                sets: [{},{}],
+                current: []
+            }
         },
-        created: function () {
-            
+        created() {
+            this.LoadMatch();
         },
         methods: {
-            FetchData() {
-                fetch('http://example.com/movies.json')
-                .then(response => response.json())
-                .then(data => console.log(data));
-            }
-        }
+            LoadMatch() {
+                axios.get('http://localhost:5000/manager/matchapi/4/')
+                    .then(res => {
+                        this.$set(this, 'data', res.data)
+                        this.$set(this, 'current', res.data.currentround)
+                    })
+                setTimeout(this.LoadMatch, 5000);
+            },
+            ConvertSetToURL(set_id) {
+                return `background-image: url('https://assets.ppy.sh/beatmaps/${set_id}/covers/cover.jpg');`
+            },
+        },
+        computed: {}
     });
 </script>
 {% endblock content %}

@@ -100,7 +100,10 @@
                     <td class="w-1 text-end">
                         <span class="avatar avatar-sm" style="background-image: url({{m.team2.flag_name|flag_url}});"></span>
                     </td>
-                    <td>{% if m.stats == 0 %}
+                    <td>
+                        {% if m.current == true %}
+                        <span class="badge bg-info">Starting</span>
+                        {% elif m.stats == 0 %}
                         <span class="badge bg-secondary">Not Started</span>
                         {% elif m.stats == 1 %}
                         <span class="badge bg-success">Ended</span>
