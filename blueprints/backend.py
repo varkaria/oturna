@@ -10,7 +10,7 @@ from objects import osuapi, mysql
 from PIL import Image
 from objects.decorators import *
 import json, re, requests, datetime
-from datetime import date
+import pandas as pd
 
 backend = Blueprint('backend', __name__)
 db = mysql.DB()
@@ -79,8 +79,13 @@ def dashboard():
         'n_team2_flag': next_match['team2_flag'],
         'n_team1_name': next_match['team1_name'],
         'n_team2_name': next_match['team2_name'],
-        'n_match_time': str(next_match['date'])
+        'n_match_time': (str(next_match['date'])[:16])
     }
+    time = str(next_match['date'])[12:]
+    orignal_date = next_data['n_match_time']
+    date_sr = pd.to_datetime(pd.Series(orignal_date))
+    change_format = date_sr.dt.strftime('%d/%m/%Y')
+    next_data['n_match_time'] = str(change_format).replace('dtype: object', '')[2:] + time
 
     last_match = db.query_one("""SELECT m.id, t1.full_name AS `team1_name`, t2.full_name AS `team2_name`, 
     t1.flag_name AS `team1_flag`, t2.flag_name AS `team2_flag`, team1_score, team2_score, m.date, m.stats
@@ -96,19 +101,25 @@ def dashboard():
         'l_team2_name': last_match['team2_name'],
         'team1_score': last_match['team1_score'],
         'team2_score': last_match['team2_score'],
-        'l_match_time': str(last_match['date']),
+        'l_match_time': (str(last_match['date'])[:16]),
         'cancel': False
     }
+    time = str(last_match['date'])[12:]
+    orignal_date = last_data['l_match_time']
+    date_sr = pd.to_datetime(pd.Series(orignal_date))
+    change_format = date_sr.dt.strftime('%d/%m/%Y')
+    last_data['l_match_time'] = str(change_format).replace('dtype: object', '')[2:] + time
+
     if last_data['stats'] == 1: # match not cancelled
         pass
     if last_data['stats'] == 2: # match cancelled
         last_data['cancel'] = True
         last_data['team1_score'] = ''
         last_data['team2_score'] = ''
-        last_data['l_match_time'] = str(last_match['date'])
 
     progress_data = {
-        'current_progress': 0.5
+        'current_progress': 0.5,
+        'ended': False
     }
 
     # reg: 0.07
