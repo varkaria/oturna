@@ -1,7 +1,7 @@
 from config import Config
 from pymysql.err import *
 from blueprints.api import getdata
-from flask import Blueprint, render_template, redirect, url_for, flash, session,request
+from flask import Blueprint, render_template, redirect, url_for, flash, session, request, current_app, send_file
 from objects.logger import log
 from objects.flag import Staff, Mods
 from rich.console import Console
@@ -9,7 +9,7 @@ from functools import wraps
 from objects import osuapi, mysql
 from PIL import Image
 from objects.decorators import *
-import json, re, requests, datetime
+import json, re, requests, datetime, os
 import pandas as pd
 
 backend = Blueprint('backend', __name__)
@@ -53,6 +53,9 @@ def base():
 @backend.route('/')
 @login_required
 def dashboard():
+
+    players = db.query_one('select count(*) as count from player')['count']
+
     colour = ''
     currentDate = datetime.date.today()
     reg_get = str(db.query_one('select register_end_date as reg_end from tourney where id=1')['reg_end'])[:10]
@@ -127,8 +130,6 @@ def dashboard():
     # regular 1: 0.5
     # regular 2: 0.715 
     # champ: 0.935
-
-    players = db.query_one('select count(*) as count from player')['count']
 
     return render_template('manager/dashboard.html', players=players, time_delta=time_delta.strip('-'), colour=colour, next_data=next_data, last_data=last_data, progress_data=progress_data)
 
@@ -696,3 +697,63 @@ def refree_helper(id:int):
         return redirect(url_for('backend.matchs'))
 
     return render_template('/manager/refree_tools.html',match=db.get_matchs(id=int(id)))
+
+@backend.route('/stream/')
+def showlist():
+    return render_template('manager/stream_list.html')
+
+BRACKETS_FOLDER = '.data/brackets'
+FILE_EX = {'json'}
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in FILE_EX
+
+@backend.route('/stream/json/upload', methods=['GET', 'POST'])
+def json_upload():
+    if request.method == 'POST':
+        file = request.files['file']
+        if file.filename == '':
+            error = 'No file chosen'
+            return render_template('stream/json_upload.html', error=error)
+        if file and allowed_file(file.filename):
+            try:
+                now = datetime.datetime.now()
+                id = str(session['user_id'])
+                date_time = now.strftime("%d-%m-%Y")
+                filename = '[' + id + ']' + ' ' + date_time + '.json'
+                file.save(os.path.join(BRACKETS_FOLDER, filename))
+                error = 'File upload successfully'
+                return render_template('stream/json_upload.html', error=error)
+            except KeyError:
+                error = 'You need to login to upload this file'
+                return render_template('stream/json_upload.html', error=error)
+        else:
+            error = 'Invalid file type'
+            return render_template('stream/json_upload.html', error=error)
+    return render_template('stream/json_upload.html')
+
+@backend.route('/stream/json/download/', methods=['GET', 'POST'])
+def json_download():
+    path = BRACKETS_FOLDER
+    list_brackets = {}
+    try:
+        id = str(session['user_id'])
+        if os.listdir(path) != []:
+            for filename in os.listdir(path):
+                list_brackets[filename] = filename
+            return render_template('stream/json_download.html', filename=filename, list_brackets=list_brackets)
+        else:
+            error = 'No json uploaded'
+            return render_template('stream/json_download.html', error=error)
+    except KeyError:
+        error = 'You need to login to view the file'
+        return render_template('stream/json_download.html', error=error)
+
+@backend.route('/stream/json/download/<path:filename>')
+def download(filename):
+    file = os.path.join(current_app.root_path,
+                        BRACKETS_FOLDER) + '/' + filename
+    response = send_file(file, mimetype='application/json',
+                         attachment_filename='brackets.json', as_attachment=True)
+    return response
