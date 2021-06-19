@@ -700,7 +700,7 @@ def refree_helper(id:int):
 
 @backend.route('/stream/')
 def showlist():
-    return render_template('manager/stream_list.html')
+    return render_template('manager/streamer_tools/stream_list.html')
 
 BRACKETS_FOLDER = '.data/brackets'
 FILE_EX = {'json'}
@@ -715,7 +715,7 @@ def json_upload():
         file = request.files['file']
         if file.filename == '':
             error = 'No file chosen'
-            return render_template('stream/json_upload.html', error=error)
+            return render_template('manager/streamer_tools/json_upload.html', error=error)
         if file and allowed_file(file.filename):
             try:
                 now = datetime.datetime.now()
@@ -724,14 +724,14 @@ def json_upload():
                 filename = '[' + id + ']' + ' ' + date_time + '.json'
                 file.save(os.path.join(BRACKETS_FOLDER, filename))
                 error = 'File upload successfully'
-                return render_template('stream/json_upload.html', error=error)
+                return render_template('manager/streamer_tools/json_upload.html', error=error)
             except KeyError:
                 error = 'You need to login to upload this file'
-                return render_template('stream/json_upload.html', error=error)
+                return render_template('manager/streamer_tools/json_upload.html', error=error)
         else:
             error = 'Invalid file type'
-            return render_template('stream/json_upload.html', error=error)
-    return render_template('stream/json_upload.html')
+            return render_template('manager/streamer_tools/json_upload.html', error=error)
+    return render_template('manager/streamer_tools/json_upload.html')
 
 @backend.route('/stream/json/download/', methods=['GET', 'POST'])
 def json_download():
@@ -742,13 +742,13 @@ def json_download():
         if os.listdir(path) != []:
             for filename in os.listdir(path):
                 list_brackets[filename] = filename
-            return render_template('stream/json_download.html', filename=filename, list_brackets=list_brackets)
+            return render_template('manager/streamer_tools/json_download.html', filename=filename, list_brackets=list_brackets)
         else:
             error = 'No json uploaded'
-            return render_template('stream/json_download.html', error=error)
+            return render_template('manager/streamer_tools/json_download.html', error=error)
     except KeyError:
         error = 'You need to login to view the file'
-        return render_template('stream/json_download.html', error=error)
+        return render_template('manager/streamer_tools/json_download.html', error=error)
 
 @backend.route('/stream/json/download/<path:filename>')
 def download(filename):
