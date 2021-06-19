@@ -615,8 +615,6 @@ def refree_helper(id:int):
         flash("You didn't be refree in this match. you can be refree by click option and be referee it : )", 'danger')
         return redirect(url_for('backend.matchs'))
 
-    print(db.get_full_match(id=int(id)))
-
     return render_template('/manager/refree_tools.html',match=db.get_matchs(id=int(id)), id=id)
 
 @backend.route('/matchapi/<id>/')
