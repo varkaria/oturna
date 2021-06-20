@@ -82,13 +82,18 @@ def dashboard():
         'n_team2_flag': next_match['team2_flag'],
         'n_team1_name': next_match['team1_name'],
         'n_team2_name': next_match['team2_name'],
-        'n_match_time': (str(next_match['date'])[:16])
+        'n_match_time': (str(next_match['date'])[:16]),
+        'cancel': False,
+        'nodata': False
     }
     time = str(next_match['date'])[12:]
     orignal_date = next_data['n_match_time']
     date_sr = pd.to_datetime(pd.Series(orignal_date))
     change_format = date_sr.dt.strftime('%d/%m/%Y')
     next_data['n_match_time'] = str(change_format).replace('dtype: object', '')[2:] + time
+
+    if next_data['n_team1_name'] == None:
+        next_data['nodata'] = True
 
     last_match = db.query_one("""SELECT m.id, t1.full_name AS `team1_name`, t2.full_name AS `team2_name`, 
     t1.flag_name AS `team1_flag`, t2.flag_name AS `team2_flag`, team1_score, team2_score, m.date, m.stats
@@ -105,13 +110,17 @@ def dashboard():
         'team1_score': last_match['team1_score'],
         'team2_score': last_match['team2_score'],
         'l_match_time': (str(last_match['date'])[:16]),
-        'cancel': False
+        'cancel': False,
+        'nodata': False
     }
     time = str(last_match['date'])[12:]
     orignal_date = last_data['l_match_time']
     date_sr = pd.to_datetime(pd.Series(orignal_date))
     change_format = date_sr.dt.strftime('%d/%m/%Y')
     last_data['l_match_time'] = str(change_format).replace('dtype: object', '')[2:] + time
+
+    if last_data['l_team1_name'] == None:
+        last_data['nodata'] = True
 
     if last_data['stats'] == 1: # match not cancelled
         pass

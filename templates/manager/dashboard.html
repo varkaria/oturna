@@ -121,6 +121,11 @@ Dashboard: {% endblock page_title %} {% block content %}
                         <p class="text-2xl">Upcoming Session Overview</p><br>
                     </div>
                     <div class="card-body">
+                        {% if next_data.nodata %}
+                            <div class="flex justify-center items-center">
+                                <h1 class="text-3xl text-black">No data</h1>
+                            </div>
+                        {% else %}
                         <div class="flex flex-col">
                             <div class="flex flex-row justify-between items-center gap-x-20">
                                 <img src="{{ next_data.n_team1_flag | flag_url }}" alt="" height="80" width="80">
@@ -135,6 +140,7 @@ Dashboard: {% endblock page_title %} {% block content %}
                                 <p class="text-lg"><b>{{ next_data.n_match_time }}</b></p>
                             </div>
                         </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -144,6 +150,11 @@ Dashboard: {% endblock page_title %} {% block content %}
                         <p class="text-2xl">Overview of Recently Closed Sessions</p><br>
                     </div>
                     <div class="card-body -mb-2">
+                        {% if last_data.nodata %}
+                            <div class="flex justify-center items-center">
+                                <h1 class="text-3xl text-black">No data</h1>
+                            </div>
+                        {% else %}
                         <div class="flex flex-col">
                             <div class="flex flex-row justify-between items-center gap-x-16">
                                 <img src="{{ last_data.l_team1_flag | flag_url }}" alt="" height="80" width="80">
@@ -164,6 +175,7 @@ Dashboard: {% endblock page_title %} {% block content %}
                                 <p class="text-3xl text-blue"><b>{{ last_data.team2_score }}</b></p>
                             </div>
                         </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
