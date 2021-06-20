@@ -156,7 +156,6 @@ class DB(object):
         'video_link', m.video_link,
         'live', (m.date < NOW()),
         'loser', (m.loser = 1),
-        'stats', m.stats,
         'note', m.note
         ) AS `json`
         FROM `match` m
