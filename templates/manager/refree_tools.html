@@ -23,8 +23,8 @@ OM{{ match[0].code }} | {{ match[0].team1.full_name }} vs {{ match[0].team2.full
                 </div>
             </a>
         </div>
-        <h1 class="text-center ref-header">Last Round Result</h1>
-        <div class="mp-history-game">
+        <h1 class="text-center ref-header" v-if='data.sets[`${current[0]}`].pick[0].result'>Last Round Result</h1>
+        <div class="mp-history-game" v-if='data.sets[`${current[0]}`].pick[0].result'>
             <a class="mpheader" href="https://osu.ppy.sh/beatmaps/2065029" 
             :style="ConvertSetToURL(data.sets[`${current[0]-1}`].pick[`${current[1]-1}`].info.beatmapset_id)">
                 <div class="mpheader-overlay"></div>
@@ -83,7 +83,7 @@ OM{{ match[0].code }} | {{ match[0].team1.full_name }} vs {{ match[0].team2.full
             <div>
                 <div class="mpresults">
                     <span class="mpresults-text"><% data.sets[`${current[0]-1}`].pick[`${current[1]-1}`].winner.teamname %> Wins</span>
-                    <span class="mpresults-text mpresults-text score">Now Score <% data.sets[`${current[0]-1}`].score[0] %> | <% data.sets[`${current[0]-1}`].score[1] %></span>
+                    <span class="mpresults-text mpresults-text score">Now Score <% data.sets[`${current[0]}`].score[0] %> | <% data.sets[`${current[0]}`].score[1] %></span>
                 </div>
             </div>
         </div>
@@ -103,8 +103,13 @@ OM{{ match[0].code }} | {{ match[0].team1.full_name }} vs {{ match[0].team2.full
             <label class="form-label">Paste Commands</label>
             <div class="input-group mb-2">
                 <input type="text" class="form-control"
-                    :value="'!mp map ' + data.sets[`${data.currentround[0]}`].pick[`${data.currentround[1]}`].map_id"
+                    :value="data.team1.full_name + ' ' + data.sets[`${current[0]}`].score[0] + ' - ' + data.sets[`${current[0]}`].score[1] + ' ' 
+                    + data.team2.full_name + ' | BO5 | Next Round: ' + data.sets[`${current[0] }`].pick[`${current[1] }`].info.title 
+                    + '[' + data.sets[`${current[0] }`].pick[`${current[1] }`].info.version + ']'"
                     readonly="">
+                <input type="text" class="form-control"
+                :value="'!mp map ' + data.sets[`${data.currentround[0]}`].pick[`${data.currentround[1]}`].map_id"
+                readonly="">
             </div>
         </div>
         <div class="mb-3">
@@ -144,6 +149,7 @@ OM{{ match[0].code }} | {{ match[0].team1.full_name }} vs {{ match[0].team2.full
                     .then(res => {
                         this.$set(this, 'data', res.data)
                         this.$set(this, 'current', res.data.currentround)
+                        console.log(this.data)
                     })
                 setTimeout(this.LoadMatch, 5000);
             },
