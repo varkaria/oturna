@@ -1,7 +1,7 @@
 from config import Config
 from pymysql.err import *
 from blueprints.api import getdata
-from flask import Blueprint, render_template, redirect, url_for, flash, session,request, jsonify
+from flask import Blueprint, render_template, redirect, url_for, flash, session, request, current_app, send_file
 from objects.logger import log
 from objects.flag import Staff, Mods
 from rich.console import Console
@@ -9,7 +9,8 @@ from functools import wraps
 from objects import osuapi, mysql
 from PIL import Image
 from objects.decorators import *
-import json, re, requests
+import json, re, requests, datetime, os
+import pandas as pd
 
 backend = Blueprint('backend', __name__)
 db = mysql.DB()
@@ -52,7 +53,94 @@ def base():
 @backend.route('/')
 @login_required
 def dashboard():
-    return render_template('manager/dashboard.html')
+
+    players = db.query_one('select count(*) as count from player')['count']
+
+    colour = ''
+    currentDate = datetime.date.today()
+    reg_get = str(db.query_one('select register_end_date as reg_end from tourney where id=1')['reg_end'])[:10]
+    reg_end_year, reg_end_month, reg_end_day = reg_get[:4], reg_get[5:7], reg_get[8:10]
+    reg_end = datetime.date(int(reg_end_year), int(reg_end_month), int(reg_end_day))
+    time_delta = str(reg_end - currentDate).strip(', 0:00:00')
+    if time_delta == '':
+        time_delta = 'Ending Today'
+        colour = 'text-green'
+    if reg_end < currentDate:
+        time_delta = 'Ended'
+        colour = 'text-red'
+    if reg_end > currentDate:
+        colour = 'text-green'
+
+    next_match = db.query_one("""SELECT m.id, t1.full_name AS `team1_name`, t2.full_name AS `team2_name`, 
+    t1.flag_name AS `team1_flag`, t2.flag_name AS `team2_flag`, m.date
+    FROM `match` `m`
+    LEFT JOIN `team` `t1` ON t1.id = m.team1
+    LEFT JOIN `team` `t2` ON t2.id = m.team2
+    WHERE m.date > NOW()""")
+    next_data = {
+        'n_team1_flag': next_match['team1_flag'],
+        'n_team2_flag': next_match['team2_flag'],
+        'n_team1_name': next_match['team1_name'],
+        'n_team2_name': next_match['team2_name'],
+        'n_match_time': (str(next_match['date'])[:16]),
+        'cancel': False,
+        'nodata': False
+    }
+    time = str(next_match['date'])[12:]
+    orignal_date = next_data['n_match_time']
+    date_sr = pd.to_datetime(pd.Series(orignal_date))
+    change_format = date_sr.dt.strftime('%d/%m/%Y')
+    next_data['n_match_time'] = str(change_format).replace('dtype: object', '')[2:] + time
+
+    if next_data['n_team1_name'] == None:
+        next_data['nodata'] = True
+
+    last_match = db.query_one("""SELECT m.id, t1.full_name AS `team1_name`, t2.full_name AS `team2_name`, 
+    t1.flag_name AS `team1_flag`, t2.flag_name AS `team2_flag`, team1_score, team2_score, m.date, m.stats
+    FROM `match` `m`
+    LEFT JOIN `team` `t1` ON t1.id = m.team1
+    LEFT JOIN `team` `t2` ON t2.id = m.team2
+    WHERE m.date <= NOW()""")
+    last_data = {
+        'stats': int(last_match['stats']),
+        'l_team1_flag': last_match['team1_flag'],
+        'l_team2_flag': last_match['team2_flag'],
+        'l_team1_name': last_match['team1_name'],
+        'l_team2_name': last_match['team2_name'],
+        'team1_score': last_match['team1_score'],
+        'team2_score': last_match['team2_score'],
+        'l_match_time': (str(last_match['date'])[:16]),
+        'cancel': False,
+        'nodata': False
+    }
+    time = str(last_match['date'])[12:]
+    orignal_date = last_data['l_match_time']
+    date_sr = pd.to_datetime(pd.Series(orignal_date))
+    change_format = date_sr.dt.strftime('%d/%m/%Y')
+    last_data['l_match_time'] = str(change_format).replace('dtype: object', '')[2:] + time
+
+    if last_data['l_team1_name'] == None:
+        last_data['nodata'] = True
+
+    if last_data['stats'] == 1: # match not cancelled
+        pass
+    if last_data['stats'] == 2: # match cancelled
+        last_data['cancel'] = True
+        last_data['team1_score'] = ''
+        last_data['team2_score'] = ''
+
+    progress_data = {
+        'current_progress': 0.5,
+        'ended': False
+    }
+
+    # reg: 0.07
+    # playoff: 0.285
+    # regular 1: 0.5
+    # regular 2: 0.715 
+    # champ: 0.935
+
+    return render_template('manager/dashboard.html', players=players, time_delta=time_delta.strip('-'), colour=colour, next_data=next_data, last_data=last_data, progress_data=progress_data)
 
 @backend.route('/planning/')
 @login_required
@@ -623,14 +711,62 @@ def refree_helper(id:int):
 def refree_helper_api(id:int):
     return db.get_full_match(id=int(id))
 
-@backend.route('/matchapi2/<id>/')
-@login_required
-@need_privilege(Staff.REFEREE)
-def refree_helper_api2(id:int):
-    return db.get_match_sets_ban_pick_full(id=int(id))
+@backend.route('/stream/')
+def showlist():
+    return render_template('manager/streamer_tools/stream_list.html')
 
-@backend.route('/matchapi3/')
-@login_required
-@need_privilege(Staff.REFEREE)
-def refree_helper_api3():
-    return jsonify(db.get_matchs())
+BRACKETS_FOLDER = '.data/brackets'
+FILE_EX = {'json'}
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in FILE_EX
+
+@backend.route('/stream/json/upload', methods=['GET', 'POST'])
+def json_upload():
+    if request.method == 'POST':
+        file = request.files['file']
+        if file.filename == '':
+            error = 'No file chosen'
+            return render_template('manager/streamer_tools/json_upload.html', error=error)
+        if file and allowed_file(file.filename):
+            try:
+                now = datetime.datetime.now()
+                id = str(session['user_id'])
+                date_time = now.strftime("%d-%m-%Y")
+                filename = '[' + id + ']' + ' ' + date_time + '.json'
+                file.save(os.path.join(BRACKETS_FOLDER, filename))
+                error = 'File upload successfully'
+                return render_template('manager/streamer_tools/json_upload.html', error=error)
+            except KeyError:
+                error = 'You need to login to upload this file'
+                return render_template('manager/streamer_tools/json_upload.html', error=error)
+        else:
+            error = 'Invalid file type'
+            return render_template('manager/streamer_tools/json_upload.html', error=error)
+    return render_template('manager/streamer_tools/json_upload.html')
+
+@backend.route('/stream/json/download/', methods=['GET', 'POST'])
+def json_download():
+    path = BRACKETS_FOLDER
+    list_brackets = {}
+    try:
+        id = str(session['user_id'])
+        if os.listdir(path) != []:
+            for filename in os.listdir(path):
+                list_brackets[filename] = filename
+            return render_template('manager/streamer_tools/json_download.html', filename=filename, list_brackets=list_brackets)
+        else:
+            error = 'No json uploaded'
+            return render_template('manager/streamer_tools/json_download.html', error=error)
+    except KeyError:
+        error = 'You need to login to view the file'
+        return render_template('manager/streamer_tools/json_download.html', error=error)
+
+@backend.route('/stream/json/download/<path:filename>')
+def download(filename):
+    file = os.path.join(current_app.root_path,
+                        BRACKETS_FOLDER) + '/' + filename
+    response = send_file(file, mimetype='application/json',
+                         attachment_filename='brackets.json', as_attachment=True)
+    return response

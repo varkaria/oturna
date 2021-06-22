@@ -28,9 +28,13 @@ python-engineio==4.2.0
 python-socketio==5.3.0
 requests==2.25.1
 rich==10.2.2
-six==1.14.0
+six==1.16.0
 urllib3==1.26.5
 Werkzeug==2.0.1
 wsproto==1.0.0
 zope.event==4.5.0
 zope.interface==5.4.0
+numpy==1.20.3
+pytz==2017.3
+python-dateutil==2.7.3
+pandas==1.2.4
