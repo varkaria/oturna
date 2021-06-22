@@ -694,16 +694,29 @@ def mappool_del(id, round):
 def refree_helper(id:int):
     # check match is have it?
     match = db.query("SELECT * FROM `match` WHERE id = %s",[id])
+    match_data = db.get_matchs(id=int(id))
     if not match:
         flash("Couldn't found match did you put it", 'danger')
         return redirect(url_for('backend.matchs'))
 
     # check referee you be in this match?
+    print(f"{match['referee']} = {session['id']}")
     if match['referee'] != session['id']:
         flash("You didn't be refree in this match. you can be refree by click option and be referee it : )", 'danger')
         return redirect(url_for('backend.matchs'))
+    
+    if 'https://osu.ppy.sh/community/matches/' not in match_data[0]['mp_link']:
+        return render_template('/manager/refree_tools_insert.html',match=match_data, id=id)
 
-    return render_template('/manager/refree_tools.html',match=db.get_matchs(id=int(id)), id=id)
+    return render_template('/manager/refree_tools.html',match=match_data, id=id)
+
+@backend.route('/match/update_mp/<id>/', methods=['POST'])
+@login_required
+@need_privilege(Staff.REFEREE)
+def refree_helper_update(id:int):
+    mp_link = request.form['mplink']
+    db.query_one(f"UPDATE `tourney`.`match` SET `mp_link`='{mp_link}' WHERE  `id`={id};")
+    return redirect(url_for('backend.refree_helper', id=id))
 
 @backend.route('/matchapi/<id>/')
 @login_required

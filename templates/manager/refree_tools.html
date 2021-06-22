@@ -14,29 +14,35 @@ OM{{ match[0].code }} | {{ match[0].team1.full_name }} vs {{ match[0].team2.full
     <div class="col-lg-8">
         <h1 class="text-center ref-header">Next Round</h1>
         <div class="mp-history-game">
-            <a class="mpheader" :style="ConvertSetToURL(data.sets[`${current[0]}`].pick[`${current[1]}`].info.beatmapset_id)">
+            <a class="mpheader"
+                :style="ConvertSetToURL(data.sets[`${current[0]}`].pick[`${current[1]}`].info.beatmapset_id)">
                 <div class="mpheader-overlay"></div>
                 <div class="mpstats-box"></div>
                 <div class="mpmetadata-box">
-                    <h1 class="mpmetadata title"><% data.sets[`${current[0] }`].pick[`${current[1] }`].info.title %> [<% data.sets[`${current[0] }`].pick[`${current[1] }`].info.version %>]</h1>
-                    <h2 class="mpmetadata artist"><% data.sets[`${current[0] }`].pick[`${current[1] }`].info.artist %></h2>
+                    <h1 class="mpmetadata title"><% data.sets[`${current[0] }`].pick[`${current[1] }`].info.title %>
+                        [<% data.sets[`${current[0] }`].pick[`${current[1] }`].info.version %>]</h1>
+                    <h2 class="mpmetadata artist"><% data.sets[`${current[0] }`].pick[`${current[1] }`].info.artist %>
+                    </h2>
                 </div>
             </a>
         </div>
         <h1 class="text-center ref-header" v-if='data.sets[`${current[0]}`].pick[0].result'>Last Round Result</h1>
         <div class="mp-history-game" v-if='data.sets[`${current[0]}`].pick[0].result'>
-            <a class="mpheader" href="https://osu.ppy.sh/beatmaps/2065029" 
-            :style="ConvertSetToURL(data.sets[`${current[0]-1}`].pick[`${current[1]-1}`].info.beatmapset_id)">
+            <a class="mpheader" href="https://osu.ppy.sh/beatmaps/2065029"
+                :style="ConvertSetToURL(data.sets[`${current[0]-1}`].pick[`${current[1]-1}`].info.beatmapset_id)">
                 <div class="mpheader-overlay"></div>
                 <div class="mpstats-box"></div>
                 <div class="mpmetadata-box">
-                    <h1 class="mpmetadata title"><% data.sets[`${current[0]-1}`].pick[`${current[1]-1}`].info.title %> [<% data.sets[`${current[0]-1}`].pick[`${current[1]-1}`].info.version %>]</h1>
-                    <h2 class="mpmetadata artist"><% data.sets[`${current[0]-1}`].pick[`${current[1]-1}`].info.artist %></h2>
+                    <h1 class="mpmetadata title"><% data.sets[`${current[0]-1}`].pick[`${current[1]-1}`].info.title %>
+                        [<% data.sets[`${current[0]-1}`].pick[`${current[1]-1}`].info.version %>]</h1>
+                    <h2 class="mpmetadata artist"><% data.sets[`${current[0]-1}`].pick[`${current[1]-1}`].info.artist %>
+                    </h2>
                 </div>
                 <div class="mpmods"></div>
             </a>
             <div class="mpplayer-scores">
-                <div class="mpplayer-score mp-history-player-score" v-for="s in data.sets[`${current[0]-1}`].pick[`${current[1]-1}`].result">
+                <div class="mpplayer-score mp-history-player-score"
+                    v-for="s in data.sets[`${current[0]-1}`].pick[`${current[1]-1}`].result">
                     <div class="mpsshapes">
                         <img :src="'https://a.ppy.sh/'+s.user_id" class="mpsavatar">
                     </div>
@@ -82,13 +88,16 @@ OM{{ match[0].code }} | {{ match[0].team1.full_name }} vs {{ match[0].team2.full
             </div>
             <div>
                 <div class="mpresults">
-                    <span class="mpresults-text"><% data.sets[`${current[0]-1}`].pick[`${current[1]-1}`].winner.teamname %> Wins</span>
-                    <span class="mpresults-text mpresults-text score">Now Score <% data.sets[`${current[0]}`].score[0] %> | <% data.sets[`${current[0]}`].score[1] %></span>
+                    <span
+                        class="mpresults-text"><% data.sets[`${current[0]-1}`].pick[`${current[1]-1}`].winner.teamname %>
+                        Wins</span>
+                    <span class="mpresults-text mpresults-text score">Now Score
+                        <% data.sets[`${current[0]}`].score[0] %> | <% data.sets[`${current[0]}`].score[1] %></span>
                 </div>
             </div>
         </div>
     </div>
-    
+
     <div class="col-lg-4">
         <div class="mb-3">
             <label class="form-label">Multiplayer Creation</label>
@@ -102,14 +111,12 @@ OM{{ match[0].code }} | {{ match[0].team1.full_name }} vs {{ match[0].team2.full
         <div class="mb-3">
             <label class="form-label">Paste Commands</label>
             <div class="input-group mb-2">
-                <input type="text" class="form-control"
-                    :value="data.team1.full_name + ' ' + data.sets[`${current[0]}`].score[0] + ' - ' + data.sets[`${current[0]}`].score[1] + ' ' 
+                <input type="text" class="form-control" :value="data.team1.full_name + ' ' + data.sets[`${current[0]}`].score[0] + ' - ' + data.sets[`${current[0]}`].score[1] + ' ' 
                     + data.team2.full_name + ' | BO5 | Next Round: ' + data.sets[`${current[0] }`].pick[`${current[1] }`].info.title 
-                    + '[' + data.sets[`${current[0] }`].pick[`${current[1] }`].info.version + ']'"
-                    readonly="">
+                    + '[' + data.sets[`${current[0] }`].pick[`${current[1] }`].info.version + ']'" readonly="">
                 <input type="text" class="form-control"
-                :value="'!mp map ' + data.sets[`${data.currentround[0]}`].pick[`${data.currentround[1]}`].map_id"
-                readonly="">
+                    :value="'!mp map ' + data.sets[`${data.currentround[0]}`].pick[`${data.currentround[1]}`].map_id"
+                    readonly="">
             </div>
         </div>
         <div class="mb-3">
@@ -136,7 +143,7 @@ OM{{ match[0].code }} | {{ match[0].team1.full_name }} vs {{ match[0].team2.full
         data() {
             return {
                 data: {},
-                sets: [{},{}],
+                sets: [{}, {}],
                 current: []
             }
         },
