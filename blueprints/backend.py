@@ -11,6 +11,7 @@ from PIL import Image
 from objects.decorators import *
 import json, re, requests, datetime, os
 import pandas as pd
+from itertools import cycle
 
 backend = Blueprint('backend', __name__)
 db = mysql.DB()
@@ -50,7 +51,7 @@ def context():
 def base():
     return render_template('/manager/base.html')
 
-@backend.route('/')
+@backend.route('/', methods=['GET', 'POST'])
 @login_required
 def dashboard():
 
@@ -129,16 +130,32 @@ def dashboard():
         last_data['team1_score'] = ''
         last_data['team2_score'] = ''
 
-    progress_data = {
-        'current_progress': 0.5,
-        'ended': False
+    progress = {
+        'start': 0,
+        'regis': 0.07,
+        'playoff': 0.285,
+        'reg1': 0.5,
+        'reg2': 0.715,
+        'champ': 0.935,
+        'end': 1
     }
-
-    # reg: 0.07
-    # playoff: 0.285
-    # regular 1: 0.5
-    # regular 2: 0.715 
-    # champ: 0.935
+    round_json = ''
+    tour_end = ''
+    if request.method == 'POST':
+        select = request.form.get('rounds')
+        with open('.data/dashboard/round.json', 'w') as f:
+            json.dump(select, f)
+            f.close()
+        if select == 'start':
+            tour_end = False
+        elif select == 'end':
+            tour_end = True
+    with open('.data/dashboard/round.json', 'r') as f:
+        round_json = json.load(f)
+    progress_data = {
+        'current_progress': progress['{}'.format(round_json)],
+        'ended': tour_end
+    }
 
     return render_template('manager/dashboard.html', players=players, time_delta=time_delta.strip('-'), colour=colour, next_data=next_data, last_data=last_data, progress_data=progress_data)
 
