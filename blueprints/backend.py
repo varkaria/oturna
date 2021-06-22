@@ -5,13 +5,11 @@ from flask import Blueprint, render_template, redirect, url_for, flash, session,
 from objects.logger import log
 from objects.flag import Staff, Mods
 from rich.console import Console
-from functools import wraps
 from objects import osuapi, mysql
 from PIL import Image
 from objects.decorators import *
 import json, re, requests, datetime, os
 import pandas as pd
-from itertools import cycle
 
 backend = Blueprint('backend', __name__)
 db = mysql.DB()
