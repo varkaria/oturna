@@ -66,6 +66,7 @@ instance/
 .webassets-cache
 
 # JSON file
+.data/dashboard/*.json
 .data/brackets/*.json
 .data/team_pics/*
 
