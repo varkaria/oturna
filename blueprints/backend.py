@@ -139,15 +139,20 @@ def dashboard():
     }
     round_json = ''
     tour_end = ''
+    select = ''
     if request.method == 'POST':
         select = request.form.get('rounds')
-        with open('.data/dashboard/round.json', 'w') as f:
-            json.dump(select, f)
-            f.close()
-        if select == 'start':
-            tour_end = False
-        elif select == 'end':
-            tour_end = True
+        if select == None:
+            pass
+        else:
+            with open('.data/dashboard/round.json', 'w') as f:
+                json.dump(select, f)
+                f.close()
+            if select == 'start':
+                tour_end = False
+            elif select == 'end':
+                tour_end = True
+        print(select)
     with open('.data/dashboard/round.json', 'r') as f:
         round_json = json.load(f)
     progress_data = {

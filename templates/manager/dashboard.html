@@ -28,8 +28,9 @@ block head %}
 Dashboard: {% endblock page_title %} {% block content %}
 <div>
     <div class="pb-2 -mt-2">
-        <form action="/manager/" method="post" class="flex flex-row gap-x-2">
+        <form action="/manager/" name="rounds" method="post" class="flex flex-row gap-x-2">
             <select name="rounds" class="p-1">
+                <option value="" disabled selected>Select your option</option>
                 <option value="start">Not Started</option>
                 <option value="regis">Registration</option>
                 <option value="playoff">Playoff</option>
