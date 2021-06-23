@@ -11,88 +11,139 @@ OM{{ match[0].code }} | {{ match[0].team1.full_name }} vs {{ match[0].team2.full
 {% block content %}
 
 <div class="row mb-3" id="app">
-    <div class="col-lg-8">
-        <h1 class="text-center ref-header">Next Round</h1>
-        <div class="mp-history-game">
-            <a class="mpheader"
-                :style="ConvertSetToURL(data.sets[`${current[0]}`].pick[`${current[1]}`].info.beatmapset_id)">
-                <div class="mpheader-overlay"></div>
-                <div class="mpstats-box"></div>
-                <div class="mpmetadata-box">
-                    <h1 class="mpmetadata title"><% data.sets[`${current[0] }`].pick[`${current[1] }`].info.title %>
-                        [<% data.sets[`${current[0] }`].pick[`${current[1] }`].info.version %>]</h1>
-                    <h2 class="mpmetadata artist"><% data.sets[`${current[0] }`].pick[`${current[1] }`].info.artist %>
-                    </h2>
-                </div>
-            </a>
-        </div>
-        <h1 class="text-center ref-header" v-if='data.sets[`${current[0]}`].pick[0].result'>Last Round Result</h1>
-        <div class="mp-history-game" v-if='data.sets[`${current[0]}`].pick[0].result'>
-            <a class="mpheader" href="https://osu.ppy.sh/beatmaps/2065029"
-                :style="ConvertSetToURL(data.sets[`${current[0]-1}`].pick[`${current[1]-1}`].info.beatmapset_id)">
-                <div class="mpheader-overlay"></div>
-                <div class="mpstats-box"></div>
-                <div class="mpmetadata-box">
-                    <h1 class="mpmetadata title"><% data.sets[`${current[0]-1}`].pick[`${current[1]-1}`].info.title %>
-                        [<% data.sets[`${current[0]-1}`].pick[`${current[1]-1}`].info.version %>]</h1>
-                    <h2 class="mpmetadata artist"><% data.sets[`${current[0]-1}`].pick[`${current[1]-1}`].info.artist %>
-                    </h2>
-                </div>
-                <div class="mpmods"></div>
-            </a>
-            <div class="mpplayer-scores">
-                <div class="mpplayer-score mp-history-player-score"
-                    v-for="s in data.sets[`${current[0]-1}`].pick[`${current[1]-1}`].result">
-                    <div class="mpsshapes">
-                        <img :src="'https://a.ppy.sh/'+s.user_id" class="mpsavatar">
+    <div class="col-lg-8" v-if='data.sets.length > 0'>
+        <div v-if="data.sets[`${current[0]}`].pick.length > 0">
+            <div v-if="data.sets[`${current[0]}`].finish == false">
+                <div class="next-match" v-if='data.finish == false'>
+                    <h1 class="text-center ref-header">Next Round</h1>
+                    <div class="mp-history-game">
+                        <a class="mpheader"
+                            :style="ConvertSetToURL(data.sets[`${current[0]}`].pick[`${current[1]}`].info.beatmapset_id)">
+                            <div class="mpheader-overlay"></div>
+                            <div class="mpstats-box"></div>
+                            <div class="mpmetadata-box">
+                                <h1 class="mpmetadata title">
+                                    <% data.sets[`${current[0] }`].pick[`${current[1] }`].info.title %>
+                                        [<% data.sets[`${current[0] }`].pick[`${current[1] }`].info.version %>]
+                                </h1>
+                                <h2 class="mpmetadata artist">
+                                    <% data.sets[`${current[0] }`].pick[`${current[1] }`].info.artist %>
+                                </h2>
+                            </div>
+                        </a>
                     </div>
-                    <div class="mpsmain">
-                        <div class="mpsinfo-box mpsinfo-box user">
-                            <div class="mpsusername-box">
-                                <a class="mpsusername"><% s.username %></a>
-                                <a class="mpsteam">team of <% s.teamname %></a>
+                </div>
+                <div class="last-round" v-if='data.sets[`${current[0]}`].pick[0].result'>
+                    <h1 class="text-center ref-header">Last Round Result</h1>
+                    <div class="mp-history-game">
+                        <a class="mpheader" href="https://osu.ppy.sh/beatmaps/2065029"
+                            :style="ConvertSetToURL(data.sets[`${current[0]}`].pick[`${current[1]-1}`].info.beatmapset_id)">
+                            <div class="mpheader-overlay"></div>
+                            <div class="mpstats-box"></div>
+                            <div class="mpmetadata-box">
+                                <h1 class="mpmetadata title">
+                                    <% data.sets[`${current[0]}`].pick[`${current[1]-1}`].info.title %>
+                                        [<% data.sets[`${current[0]}`].pick[`${current[1]-1}`].info.version %>]
+                                </h1>
+                                <h2 class="mpmetadata artist">
+                                    <% data.sets[`${current[0]}`].pick[`${current[1]-1}`].info.artist %>
+                                </h2>
+                            </div>
+                            <div class="mpmods"></div>
+                        </a>
+                        <div class="mpplayer-scores">
+                            <div class="mpplayer-score mp-history-player-score"
+                                v-for="s in data.sets[`${current[0]}`].pick[`${current[1]-1}`].result">
+                                <div class="mpsshapes">
+                                    <img :src="'https://a.ppy.sh/'+s.user_id" class="mpsavatar">
+                                </div>
+                                <div class="mpsmain">
+                                    <div class="mpsinfo-box mpsinfo-box user">
+                                        <div class="mpsusername-box">
+                                            <a class="mpsusername">
+                                                <% s.username %>
+                                            </a>
+                                            <a class="mpsteam">team of <% s.teamname %></a>
+                                        </div>
+                                    </div>
+                                    <div class="mpsinfo-box mpsinfo-box stats">
+                                        <div class="mpsstat-row mpsstat-row first">
+                                            <div class="mpsstat combo">
+                                                <span class="mpsstat-label small">คอมโบ</span>
+                                                <span class="mpsstat-number medium">
+                                                    <% s.maxcombo %>
+                                                </span>
+                                            </div>
+                                            <div class="mpsstat score">
+                                                <span class="mpsstat-label small">คะแนน</span>
+                                                <span class="mpsstat-number large">
+                                                    <% s.score %>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="mpsstat-row">
+                                            <div class="mpsstat small">
+                                                <span class="mpsstat-label large">MAX</span>
+                                                <span class="mpsstat-number small">
+                                                    <% s.countgeki %>
+                                                </span>
+                                            </div>
+                                            <div class="mpsstat small">
+                                                <span class="mpsstat-label large">300</span>
+                                                <span class="mpsstat-number small">
+                                                    <% s.count300 %>
+                                                </span>
+                                            </div>
+                                            <div class="mpsstat small">
+                                                <span class="mpsstat-label large">200</span>
+                                                <span class="mpsstat-number small">
+                                                    <% s.countkatu %>
+                                                </span>
+                                            </div>
+                                            <div class="mpsstat small">
+                                                <span class="mpsstat-label large">100</span>
+                                                <span class="mpsstat-number small">
+                                                    <% s.count100 %>
+                                                </span>
+                                            </div>
+                                            <div class="mpsstat small">
+                                                <span class="mpsstat-label large">50</span>
+                                                <span class="mpsstat-number small">
+                                                    <% s.count50 %>
+                                                </span>
+                                            </div>
+                                            <div class="mpsstat small">
+                                                <span class="mpsstat-label large">Miss</span>
+                                                <span class="mpsstat-number small">
+                                                    <% s.countmiss %>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="mpsinfo-box mpsinfo-box stats">
-                            <div class="mpsstat-row mpsstat-row first">
-                                <div class="mpsstat combo">
-                                    <span class="mpsstat-label small">คอมโบ</span>
-                                    <span class="mpsstat-number medium"><% s.maxcombo %></span></div>
-                                <div class="mpsstat score">
-                                    <span class="mpsstat-label small">คะแนน</span>
-                                    <span class="mpsstat-number large"><% s.score %></span></div>
-                            </div>
-                            <div class="mpsstat-row">
-                                <div class="mpsstat small">
-                                    <span class="mpsstat-label large">MAX</span>
-                                    <span class="mpsstat-number small"><% s.countgeki %></span></div>
-                                <div class="mpsstat small">
-                                    <span class="mpsstat-label large">300</span>
-                                    <span class="mpsstat-number small"><% s.count300 %></span></div>
-                                <div class="mpsstat small">
-                                    <span class="mpsstat-label large">200</span>
-                                    <span class="mpsstat-number small"><% s.countkatu %></span></div>
-                                <div class="mpsstat small">
-                                    <span class="mpsstat-label large">100</span>
-                                    <span class="mpsstat-number small"><% s.count100 %></span></div>
-                                <div class="mpsstat small">
-                                    <span class="mpsstat-label large">50</span>
-                                    <span class="mpsstat-number small"><% s.count50 %></span></div>
-                                <div class="mpsstat small">
-                                    <span class="mpsstat-label large">Miss</span>
-                                    <span class="mpsstat-number small"><% s.countmiss %></span></div>
+                        <div>
+                            <div class="mpresults">
+                                <span class="mpresults-text">
+                                    <% data.sets[`${current[0]}`].pick[`${current[1]-1}`].winner.teamname %>
+                                        Wins
+                                </span>
+                                <span class="mpresults-text mpresults-text score">Now Score
+                                    <% data.sets[`${current[0]}`].score[0] %> | <% data.sets[`${current[0]}`].score[1]
+                                            %>
+                                </span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div>
-                <div class="mpresults">
-                    <span
-                        class="mpresults-text"><% data.sets[`${current[0]-1}`].pick[`${current[1]-1}`].winner.teamname %>
-                        Wins</span>
-                    <span class="mpresults-text mpresults-text score">Now Score
-                        <% data.sets[`${current[0]}`].score[0] %> | <% data.sets[`${current[0]}`].score[1] %></span>
+            <div v-if="data.sets[`${current[0]}`].finish == true">
+                <div class="last-round">
+                    <h1 class="text-center ref-header">Sets Result</h1>
+                    <div class="mp-history-game">
+                        gay
+                    </div>
                 </div>
             </div>
         </div>
@@ -108,15 +159,19 @@ OM{{ match[0].code }} | {{ match[0].team1.full_name }} vs {{ match[0].team2.full
             <input type="text" class="form-control" name="example-disabled-input" placeholder="Readonly..."
                 value="!mp set 2 3 16" readonly="">
         </div>
-        <div class="mb-3">
-            <label class="form-label">Paste Commands</label>
-            <div class="input-group mb-2">
-                <input type="text" class="form-control" :value="data.team1.full_name + ' ' + data.sets[`${current[0]}`].score[0] + ' - ' + data.sets[`${current[0]}`].score[1] + ' ' 
+        <div class="mb-3" v-if='data.finish == false && data.sets.length > 0'>
+            <div v-if="data.sets[`${current[0]}`].pick.length > 0">
+                <div v-if="data.sets[`${current[0]}`].finish == false">
+                    <label class="form-label">Paste Commands</label>
+                    <div class="input-group mb-2">
+                        <input type="text" class="form-control" :value="data.team1.full_name + ' ' + data.sets[`${current[0]}`].score[0] + ' - ' + data.sets[`${current[0]}`].score[1] + ' ' 
                     + data.team2.full_name + ' | BO5 | Next Round: ' + data.sets[`${current[0] }`].pick[`${current[1] }`].info.title 
-                    + '[' + data.sets[`${current[0] }`].pick[`${current[1] }`].info.version + ']'" readonly="">
-                <input type="text" class="form-control"
-                    :value="'!mp map ' + data.sets[`${data.currentround[0]}`].pick[`${data.currentround[1]}`].map_id"
-                    readonly="">
+                    + ' [' + data.sets[`${current[0] }`].pick[`${current[1] }`].info.version + ']'" readonly="">
+                        <input type="text" class="form-control"
+                            :value="'!mp map ' + data.sets[`${data.currentround[0]}`].pick[`${data.currentround[1]}`].map_id + ' 3'"
+                            readonly="">
+                    </div>
+                </div>
             </div>
         </div>
         <div class="mb-3">
@@ -124,6 +179,12 @@ OM{{ match[0].code }} | {{ match[0].team1.full_name }} vs {{ match[0].team2.full
             <div class="input-group mb-2">
                 <input type="text" class="form-control" name="example-disabled-input" placeholder="Waiting MP_Link"
                     :value="data.mp_link" readonly="">
+            </div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Invite Player</label>
+            <div class="input-group mb-2">
+                <input type="text" class="form-control" value="when zytosy is sus" readonly="">
             </div>
         </div>
         <div class="mb-3">
@@ -152,7 +213,7 @@ OM{{ match[0].code }} | {{ match[0].team1.full_name }} vs {{ match[0].team2.full
         },
         methods: {
             LoadMatch() {
-                axios.get('http://localhost:5000/manager/matchapi/4/')
+                axios.get('https://brokenhand.ml/manager/matchapi/{{ id }}/')
                     .then(res => {
                         this.$set(this, 'data', res.data)
                         this.$set(this, 'current', res.data.currentround)

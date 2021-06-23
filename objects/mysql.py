@@ -190,7 +190,7 @@ class DB(object):
         import os.path
         
         parsed = os.path.split(fulldata['mp_link'])
-        man = osuapi.get(osuapi.V1Path.get_match, mp=parsed[1])
+        man = osuapi.get(osuapi.V1Path.get_match, mp=int(parsed[1]))
         multi_games_data = man['games']
 
         for s in l_sets: # นำข้อมูล sets มาเรียง
@@ -237,8 +237,8 @@ class DB(object):
                         if g['scores']:
                             for w in g['scores']:
                                 q = self.query_one("SELECT player.username AS `player`, team.full_name AS `team` FROM player LEFT JOIN team ON team.id = player.team WHERE user_id=%s", (w['user_id']))
-                            w['username'] = q['player']
-                            w['teamname'] = q['team']
+                                w['username'] = q['player']
+                                w['teamname'] = q['team']
                             p['result'] = g['scores'] # เอาผลของคะแนนใส่ใน pick นั้นๆ
                             p['winner'] = g['scores'][check_team_win(g['scores'])]
                             win = check_team_win(g['scores']) # เช็คว่าทีมไหนคะแนนเยอะกว่า
@@ -254,6 +254,7 @@ class DB(object):
                     if str(tie_m['map_id']) == str(g['beatmap_id']) and str(tie_m['map_id']) not in str(dupli):
                         tie_m['result'] = g['scores'] # เอาผลของคะแนนใส่ใน pick นั้นๆ
                         win = check_team_win(g['scores']) # เช็คว่าทีมไหนคะแนนเยอะกว่า
+                        score[win] += 1 # เพิ่มคะแนนของทีมในเซ้ตๆนั้น
                         o_score[win] += 1 # เพิ่มคะแนนของทีมในเซ้ตๆนั้น
                         state = 0
                         finish = True
@@ -269,29 +270,31 @@ class DB(object):
             })
             
         self.query_one("UPDATE `tourney`.`match` SET `team1_score`='%s', `team2_score`='%s' WHERE  `id`=%s;",(o_score[0],o_score[1],fulldata['id']))
-        if o_sets:
-            fulldata['currentround'] = [len(o_sets)-1,o_sets[len(o_sets)-1]['state']-1]
-        else:
-            fulldata['currentround'] = [0,0]
+
         if o_score[0] == o_score[1] and o_score[0] == o_score_to_win - 1:
             # match tb
             tiebreaker_match = self.query_one("SELECT id, beatmap_id AS map_id, 'tiebreaker' AS 'from', 'pick' AS 'type', info FROM mappool WHERE round_id=%s AND mods='TBS'",[fulldata['round']['id']])
             tiebreaker_match['info'] = json.loads(tiebreaker_match['info'])
-
-            last_score = [0,0]
-            if str(tiebreaker_match['map_id']) == str(g['beatmap_id']) and str(tiebreaker_match['map_id']) not in str(dupli):
-                tiebreaker_match['result'] = g['scores'] # เอาผลของคะแนนใส่ใน pick นั้นๆ
-                win = check_team_win(g['scores']) # เช็คว่าทีมไหนคะแนนเยอะกว่า
-                o_score[win] += 1 
-                last_score[win] += 1
-                state = 0
-                finish = True
+            score = [0,0]
+            finish = False
+            state = 1
+            
+            for idx, g in enumerate(multi_games_data): # นำผลที่ได้มาจาก osu!api มาเรียง
+                if str(tiebreaker_match['map_id']) == str(g['beatmap_id']) and str(tiebreaker_match['map_id']) not in str(dupli):
+                    tiebreaker_match['result'] = g['scores'] # เอาผลของคะแนนใส่ใน pick นั้นๆ
+                    win = check_team_win(g['scores']) # เช็คว่าทีมไหนคะแนนเยอะกว่า
+                    score[win] += 1 # เพิ่มคะแนนของทีมในเซ้ตๆนั้น
+                    o_score[win] += 1 # เพิ่มคะแนนของทีมในเซ้ตๆนั้น
+                    state = 0
+                    finish = True
+                    multi_games_data.pop(idx) # เอาผลการแข่งนี้ออก
 
             o_sets.append({
                 'ban': [],
-                'pick': [], # map data of tb match or something
-                'score': last_score,
-                'state': state
+                'pick': [tiebreaker_match], # map data of tb match or something
+                'score': score,
+                'state': state,
+                'finish': finish
             })
 
         fulldata['sets'] = o_sets
@@ -300,6 +303,18 @@ class DB(object):
         
         if o_score[0] == 2 or o_score[1] == 2:
             fulldata['finish'] = True
+
+        if o_sets:
+            print(len(o_sets))
+            if len(o_sets) == 2:
+                if len(o_sets[len(o_sets)-1]['pick']) >= 4:
+                    fulldata['currentround'] = [len(o_sets)-1,o_sets[len(o_sets)-1]['state']-1]
+                else:
+                    fulldata['currentround'] = [len(o_sets)-2,o_sets[len(o_sets)-2]['state']-1]
+            else:
+                fulldata['currentround'] = [len(o_sets)-1,o_sets[len(o_sets)-1]['state']-1]
+        else:
+            fulldata['currentround'] = [0,0]
         
         return fulldata
 
@@ -388,7 +403,7 @@ class DB(object):
                 })
 
         if res['banpicks']:
-            t = len(res['banpicks']) - 1
+            t = len(res['banpicks'])
             if res['banpicks'][0]['from'] != None:
                 if t in [0,1,4,5]:
                     res['status'] = 'ban'
