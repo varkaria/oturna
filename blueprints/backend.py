@@ -152,7 +152,6 @@ def dashboard():
                 tour_end = False
             elif select == 'end':
                 tour_end = True
-        print(select)
     with open('.data/dashboard/round.json', 'r') as f:
         round_json = json.load(f)
     progress_data = {
