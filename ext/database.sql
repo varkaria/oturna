@@ -324,6 +324,7 @@ CREATE TABLE IF NOT EXISTS `tourney` (
   `live_link` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT 'Live broadcast URL',
   `map_sort` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `1v1` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Is it 1V1?',
+  `rounds` varchar(50) NOT NULL DEFAULT 'start' CHARACTER SET utf8 COLLATE utf8_general_ci COMMENT 'For progression in dashboard',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 ROW_FORMAT=DYNAMIC COMMENT='Game information';
 
