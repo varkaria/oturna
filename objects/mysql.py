@@ -1,6 +1,7 @@
 import pymysql, json
 from pymysql.cursors import DictCursor
 from config import Config
+from objects import osuapi
 from objects.objects import *
 
 class DB(object):
@@ -185,15 +186,18 @@ class DB(object):
                 "error": "Please insert mp_link first before getting match data" 
             }
 
-        # ดึงข้อมูลจาก osu!api (ตอนนี้ใช้ json โง่ๆไปก่อน)
-        with open('sample.json', 'r') as readfile:
-            man = json.load(readfile)
+        # ดึงข้อมูลจาก osu!api
+        import os.path
+        
+        parsed = os.path.split(fulldata['mp_link'])
+        man = osuapi.get(osuapi.V1Path.get_match, mp=parsed[1])
         multi_games_data = man['games']
 
         for s in l_sets: # นำข้อมูล sets มาเรียง
             score = [0,0]
             points_to_win = 3 # i'll add in mysql soon
             state = 1 # state : map on 1 2 3 4 5 (Tiebreaker) 10 (Finished)
+            finish = False
             pickbans = self.query_all("""
             SELECT m.id, m.map_id, m.from, m.type, p.info
             FROM match_sets_banpick `m` 
@@ -224,21 +228,23 @@ class DB(object):
                     else:
                         o_score[1] += 1
                     # เปลี่ยนสถานะของเซ็ตนี้ให้กลายเป็น 10 (เซ็ตนี้จบแล้ว)
-                    state = 10
+                    state = 0
+                    finish = True
                     break
                 for idx, g in enumerate(multi_games_data): # นำผลที่ได้มาจาก osu!api มาเรัยง
                     if str(p['map_id']) == str(g['beatmap_id']) and str(p['map_id']) not in str(dupli):
                         dupli.append(str(p['map_id'])) # เอาแมพนั้นไปใส่ในแมพที่ใช้แล้ว
-                        for w in g['scores']:
-                            q = self.query_one("SELECT player.username AS `player`, team.full_name AS `team` FROM player LEFT JOIN team ON team.id = player.team WHERE user_id=%s", (w['user_id']))
+                        if g['scores']:
+                            for w in g['scores']:
+                                q = self.query_one("SELECT player.username AS `player`, team.full_name AS `team` FROM player LEFT JOIN team ON team.id = player.team WHERE user_id=%s", (w['user_id']))
                             w['username'] = q['player']
                             w['teamname'] = q['team']
-                        p['result'] = g['scores'] # เอาผลของคะแนนใส่ใน pick นั้นๆ
-                        p['winner'] = g['scores'][check_team_win(g['scores'])]
-                        win = check_team_win(g['scores']) # เช็คว่าทีมไหนคะแนนเยอะกว่า
-                        score[win] += 1 # เพิ่มคะแนนของทีมในเซ้ตๆนั้น
-                        state += 1 # เพิ่มสถานะของเซ็ตนี้
-                        multi_games_data.pop(idx) # เอาผลการแข่งนี้ออก
+                            p['result'] = g['scores'] # เอาผลของคะแนนใส่ใน pick นั้นๆ
+                            p['winner'] = g['scores'][check_team_win(g['scores'])]
+                            win = check_team_win(g['scores']) # เช็คว่าทีมไหนคะแนนเยอะกว่า
+                            score[win] += 1 # เพิ่มคะแนนของทีมในเซ้ตๆนั้น
+                            state += 1 # เพิ่มสถานะของเซ็ตนี้
+                            multi_games_data.pop(idx) # เอาผลการแข่งนี้ออก
 
             if score[0] == points_to_win - 1 and score[1] == points_to_win - 1:
                 # หาว่า Tiebreaker คือแมพอะไร
@@ -249,7 +255,8 @@ class DB(object):
                         tie_m['result'] = g['scores'] # เอาผลของคะแนนใส่ใน pick นั้นๆ
                         win = check_team_win(g['scores']) # เช็คว่าทีมไหนคะแนนเยอะกว่า
                         o_score[win] += 1 # เพิ่มคะแนนของทีมในเซ้ตๆนั้น
-                        state = 10 # ปรับสถานะของเซ็ตนี้ให้จบไปแล้ว เพราะรอบนี้คือรอบสุดท้าย
+                        state = 0
+                        finish = True
                         multi_games_data.pop(idx) # เอาผลการแข่งนี้ออก
                 picks.append(tie_m)
             
@@ -257,12 +264,15 @@ class DB(object):
                 'ban': bans,
                 'pick': picks,
                 'score': score,
-                'state': state
+                'state': state,
+                'finish': finish
             })
             
         self.query_one("UPDATE `tourney`.`match` SET `team1_score`='%s', `team2_score`='%s' WHERE  `id`=%s;",(o_score[0],o_score[1],fulldata['id']))
-        
-        fulldata['currentround'] = [len(o_sets)-1,o_sets[len(o_sets)-1]['state']-1]
+        if o_sets:
+            fulldata['currentround'] = [len(o_sets)-1,o_sets[len(o_sets)-1]['state']-1]
+        else:
+            fulldata['currentround'] = [0,0]
         if o_score[0] == o_score[1] and o_score[0] == o_score_to_win - 1:
             # match tb
             tiebreaker_match = self.query_one("SELECT id, beatmap_id AS map_id, 'tiebreaker' AS 'from', 'pick' AS 'type', info FROM mappool WHERE round_id=%s AND mods='TBS'",[fulldata['round']['id']])
@@ -274,7 +284,8 @@ class DB(object):
                 win = check_team_win(g['scores']) # เช็คว่าทีมไหนคะแนนเยอะกว่า
                 o_score[win] += 1 
                 last_score[win] += 1
-                state = 10
+                state = 0
+                finish = True
 
             o_sets.append({
                 'ban': [],
@@ -284,6 +295,12 @@ class DB(object):
             })
 
         fulldata['sets'] = o_sets
+        fulldata['score'] = o_score
+        fulldata['finish'] = False
+        
+        if o_score[0] == 2 or o_score[1] == 2:
+            fulldata['finish'] = True
+        
         return fulldata
 
     def get_staff(self, staff_id=None, user_id=None, format=True, viewall=False):
@@ -348,8 +365,9 @@ class DB(object):
         available_maps = []
         for s in mappool:
             d = json.loads(s['json'])
-            e = json.loads(prevbanspicks['last'])
-            if str(d['beatmap_id']) in str(res['banpicks']) or str(d['mods']) == 'TB' or str(d['mods']) == 'TBSET':
+            if len(prev) == 2:
+                e = json.loads(prevbanspicks['last'])
+            if str(d['beatmap_id']) in str(res['banpicks']) or str(d['mods']) == 'TB' or str(d['mods']) == 'TBS':
                 continue
             else:
                 if len(prev) >= 2:
@@ -362,7 +380,7 @@ class DB(object):
                     else:
                         if d['beatmap_id'] == e[0]['map_id']:
                             continue
-
+                        
                 available_maps.append({
                     'id': s['id'],
                     'mods': s['mods'],
