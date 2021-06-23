@@ -116,7 +116,21 @@
             <div class="form-text">ex: NM, HR, HD, DT, FM, TB</div>
         </div>
     </div>
-
+    <div class="row mb-3">
+        <label for="rounds" class="col-sm-2 col-form-label">Current Progress</label>
+        <div class="col-sm-10">
+            <select name="rounds" class="p-1">
+                <option value="" disabled selected>Select your option</option>
+                <option value="start">Not Started</option>
+                <option value="regis">Registration</option>
+                <option value="playoff">Playoff</option>
+                <option value="reg1">Regular Phase 1</option>
+                <option value="reg2">Regular Phase 2</option>
+                <option value="champ">Championship</option>
+                <option value="end">Ended</option>
+            </select>
+        </div>
+    </div>
     <button type="submit" class="btn btn-success">Save</button>
 </form>
 {% endblock content %}

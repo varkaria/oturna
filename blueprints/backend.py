@@ -137,28 +137,15 @@ def dashboard():
         'champ': 0.935,
         'end': 1
     }
-    round_json = ''
-    tour_end = ''
-    select = ''
-    if request.method == 'POST':
-        select = request.form.get('rounds')
-        if select == None:
-            pass
-        else:
-            with open('.data/dashboard/round.json', 'w') as f:
-                json.dump(select, f)
-                f.close()
-            if select == 'start':
-                tour_end = False
-            elif select == 'end':
-                tour_end = True
-    with open('.data/dashboard/round.json', 'r') as f:
-        round_json = json.load(f)
+    tour_end = False
+    progress_get = db.query_one("""SELECT rounds from tourney""")['rounds']
+    if progress_get == 'end':
+        tour_end = True
     progress_data = {
-        'current_progress': progress['{}'.format(round_json)],
+        'current_progress': progress[progress_get],
         'ended': tour_end
     }
-
+    
     return render_template('manager/dashboard.html', players=players, time_delta=time_delta.strip('-'), colour=colour, next_data=next_data, last_data=last_data, progress_data=progress_data)
 
 @backend.route('/planning/')
