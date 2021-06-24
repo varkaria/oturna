@@ -238,12 +238,13 @@ a {
     transition: 0.5s ease;
     transition-delay: 5s;
     pointer-events: none;
-}
-
-.unready-time {
     opacity: 1;
 }
 
 .ready-time {
     opacity: 0;
+}
+
+.ban-element {
+    opacity: 0.3;
 }
