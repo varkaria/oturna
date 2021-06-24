@@ -224,6 +224,27 @@ def match_update(id):
         flash(e, 'danger')
         return redirect(url_for('backend.matchs'))
 
+@backend.route('/schedule/match/<id>/preduct', methods=['POST'])
+@login_required
+@need_privilege(Staff.COMMENTATOR)
+def match_preduct_update(id:int):
+    w = request.form['win']
+    l = request.form['lose']
+    s = request.form['man']
+    res = db.query_one(f"SELECT id, team1, team2 FROM `match` WHERE id={id}")
+    
+    if s == 'team1':
+            db.query_one("INSERT INTO `tourney`.`com_preducts` (`match_id`, `commentator`, `s_win`, `s_team1`, `s_team2`) VALUES (%s, %s, %s, %s, %s);", (id,session['id'],res[f'{s}'],2,l))
+    else:
+        db.query_one("INSERT INTO `tourney`.`com_preducts` (`match_id`, `commentator`, `s_win`, `s_team1`, `s_team2`) VALUES (%s, %s, %s, %s, %s);", (id,session['id'],res[f'{s}'],l,2))
+    
+    try:
+        flash('MatchId: %s preduct successfully' % id, 'success')
+        return redirect(url_for('backend.matchs'))
+    except Exception as e:
+        flash(e, 'danger')
+        return redirect(url_for('backend.matchs'))
+
 @backend.route('/schedule/match/<id>/delete', methods=['POST'])
 @login_required
 @need_privilege(Staff.ADMIN)

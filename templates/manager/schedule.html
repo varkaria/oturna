@@ -18,7 +18,12 @@
 {% block actions %}
 {% if isadmin %}
 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#match-modal">
-    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+        stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+        <line x1="12" y1="5" x2="12" y2="19"></line>
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+    </svg>
     New Schedule
 </button>
 {% endif %}
@@ -40,17 +45,23 @@
         <div class="input-icon mb-3">
             <input type="text" id="search-code" class="form-control" placeholder="Search for code..">
             <span class="input-icon-addon">
-              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><circle cx="10" cy="10" r="7"></circle><line x1="21" y1="21" x2="15" y2="15"></line></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
+                    stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                    <circle cx="10" cy="10" r="7"></circle>
+                    <line x1="21" y1="21" x2="15" y2="15"></line>
+                </svg>
             </span>
         </div>
     </div>
     <div class="col-auto">
         <div class="form-selectgroup">
-            <label class="form-selectgroup-item" data-bs-toggle="tooltip" data-bs-placement="top" title="Show finished and cancelled rounds">
-              <input type="checkbox" class="form-selectgroup-input" id="view-completed">
-              <span class="form-selectgroup-label">Show Completed</span>
+            <label class="form-selectgroup-item" data-bs-toggle="tooltip" data-bs-placement="top"
+                title="Show finished and cancelled rounds">
+                <input type="checkbox" class="form-selectgroup-input" id="view-completed">
+                <span class="form-selectgroup-label">Show Completed</span>
             </label>
-          </div>
+        </div>
     </div>
 </div>
 <div class="card pt-0">
@@ -75,30 +86,37 @@
             </thead>
             <tbody>
                 {% for m in matchs %}
-                <tr {% if m.stats in (1,2) %}class="filter-view-completed"{% endif %} data-stats="{{ m.stats }}">
+                <tr {% if m.stats in (1,2) %}class="filter-view-completed" {% endif %} data-stats="{{ m.stats }}">
                     <td class="w-1" style="display: none;">{{m.id}}</td>
                     <td class="w-1" data-code="{{m.code}}">{{m.code}}</td>
                     <td class="w-1" data-round="{{m.round.id}}">
-                        <span>{{m.round.name}} {% if m.loser %}<span class="badge bg-orange">LB</span>{% endif %}</span><br>
+                        <span>{{m.round.name}} {% if m.loser %}<span class="badge bg-orange">LB</span>{% endif
+                            %}</span><br>
                         <span>{{m.date if m.date is not none else 'no set'}}</span>
                     </td>
                     <td class="w-1">
-                        <span class="avatar avatar-sm" style="background-image: url({{ m.team1.flag_name | flag_url }});"></span>
+                        <span class="avatar avatar-sm"
+                            style="background-image: url({{ m.team1.flag_name | flag_url }});"></span>
                     </td>
                     <td class="ps-0">
                         {{m.team1.full_name if m.team1.full_name is not none else ''}}
                     </td>
                     <td>
-                        <span class="badge {% if (m.team1.score > m.team2.score or m.team2.score == -1) and m.stats in (1,2) %}bg-red{% else %}bg-secondary{% endif %} ms-2">{{ m.team1.score }}</span>
+                        <span
+                            class="badge {% if (m.team1.score > m.team2.score or m.team2.score == -1) and m.stats in (1,2) %}bg-red{% else %}bg-secondary{% endif %} ms-2">{{
+                            m.team1.score }}</span>
                     </td>
                     <td>
-                        <span class="badge {% if (m.team1.score < m.team2.score or m.team1.score == -1) and m.stats in (1,2) %}bg-blue{% else %}bg-secondary{% endif %} ms-2">{{ m.team2.score }}</span>
+                        <span
+                            class="badge {% if (m.team1.score < m.team2.score or m.team1.score == -1) and m.stats in (1,2) %}bg-blue{% else %}bg-secondary{% endif %} ms-2">{{
+                            m.team2.score }}</span>
                     </td>
                     <td class="text-end pe-0">
                         {{m.team2.full_name if m.team2.full_name is not none else ''}}
                     </td>
                     <td class="w-1 text-end">
-                        <span class="avatar avatar-sm" style="background-image: url({{m.team2.flag_name|flag_url}});"></span>
+                        <span class="avatar avatar-sm"
+                            style="background-image: url({{m.team2.flag_name|flag_url}});"></span>
                     </td>
                     <td>
                         {% if m.current == true %}
@@ -119,13 +137,14 @@
                     <td>{{m.commentator2.username if m.commentator2.username is not none else ''}}</td>
                     <td>
                         <div class="text-end">
-                            <button type="button" class="btn dropdown-toggle align-text-top" id="staff-menu" data-bs-toggle="dropdown"
-                                aria-expanded="false" {% if m.stats> 0 and not isadmin %}disabled{% endif %}>
+                            <button type="button" class="btn dropdown-toggle align-text-top" id="staff-menu"
+                                data-bs-toggle="dropdown" aria-expanded="false" {% if m.stats> 0 and not isadmin
+                                %}disabled{% endif %}>
                                 <span>
                                     <svg xmlns="http://www.w3.org/2000/svg"
-                                        class="icon icon-tabler icon-tabler-adjustments-horizontal" width="44" height="44"
-                                        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none"
-                                        stroke-linecap="round" stroke-linejoin="round">
+                                        class="icon icon-tabler icon-tabler-adjustments-horizontal" width="44"
+                                        height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                        fill="none" stroke-linecap="round" stroke-linejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                         <circle cx="14" cy="6" r="2" />
                                         <line x1="4" y1="6" x2="12" y2="6" />
@@ -142,7 +161,8 @@
                                     Options
                                 </span>
                             </button>
-                            <ul class="dropdown-menu dropdown-menu-end" data-id="{{ m.id }}" aria-labelledby="staff-menu">
+                            <ul class="dropdown-menu dropdown-menu-end" data-id="{{ m.id }}"
+                                aria-labelledby="staff-menu">
                                 {% if m.stats < 1 %} {% if m.referee.username and m.streamer.username and
                                     m.commentator.username and m.commentator2.username %} <span
                                     class="px-3 py-1 text-muted">No referee/streamer available</span>
@@ -152,14 +172,17 @@
                                             type="button">Go to Match</a></li>
                                     {% endif %}
                                     {% if m.referee.username is none %}
-                                    <li><button class="dropdown-item job_action ref get" type="button">Become Referee</button></li>
+                                    <li><button class="dropdown-item job_action ref get" type="button">Become
+                                            Referee</button></li>
                                     {% endif %}
                                     {% if m.streamer.username is none %}
-                                    <li><button class="dropdown-item job_action stream get" type="button">Become Streamer</button>
+                                    <li><button class="dropdown-item job_action stream get" type="button">Become
+                                            Streamer</button>
                                     </li>
                                     {% endif %}
                                     {% if (m.commentator.username is none) or (m.commentator2.username is none) %}
-                                    <li><button class="dropdown-item job_action comm get" type="button">Become Commentator</button></li>
+                                    <li><button class="dropdown-item job_action comm get" type="button">Become
+                                            Commentator</button></li>
                                     {% endif %}
                                     {% if m.referee.id == cur_user.id %}
                                     <li><button class="dropdown-item job_action ref remove text-danger"
@@ -173,12 +196,19 @@
                                     <li><button class="dropdown-item job_action comm remove text-danger"
                                             type="button">Delete Commentator</button></li>
                                     {% endif %}
+                                    {% if (cur_user.group_id == 4) and (cur_user.id not in m.preducts|map(attribute="commentator")) %}
+                                    <li>
+                                        <button class="dropdown-item go-preduction" type="button" data-bs-toggle="modal"
+                                            data-bs-target="#preduction-modal">Preduction</button>
+                                    </li>
+                                    {% endif %}
                                     {% else %}
                                     <span class="px-3 py-1 text-muted">Ended</span>
                                     {% endif %}
                                     {% if isadmin %}
                                     <li><button class="dropdown-item modify-match text-primary" type="button"
-                                            data-bs-toggle="modal" data-bs-target="#modify-match-modal">Edit</button></li>
+                                            data-bs-toggle="modal" data-bs-target="#modify-match-modal">Edit</button>
+                                    </li>
                                     {% endif %}
                             </ul>
                         </div>
@@ -201,7 +231,8 @@
                 <form id="match-action" action="match/" method="post" autocomplete="off">
                     <div class="mb-2">
                         <label class="form-label">Code</label>
-                        <input type="text" name="code" class="form-control" id="m-code" maxlength="10" placeholder="Within 10 integer, No repeat" required>
+                        <input type="text" name="code" class="form-control" id="m-code" maxlength="10"
+                            placeholder="Within 10 integer, No repeat" required>
                     </div>
                     <div class="mb-2">
                         <label class="form-label">Rounds</label>
@@ -214,18 +245,26 @@
                     <div class="mb-2">
                         <label class="form-label">Team 1 (Player 1)</label>
                         <select type="text" name="team1" class="form-select" id="m-team1" value="" required>
-                            <option value="" data-custom-properties="&lt;span class=&quot;avatar avatar-xs&quot;&gt;?&lt;/span&gt;">Please select team 1</option>
+                            <option value=""
+                                data-custom-properties="&lt;span class=&quot;avatar avatar-xs&quot;&gt;?&lt;/span&gt;">
+                                Please select team 1</option>
                             {% for team in teams %}
-                            <option value="{{team.id}}" data-custom-properties="&lt;span class=&quot;avatar avatar-xs&quot; style=&quot;background-image: url({{ team.flag_name | flag_url }})&quot;&gt;&lt;/span&gt;">{{team.full_name}}</option>
+                            <option value="{{team.id}}"
+                                data-custom-properties="&lt;span class=&quot;avatar avatar-xs&quot; style=&quot;background-image: url({{ team.flag_name | flag_url }})&quot;&gt;&lt;/span&gt;">
+                                {{team.full_name}}</option>
                             {% endfor %}
                         </select>
                     </div>
                     <div class="mb-2">
                         <label class="form-label">Team 2 (Player 2)</label>
                         <select type="text" name="team2" class="form-select" id="m-team2" value="" required>
-                            <option value="" data-custom-properties="&lt;span class=&quot;avatar avatar-xs&quot;&gt;?&lt;/span&gt;">Please select team 1</option>
+                            <option value=""
+                                data-custom-properties="&lt;span class=&quot;avatar avatar-xs&quot;&gt;?&lt;/span&gt;">
+                                Please select team 1</option>
                             {% for team in teams %}
-                            <option value="{{team.id}}" data-custom-properties="&lt;span class=&quot;avatar avatar-xs&quot; style=&quot;background-image: url({{ team.flag_name | flag_url }})&quot;&gt;&lt;/span&gt;">{{team.full_name}}</option>
+                            <option value="{{team.id}}"
+                                data-custom-properties="&lt;span class=&quot;avatar avatar-xs&quot; style=&quot;background-image: url({{ team.flag_name | flag_url }})&quot;&gt;&lt;/span&gt;">
+                                {{team.full_name}}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -242,7 +281,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="reset" form="match-action" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="reset" form="match-action" class="btn btn-secondary"
+                    data-bs-dismiss="modal">Cancel</button>
                 <button type="submit" form="match-action" class="btn btn-success">Done</button>
             </div>
         </div>
@@ -279,9 +319,13 @@
                                     <div class="col-8">
                                         <label class="form-label">Team 1 (Player 1)</label>
                                         <select type="text" name="team1" class="form-select" id="mo-team1" required>
-                                            <option value="" data-custom-properties="&lt;span class=&quot;avatar avatar-xs&quot;&gt;?&lt;/span&gt;">Select team 1</option>
+                                            <option value=""
+                                                data-custom-properties="&lt;span class=&quot;avatar avatar-xs&quot;&gt;?&lt;/span&gt;">
+                                                Select team 1</option>
                                             {% for team in teams %}
-                                            <option value="{{team.id}}" data-custom-properties="&lt;span class=&quot;avatar avatar-xs&quot; style=&quot;background-image: url({{ team.flag_name | flag_url }})&quot;&gt;&lt;/span&gt;">{{team.full_name}}</option>
+                                            <option value="{{team.id}}"
+                                                data-custom-properties="&lt;span class=&quot;avatar avatar-xs&quot; style=&quot;background-image: url({{ team.flag_name | flag_url }})&quot;&gt;&lt;/span&gt;">
+                                                {{team.full_name}}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
@@ -298,9 +342,13 @@
                                     <div class="col-8">
                                         <label class="form-label">Team 2 (Player 2)</label>
                                         <select type="text" name="team2" class="form-select" id="mo-team2" required>
-                                            <option value="" data-custom-properties="&lt;span class=&quot;avatar avatar-xs&quot;&gt;?&lt;/span&gt;">Select team 2</option>
+                                            <option value=""
+                                                data-custom-properties="&lt;span class=&quot;avatar avatar-xs&quot;&gt;?&lt;/span&gt;">
+                                                Select team 2</option>
                                             {% for team in teams %}
-                                            <option value="{{team.id}}" data-custom-properties="&lt;span class=&quot;avatar avatar-xs&quot; style=&quot;background-image: url({{ team.flag_name | flag_url }})&quot;&gt;&lt;/span&gt;">{{team.full_name}}</option>
+                                            <option value="{{team.id}}"
+                                                data-custom-properties="&lt;span class=&quot;avatar avatar-xs&quot; style=&quot;background-image: url({{ team.flag_name | flag_url }})&quot;&gt;&lt;/span&gt;">
+                                                {{team.full_name}}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
@@ -329,36 +377,52 @@
                             <div class="mb-3">
                                 <label class="form-label">Referee</label>
                                 <select name="referee" id="mo-ref" class="form-select">
-                                    <option value="" data-custom-properties="&lt;span class=&quot;avatar avatar-xs&quot;&gt;?&lt;/span&gt;"></option>
+                                    <option value=""
+                                        data-custom-properties="&lt;span class=&quot;avatar avatar-xs&quot;&gt;?&lt;/span&gt;">
+                                    </option>
                                     {% for ref in staffs['REFEREE'] %}
-                                    <option value="{{ref.id}}" data-custom-properties="&lt;span class=&quot;avatar avatar-xs&quot; style=&quot;background-image: url(https://a.ppy.sh/{{ref.user_id}})&quot;&gt;&lt;/span&gt;">{{ref.username}}</option>
+                                    <option value="{{ref.id}}"
+                                        data-custom-properties="&lt;span class=&quot;avatar avatar-xs&quot; style=&quot;background-image: url(https://a.ppy.sh/{{ref.user_id}})&quot;&gt;&lt;/span&gt;">
+                                        {{ref.username}}</option>
                                     {% endfor %}
                                 </select>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Streamer</label>
                                 <select name="streamer" id="mo-stream" class="form-select">
-                                    <option value="" data-custom-properties="&lt;span class=&quot;avatar avatar-xs&quot;&gt;?&lt;/span&gt;"></option>
+                                    <option value=""
+                                        data-custom-properties="&lt;span class=&quot;avatar avatar-xs&quot;&gt;?&lt;/span&gt;">
+                                    </option>
                                     {% for stream in staffs['STREAMER'] %}
-                                    <option value="{{stream.id}}" data-custom-properties="&lt;span class=&quot;avatar avatar-xs&quot; style=&quot;background-image: url(https://a.ppy.sh/{{stream.user_id}})&quot;&gt;&lt;/span&gt;">{{stream.username}}</option>
+                                    <option value="{{stream.id}}"
+                                        data-custom-properties="&lt;span class=&quot;avatar avatar-xs&quot; style=&quot;background-image: url(https://a.ppy.sh/{{stream.user_id}})&quot;&gt;&lt;/span&gt;">
+                                        {{stream.username}}</option>
                                     {% endfor %}
                                 </select>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Commentator 1</label>
                                 <select name="commentator" id="mo-comm" class="form-select">
-                                    <option value="" data-custom-properties="&lt;span class=&quot;avatar avatar-xs&quot;&gt;?&lt;/span&gt;"></option>
+                                    <option value=""
+                                        data-custom-properties="&lt;span class=&quot;avatar avatar-xs&quot;&gt;?&lt;/span&gt;">
+                                    </option>
                                     {% for comm in staffs['COMMENTATOR'] %}
-                                    <option value="{{comm.id}}" data-custom-properties="&lt;span class=&quot;avatar avatar-xs&quot; style=&quot;background-image: url(https://a.ppy.sh/{{comm.user_id}})&quot;&gt;&lt;/span&gt;">{{comm.username}}</option>
+                                    <option value="{{comm.id}}"
+                                        data-custom-properties="&lt;span class=&quot;avatar avatar-xs&quot; style=&quot;background-image: url(https://a.ppy.sh/{{comm.user_id}})&quot;&gt;&lt;/span&gt;">
+                                        {{comm.username}}</option>
                                     {% endfor %}
                                 </select>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Commentator 2</label>
                                 <select name="commentator2" id="mo-comm2" class="form-select">
-                                    <option value="" data-custom-properties="&lt;span class=&quot;avatar avatar-xs&quot;&gt;?&lt;/span&gt;"></option>
+                                    <option value=""
+                                        data-custom-properties="&lt;span class=&quot;avatar avatar-xs&quot;&gt;?&lt;/span&gt;">
+                                    </option>
                                     {% for comm2 in staffs['COMMENTATOR'] %}
-                                    <option value="{{comm2.id}}" data-custom-properties="&lt;span class=&quot;avatar avatar-xs&quot; style=&quot;background-image: url(https://a.ppy.sh/{{comm2.user_id}})&quot;&gt;&lt;/span&gt;">{{comm2.username}}</option>
+                                    <option value="{{comm2.id}}"
+                                        data-custom-properties="&lt;span class=&quot;avatar avatar-xs&quot; style=&quot;background-image: url(https://a.ppy.sh/{{comm2.user_id}})&quot;&gt;&lt;/span&gt;">
+                                        {{comm2.username}}</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -388,7 +452,8 @@
             <div class="modal-footer">
                 <button type="reset" form="modify-match" class="btn btn-danger" data-bs-dismiss="modal"
                     data-bs-toggle="modal" data-bs-target="#delete-match-modal">Delete Match</button>
-                <button type="reset" form="modify-match" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="reset" form="modify-match" class="btn btn-secondary"
+                    data-bs-dismiss="modal">Cancel</button>
                 <button type="submit" form="modify-match" class="btn btn-success">Done</button>
             </div>
         </div>
@@ -410,8 +475,81 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                <button type="button" class="btn btn-danger" id="confirm-delete-match">Yes (Double click)</span></button>
+                <button type="button" class="btn btn-danger" id="confirm-delete-match">Yes (Double
+                    click)</span></button>
             </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% if (cur_user.group_id == 4) or (cur_user.group_id == 1) %}
+<div class="modal fade" tabindex="-1" id="preduction-modal" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <form method="post" id="com-preduction">
+                <div class="modal-body">
+                    <div class="modal-title">Match Preduction</div>
+                    <div class="mb-3">
+                        <label class="form-label">Please select team who wins?</label>
+                        <div class="form-selectgroup form-selectgroup-boxes d-flex flex-column">
+                            <label class="form-selectgroup-item flex-fill">
+                                <input type="radio" name="man" value="team1" class="form-selectgroup-input">
+                                <div class="form-selectgroup-label d-flex align-items-center p-3">
+                                    <div class="me-3">
+                                        <span class="form-selectgroup-check"></span>
+                                    </div>
+                                    <div>
+                                        <div class="form-selectgroup-label-content d-flex align-items-center">
+                                            <span class="avatar me-3" id="p-team1-ava"></span>
+                                            <div>
+                                                <div class="font-weight-medium" id="p-team1"></div>
+                                                <div class="text-muted" id="p-team1-players"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </label>
+                            <label class="form-selectgroup-item flex-fill">
+                                <input type="radio" name="man" value="team2" class="form-selectgroup-input">
+                                <div class="form-selectgroup-label d-flex align-items-center p-3">
+                                    <div class="me-3">
+                                        <span class="form-selectgroup-check"></span>
+                                    </div>
+                                    <div>
+                                        <div class="form-selectgroup-label-content d-flex align-items-center">
+                                            <span class="avatar me-3" id="p-team2-ava"></span>
+                                            <div>
+                                                <div class="font-weight-medium" id="p-team2"></div>
+                                                <div class="text-muted" id="p-team2-players"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Scores</label>
+                        <div class="input-group mb-2">
+                            <span class="input-group-text">
+                                Win | Lose
+                            </span>
+                            <input type="text" class="form-control" placeholder="Wins" name="win" value="2" autocomplete="off"
+                                readonly>
+                            <input type="text" class="form-control" placeholder="Lose" name="lose" value="" autocomplete="off">
+                        </div>
+                        <span class="form-check-description">
+                            Win points should be 2 only that's default so dont worry about it
+                        </span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link link-secondary me-auto"
+                        data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" form="com-preduction" class="btn btn-info">Confirm</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -451,7 +589,7 @@
     }
 
     $(document).ready(function () {
-        $('#view-completed').click(function(){
+        $('#view-completed').click(function () {
             var table, tr, i;
             table = document.getElementById("main-table");
             tr = table.getElementsByTagName("tr");
@@ -486,7 +624,7 @@
             }
         });
 
-        $('#search-code').keyup(function (){
+        $('#search-code').keyup(function () {
             var input, filter, table, tr, td, i, txtValue;
             input = document.getElementById("search-code");
             filter = input.value.toUpperCase();
@@ -514,6 +652,25 @@
             job_action(id, job, action);
         });
 
+        $(".go-preduction").click(function () {
+            var id = $(this)[0].parentElement.parentElement.dataset.id;
+            document.getElementById('com-preduction').action = `match/${id}/preduct`
+            $.getJSON(`/api/m_preduct/${id}`).done(function (data) {
+                $('#p-team1').html(`${data.data.team1.full_name}`);
+                $('#p-team2').html(`${data.data.team2.full_name}`);
+                $('#p-team1-players').html(`${data.data.team1.players[0]} | ${data.data.team1.players[1]}`);
+                $('#p-team2-players').html(`${data.data.team2.players[0]} | ${data.data.team2.players[1]}`);
+                $('#p-team1-ava').css('background-image', 'url(/team_flag/' + data.data.team1.id + ')');
+                $('#p-team2-ava').css('background-image', 'url(/team_flag/' + data.data.team2.id + ')');
+            });
+        });
+
+        $('#confirm-delete-match').dblclick(function () {
+            var id = $('#mb-id').val();
+            $('#md-form')[0].action = `match/${id}/delete`;
+            $('#md-form').submit();
+        });
+
         $(".modify-match").click(function () {
             var id = $(this)[0].parentElement.parentElement.dataset.id;
             document.getElementById('modify-match').action = `match/${id}/update`
@@ -538,42 +695,36 @@
                 $('#mb-id').val(id);
             });
         });
-
-        $('#confirm-delete-match').dblclick(function () {
-            var id = $('#mb-id').val();
-            $('#md-form')[0].action = `match/${id}/delete`;
-            $('#md-form').submit();
-        });
     });
 </script>
 
 <script>
     function createaAvaChioces(id) {
         return new Choices(el = document.getElementById(id), {
-    		classNames: {
-    			containerInner: el.className,
-    			input: 'form-control',
-    			inputCloned: 'form-control-sm',
-    			listDropdown: 'dropdown-menu',
-    			itemChoice: 'dropdown-item',
-    			activeState: 'show',
-    			selectedState: 'active',
-    		},
-    		shouldSort: false,
-    		searchEnabled: false,
-    		callbackOnCreateTemplates: function(template) {
-    			var classNames = this.config.className,
-    			itemSelectText = this.config.itemSelectText;
-    			return {
-    				item: function(classNames, data) {
-    					return template('<div class="' + String(classNames.item) + ' ' + String( data.highlighted ? classNames.highlightedState : classNames.itemSelectable ) + '" data-item data-id="' + String(data.id) + '" data-value="' + String(data.value) + '"' + String(data.active ? 'aria-selected="true"' : '') + '' + String(data.disabled ? 'aria-disabled="true"' : '') + '><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + String(data.label) + '</div>');
-    				},
-    				choice: function(classNames, data) {
-    					return template('<div class="' + String(classNames.item) + ' ' + String(classNames.itemChoice) + ' ' + String( data.disabled ? classNames.itemDisabled : classNames.itemSelectable ) + '" data-select-text="' + String(itemSelectText) + '" data-choice  ' + String( data.disabled ? 'data-choice-disabled aria-disabled="true"' : 'data-choice-selectable' ) + ' data-id="' + String(data.id) + '" data-value="' + String(data.value) + '" ' + String( data.groupId > 0 ? 'role="treeitem"' : 'role="option"' ) + ' ><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + String(data.label) + '</div>');
-    				},
-    			};
-    		},
-    	})
+            classNames: {
+                containerInner: el.className,
+                input: 'form-control',
+                inputCloned: 'form-control-sm',
+                listDropdown: 'dropdown-menu',
+                itemChoice: 'dropdown-item',
+                activeState: 'show',
+                selectedState: 'active',
+            },
+            shouldSort: false,
+            searchEnabled: false,
+            callbackOnCreateTemplates: function (template) {
+                var classNames = this.config.className,
+                    itemSelectText = this.config.itemSelectText;
+                return {
+                    item: function (classNames, data) {
+                        return template('<div class="' + String(classNames.item) + ' ' + String(data.highlighted ? classNames.highlightedState : classNames.itemSelectable) + '" data-item data-id="' + String(data.id) + '" data-value="' + String(data.value) + '"' + String(data.active ? 'aria-selected="true"' : '') + '' + String(data.disabled ? 'aria-disabled="true"' : '') + '><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + String(data.label) + '</div>');
+                    },
+                    choice: function (classNames, data) {
+                        return template('<div class="' + String(classNames.item) + ' ' + String(classNames.itemChoice) + ' ' + String(data.disabled ? classNames.itemDisabled : classNames.itemSelectable) + '" data-select-text="' + String(itemSelectText) + '" data-choice  ' + String(data.disabled ? 'data-choice-disabled aria-disabled="true"' : 'data-choice-selectable') + ' data-id="' + String(data.id) + '" data-value="' + String(data.value) + '" ' + String(data.groupId > 0 ? 'role="treeitem"' : 'role="option"') + ' ><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + String(data.label) + '</div>');
+                    },
+                };
+            },
+        })
     }
 
     const m_team1 = createaAvaChioces('m-team1');
@@ -588,19 +739,19 @@
 
 <script>
     function selectChioces(id) {
-    	return new Choices(el = document.getElementById(id), {
-    		classNames: {
-    			containerInner: el.className,
-    			input: 'form-control',
-    			inputCloned: 'form-control-sm',
-    			listDropdown: 'dropdown-menu',
-    			itemChoice: 'dropdown-item',
-    			activeState: 'show',
-    			selectedState: 'active',
-    		},
-    		shouldSort: false,
-    		searchEnabled: false,
-    	})
+        return new Choices(el = document.getElementById(id), {
+            classNames: {
+                containerInner: el.className,
+                input: 'form-control',
+                inputCloned: 'form-control-sm',
+                listDropdown: 'dropdown-menu',
+                itemChoice: 'dropdown-item',
+                activeState: 'show',
+                selectedState: 'active',
+            },
+            shouldSort: false,
+            searchEnabled: false,
+        })
     }
 
     const m_round = selectChioces('m-round');

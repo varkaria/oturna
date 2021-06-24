@@ -117,6 +117,7 @@ class DB(object):
             'streamer', JSON_OBJECT('id', str.id, 'group_id', str.group_id, 'user_id', str.user_id, 'username', str.username),
             'commentator', JSON_OBJECT('id', com.id, 'group_id', com.group_id, 'user_id', com.user_id, 'username', com.username),
             'commentator2', JSON_OBJECT('id', com2.id, 'group_id', com2.group_id, 'user_id', com2.user_id, 'username', com2.username),
+            'preducts', JSON_ARRAY(JSON_OBJECT('id', cp.id, 'commentator', cp.commentator)),
             'mp_link', m.mp_link,
             'video_link', m.video_link,
             'current', (m.stats = 0 AND m.date < NOW()),
@@ -133,6 +134,7 @@ class DB(object):
             LEFT JOIN staff str ON str.id = m.streamer
             LEFT JOIN staff com ON com.id = m.commentator
             LEFT JOIN staff com2 ON com2.id = m.commentator2
+            LEFT JOIN com_preducts cp ON cp.match_id = m.id
             """
         if round_id or id:
             query_text += " WHERE "

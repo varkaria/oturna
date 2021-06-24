@@ -53,6 +53,18 @@ def getdata(table_name:str, id:str):
             abort(404)
     else:
         abort(404)
+
+@api.route('/m_preduct/<id>')
+@login_required
+def getdata_preduct(id:int):
+    res = db.query_one("SELECT JSON_OBJECT('id', m.id, 'team1', JSON_OBJECT('id', t1.id, 'full_name', t1.full_name, 'flag_name', t1.flag_name, 'acronym', t1.acronym), 'team2', JSON_OBJECT('id', t2.id, 'full_name', t2.full_name, 'flag_name', t2.flag_name, 'acronym', t2.acronym)) AS `json` FROM `match` m LEFT JOIN team t1 ON t1.id = m.team1 LEFT JOIN team t2 ON t2.id = m.team2 where m.id = %s" % (id))
+    d = json.loads(res['json'])
+    for i in range(2):
+        p = db.query_all("SELECT username FROM player WHERE team=%s", (d[f'team{i+1}']['id']))
+        d[f'team{i+1}']['players'] = []
+        for w in p:
+            d[f'team{i+1}']['players'].append(w['username'])
+    return jsonify(data=d)
         
 @api.route('/check_round')
 def check_round():
