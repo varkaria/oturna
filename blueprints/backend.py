@@ -11,6 +11,7 @@ from PIL import Image
 from objects.decorators import *
 import json, re, requests, datetime, os
 import pandas as pd
+import random, string
 
 backend = Blueprint('backend', __name__)
 db = mysql.DB()
@@ -174,6 +175,10 @@ def matchs_add():
 
     try:
         db.query('Insert into `match` (`round_id`, `code`, `team1`, `team2`, `date`, `loser`) values (%s, %s, %s, %s, %s, %s)', (round_id, code, team1_id, team2_id, date, loser))
+        id = db.query('SELECT LAST_INSERT_ID() AS `id`;')
+        for i in range(2):
+            ranstr = ''.join(random.choices(string.ascii_lowercase + string.digits, k = 32))
+            db.query("Insert into `match_sets` (`match_id`, `random`) VALUES (%s, %s);", (id['id'], ranstr))
         flash('%s added successfully' % code, 'success')
         return redirect(url_for('backend.matchs'))
     except Exception as e:
@@ -225,7 +230,7 @@ def match_update(id):
 def match_delete(id):
     try:
         db.query("DELETE FROM `match` WHERE id = %s;", [id])
-        flash('MathId: %s deleted successfully' % id, 'success')
+        flash('MatchId: %s deleted successfully' % id, 'success')
         return redirect(url_for('backend.matchs'))
     except Exception as e:
         flash(e, 'danger')
@@ -693,22 +698,36 @@ def mappool_del(id, round):
 @need_privilege(Staff.REFEREE)
 def refree_helper(id:int):
     # check match is have it?
-    match = db.query("SELECT * FROM `match` WHERE id = %s",[id])
+    banpick_urls = db.query_all("SELECT random FROM `match_sets` WHERE `match_id`=%s",[id])
+    match = db.query("SELECT id FROM `match` WHERE `id`=%s",[id])
     match_data = db.get_matchs(id=int(id))
     if not match:
         flash("Couldn't found match did you put it", 'danger')
         return redirect(url_for('backend.matchs'))
 
-    # check referee you be in this match?
-    print(f"{match['referee']} = {session['id']}")
-    if match['referee'] != session['id']:
+    if match_data['referee']['id'] != session['id']:
         flash("You didn't be refree in this match. you can be refree by click option and be referee it : )", 'danger')
         return redirect(url_for('backend.matchs'))
     
     if 'https://osu.ppy.sh/community/matches/' not in match_data[0]['mp_link']:
         return render_template('/manager/refree_tools_insert.html',match=match_data, id=id)
 
-    return render_template('/manager/refree_tools.html',match=match_data, id=id)
+    return render_template('/manager/refree_tools.html',match=match_data, id=id, banurl=banpick_urls)
+
+@backend.route('/match_lock/<id>/')
+@login_required
+@need_privilege(Staff.REFEREE)
+def refree_helper_lock(id:int):
+    # check match is have it?
+    match = db.query("SELECT id FROM `match` WHERE `id`=%s",[id])
+    if not match:
+        flash("Couldn't found match did you put it", 'danger')
+        return redirect(url_for('backend.matchs'))
+
+    db.get_full_match(id=int(id),set=1)
+
+    flash("This Match is finished!! Thanks you for refree this match (i luv you)", 'success')
+    return redirect(url_for('backend.matchs'))
 
 @backend.route('/match/update_mp/<id>/', methods=['POST'])
 @login_required
