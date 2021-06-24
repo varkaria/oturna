@@ -340,6 +340,19 @@ class DB(object):
             else:
                 self.query_one(f'UPDATE `tourney`.`team` SET `win`=`win`+ 1 WHERE `id`={fulldata["team2"]["id"]};')
                 self.query_one(f'UPDATE `tourney`.`team` SET `lose`=`lose`+ 1 WHERE `id`={fulldata["team1"]["id"]};')
+            preducts = self.query_all(f'SELECT * FROM `tourney`.`match_sets` WHERE `match_id`={fulldata["id"]} AND `finish`=0;')
+            for p in preducts:
+                point = 0
+                if o_score[0] == 2 and o_score[0] == p['s_team1']:
+                    point = point + 3
+                    if o_score[1] == p['s_team2']:
+                        point = point + 2
+                elif o_score[1] == 2 and o_score[1] == p['s_team2']:
+                    point = point + 3
+                    if o_score[0] == p['s_team1']:
+                        point = point + 2
+                self.query_one(f'UPDATE `tourney`.`staff` SET `c_score`=`c_score` + {point} WHERE `id`={p["commentator"]};')
+            self.query_one(f'UPDATE `tourney`.`com_preducts` SET `finish`=1 WHERE `match_id`={fulldata["id"]} AND `finish`=0;')
             self.query_one(f'UPDATE `tourney`.`team` SET `match_play`=`match_play` + 1 WHERE `id`={fulldata["team1"]["id"]};')
             self.query_one(f'UPDATE `tourney`.`team` SET `match_play`=`match_play` + 1 WHERE `id`={fulldata["team2"]["id"]};')
             self.query_one(f'UPDATE `tourney`.`match` SET `lock`="1" WHERE  `id`={fulldata["id"]};')
