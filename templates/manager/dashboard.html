@@ -188,30 +188,32 @@ Dashboard:
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/progressbar.js/1.1.0/progressbar.min.js"></script>
 <script>
-  var current_prog = "{{ progress_data.current_progress }}";
-  var bar = new ProgressBar.Line("#progress-container", {
-    strokeWidth: 0.8,
-    easing: "easeInOut",
-    duration: 1700,
-    color: "#206bc4",
-    trailColor: "#eee",
-    trailWidth: 1,
-    svgStyle: {
-      strokeLinecap: "",
-    },
-  });
-  bar.animate(current_prog);
+    
+    var bar2 = new ProgressBar.Circle("#analysis", {
+        strokeWidth: 1.2,
+        easing: "easeInOut",
+        duration: 1700,
+        color: "#206bc4",
+        trailColor: "#eee",
+        trailWidth: 1,
+        svgStyle: null,
+    });
+    bar2.animate(1);
 
-  var bar2 = new ProgressBar.Circle("#analysis", {
-    strokeWidth: 1.2,
-    easing: "easeInOut",
-    duration: 1700,
-    color: "#206bc4",
-    trailColor: "#eee",
-    trailWidth: 1,
-    svgStyle: null,
-  });
-  bar2.animate(1);
+    var current_prog = "{{ progress_data.current_progress }}";
+    var bar = new ProgressBar.Line("#progress-container", {
+        strokeWidth: 0.8,
+        easing: "easeInOut",
+        duration: 1700,
+        color: "#206bc4",
+        trailColor: "#eee",
+        trailWidth: 1,
+        svgStyle: {
+        strokeLinecap: "",
+        },
+    });
+    bar.animate(current_prog);
+
 </script>
 <style>
   #progress-container svg {

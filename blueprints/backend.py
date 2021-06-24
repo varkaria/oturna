@@ -5,7 +5,6 @@ from flask import Blueprint, render_template, redirect, url_for, flash, session,
 from objects.logger import log
 from objects.flag import Staff, Mods
 from rich.console import Console
-from functools import wraps
 from objects import osuapi, mysql
 from PIL import Image
 from objects.decorators import *
@@ -51,7 +50,7 @@ def context():
 def base():
     return render_template('/manager/base.html')
 
-@backend.route('/')
+@backend.route('/', methods=['GET', 'POST'])
 @login_required
 def dashboard():
 
@@ -71,6 +70,9 @@ def dashboard():
         colour = 'text-red'
     if reg_end > currentDate:
         colour = 'text-green'
+        
+    next_data = []
+    last_data = []
 
     next_match = db.query_one("""SELECT m.id, t1.full_name AS `team1_name`, t2.full_name AS `team2_name`, 
     t1.flag_name AS `team1_flag`, t2.flag_name AS `team2_flag`, m.date
@@ -78,7 +80,8 @@ def dashboard():
     LEFT JOIN `team` `t1` ON t1.id = m.team1
     LEFT JOIN `team` `t2` ON t2.id = m.team2
     WHERE m.date > NOW()""")
-    next_data = {
+    if next_match:
+        next_data = {
         'n_team1_flag': next_match['team1_flag'],
         'n_team2_flag': next_match['team2_flag'],
         'n_team1_name': next_match['team1_name'],
@@ -86,15 +89,15 @@ def dashboard():
         'n_match_time': (str(next_match['date'])[:16]),
         'cancel': False,
         'nodata': False
-    }
-    time = str(next_match['date'])[12:]
-    orignal_date = next_data['n_match_time']
-    date_sr = pd.to_datetime(pd.Series(orignal_date))
-    change_format = date_sr.dt.strftime('%d/%m/%Y')
-    next_data['n_match_time'] = str(change_format).replace('dtype: object', '')[2:] + time
+        }
+        time = str(next_match['date'])[12:]
+        orignal_date = next_data['n_match_time']
+        date_sr = pd.to_datetime(pd.Series(orignal_date))
+        change_format = date_sr.dt.strftime('%d/%m/%Y')
+        next_data['n_match_time'] = str(change_format).replace('dtype: object', '')[2:] + time
 
-    if next_data['n_team1_name'] == None:
-        next_data['nodata'] = True
+        if next_data['n_team1_name'] == None:
+            next_data['nodata'] = True
 
     last_match = db.query_one("""SELECT m.id, t1.full_name AS `team1_name`, t2.full_name AS `team2_name`, 
     t1.flag_name AS `team1_flag`, t2.flag_name AS `team2_flag`, team1_score, team2_score, m.date, m.stats
@@ -102,7 +105,8 @@ def dashboard():
     LEFT JOIN `team` `t1` ON t1.id = m.team1
     LEFT JOIN `team` `t2` ON t2.id = m.team2
     WHERE m.date <= NOW()""")
-    last_data = {
+    if last_match:
+        last_data = {
         'stats': int(last_match['stats']),
         'l_team1_flag': last_match['team1_flag'],
         'l_team2_flag': last_match['team2_flag'],
@@ -113,26 +117,39 @@ def dashboard():
         'l_match_time': (str(last_match['date'])[:16]),
         'cancel': False,
         'nodata': False
+        }
+        time = str(last_match['date'])[12:]
+        orignal_date = last_data['l_match_time']
+        date_sr = pd.to_datetime(pd.Series(orignal_date))
+        change_format = date_sr.dt.strftime('%d/%m/%Y')
+        last_data['l_match_time'] = str(change_format).replace('dtype: object', '')[2:] + time
+
+        if last_data['l_team1_name'] == None:
+            last_data['nodata'] = True
+
+        if last_data['stats'] == 1: # match not cancelled
+            pass
+        if last_data['stats'] == 2: # match cancelled
+            last_data['cancel'] = True
+            last_data['team1_score'] = ''
+            last_data['team2_score'] = ''
+
+    progress = {
+        'start': 0,
+        'regis': 0.07,
+        'playoff': 0.285,
+        'reg1': 0.5,
+        'reg2': 0.715,
+        'champ': 0.935,
+        'end': 1
     }
-    time = str(last_match['date'])[12:]
-    orignal_date = last_data['l_match_time']
-    date_sr = pd.to_datetime(pd.Series(orignal_date))
-    change_format = date_sr.dt.strftime('%d/%m/%Y')
-    last_data['l_match_time'] = str(change_format).replace('dtype: object', '')[2:] + time
-
-    if last_data['l_team1_name'] == None:
-        last_data['nodata'] = True
-
-    if last_data['stats'] == 1: # match not cancelled
-        pass
-    if last_data['stats'] == 2: # match cancelled
-        last_data['cancel'] = True
-        last_data['team1_score'] = ''
-        last_data['team2_score'] = ''
-
+    tour_end = False
+    progress_get = db.query_one("""SELECT rounds from tourney""")['rounds']
+    if progress_get == 'end':
+        tour_end = True
     progress_data = {
-        'current_progress': 0.5,
-        'ended': False
+        'current_progress': progress[progress_get],
+        'ended': tour_end
     }
 
     # reg: 0.07
@@ -141,7 +158,8 @@ def dashboard():
     # regular 2: 0.715 
     # champ: 0.935
 
-    return render_template('manager/dashboard.html', players=players, time_delta=time_delta.strip('-'), colour=colour, next_data=next_data, last_data=last_data, progress_data=progress_data)
+    return render_template('manager/dashboard.html', players=players, time_delta=time_delta.strip('-'), colour=colour, 
+                           next_data=next_data, last_data=last_data, progress_data=progress_data)
 
 @backend.route('/planning/')
 @login_required
