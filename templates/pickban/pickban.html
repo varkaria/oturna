@@ -17,7 +17,7 @@
             <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl 
             transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
                 <div class="bg-gray-600 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                    <div class="sm:flex sm:items-start">
+                    <div class="sm:flex sm:items-center justify-center">
                         <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                             <div class="mt-2">
                                 <h1
@@ -27,13 +27,13 @@
                                 </h1>
                                 <div class="flex">
                                     <div class="p-8">
-                                        <img :class="'w-1/2 mx-auto mb-4 rounded-full border-2 transition-all ' + (results.team1.online == 1 ? 'border-green-600':'border-red-600')"
+                                        <img :class="'w-20 h-20 mx-auto mb-4 rounded-full border-2 transition-all ' + (results.team1.online == 1 ? 'border-green-600':'border-red-600')"
                                             :src="'https://a.ppy.sh/' + results.team1.leader_id">
                                         <h3 class="text-xl mb-1 font-semibold font-heading text-white text-center"><% results.team1.leader_name %></h3>
                                         <p class="text-sm text-white text-center">Leader of <% results.team1.full_name %></p>
                                     </div>
                                     <div class="p-8">
-                                        <img :class="'w-1/2 mx-auto mb-4 rounded-full border-2 transition-all ' + (results.team2.online == 1 ? 'border-green-600':'border-red-600')"
+                                        <img :class="'w-20 h-20 mx-auto mb-4 rounded-full border-2 transition-all ' + (results.team2.online == 1 ? 'border-green-600':'border-red-600')"
                                         :src="'https://a.ppy.sh/' + results.team2.leader_id">
                                         <h3 class="text-xl mb-1 font-semibold font-heading text-white text-center"><% results.team2.leader_name %></h3>
                                         <p class="text-sm text-white text-center">Leader of <% results.team2.full_name %></p>
@@ -70,7 +70,7 @@
                     <h1 class="text-white text-xl mt-2"><% results.team1.leader_name %></h1>
                 </div>
                 <div class="w-1/9 overflow-hidden">
-                    <div v-if="results.banpicks[0].info != null" :class="'b-block ' + (results.banpicks[0].info != null ? 'border-4 border-red-700':'')"
+                    <div v-if="results.banpicks[0].info != null" :class="'b-block ' + (results.banpicks[0].info != null ? 'border-4 border-red-700 ban-element':'')"
                         :style="'background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(https://assets.ppy.sh/beatmaps/'+ results.banpicks[0].info.beatmapset_id +'/covers/cover.jpg);'">
                         <a class="mods">
                             <% results.banpicks[0].mods %>
@@ -99,7 +99,7 @@
                 </div>
 
                 <div class="w-1/9 overflow-hidden">
-                    <div v-if="results.banpicks[5]" class="b-block" :class="'b-block ' + (results.banpicks[5] ? 'border-4 border-red-700':'')"
+                    <div v-if="results.banpicks[5]" class="b-block" :class="'b-block ' + (results.banpicks[5] ? 'border-4 border-red-700 ban-element':'')"
                         :style="'background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(https://assets.ppy.sh/beatmaps/'+ results.banpicks[5].info.beatmapset_id +'/covers/cover.jpg);'">
                         <a class="mods">
                             <% results.banpicks[5].mods %>
@@ -129,7 +129,7 @@
                 </div>
 
                 <div class="w-1/9 overflow-hidden">
-                    <div v-if="results.banpicks[1]" class="b-block" :class="'b-block ' + (results.banpicks[1] ? 'border-4 border-red-700':'')"
+                    <div v-if="results.banpicks[1]" class="b-block" :class="'b-block ' + (results.banpicks[1] ? 'border-4 border-red-700 ban-element':'')"
                         :style="'background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(https://assets.ppy.sh/beatmaps/'+ results.banpicks[1].info.beatmapset_id +'/covers/cover.jpg);'">
                         <a class="mods">
                             <% results.banpicks[1].mods %>
@@ -152,7 +152,7 @@
                 </div>
 
                 <div class="w-1/9 overflow-hidden">
-                    <div v-if="results.banpicks[4]" class="b-block" :class="'b-block ' + (results.banpicks[4] ? 'border-4 border-red-700':'')"
+                    <div v-if="results.banpicks[4]" class="b-block" :class="'b-block ' + (results.banpicks[4] ? 'border-4 border-red-700 ban-element':'')"
                         :style="'background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(https://assets.ppy.sh/beatmaps/'+ results.banpicks[4].info.beatmapset_id +'/covers/cover.jpg);'">
                         <a class="mods">
                             <% results.banpicks[4].mods %>
@@ -181,7 +181,7 @@
                 <h1 class="text-3xl text-white" v-if='results.picker'>Team <% results.picker_t %>
                         <% results.status %>
                 </h1>
-                <h1 v-else class="text-3xl text-white">Ban & Pick was finished</h1>
+                <h1 v-else class="text-3xl text-white">Ban & Pick was finished. You can close this and continue your match in game. Goodluck!!</h1>
             </div>
         </div>
     </section>
@@ -223,22 +223,25 @@
         data: {
             results: {},
             userid: Number('{{ session.user_id }}'),
+            setid: Number('{{ match_set }}'),
             once: 0
         },
         created: function () {
+            userid = this.userid
+            setid = this.setid
             socket.on('connect', msg => {
-                socket.emit('ready', this.user_id)
+                socket.emit('ready', {userid, setid})
             })
 
             socket.on('disconnect', function () {
-                socket.emit('ready', this.user_id)
+                socket.emit('ready', {userid, setid})
             });
 
-            socket.on('data_result', msg => {
+            socket.on(`data_result_${setid}`, msg => {
                 this.results = msg
             })
 
-            socket.on('new_result', msg => {
+            socket.on(`new_result_${setid}`, msg => {
                 this.results = msg
                 this.once = 0
                 console.log(this.results)

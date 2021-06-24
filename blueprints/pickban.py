@@ -19,7 +19,6 @@ def get_leaders_match(id):
     AND p2.leader = 1
     WHERE m.id={id}
     ''')
-    print(out['json'])
     return out['json']
 
 @pickban.route('/')
@@ -33,10 +32,9 @@ def pickban_main(code):
     
     if set_match:
         session['match_set_id'] = set_match['id']
-        print(session['user_id'])
         if str(session['user_id']) not in str(get_leaders_match(set_match['match_id'])):
             return "you aren't being the leader of this match"
-        return render_template('pickban/pickban.html', match_code=code)
+        return render_template('pickban/pickban.html', match_code=code, match_set=set_match['id'] )
 
     return 'hi uwu 2'
     
