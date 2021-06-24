@@ -222,19 +222,19 @@ def match_update(id):
 @backend.route('/schedule/match/<id>/preduct', methods=['POST'])
 @login_required
 @need_privilege(Staff.COMMENTATOR)
-def match_preduct_update(id):
+def match_preduct_update(id:int):
+    w = request.form['win']
+    l = request.form['lose']
+    s = request.form['man']
+    res = db.query_one(f"SELECT id, team1, team2 FROM `match` WHERE id={id}")
+    
+    if s == 'team1':
+            db.query_one("INSERT INTO `tourney`.`com_preducts` (`match_id`, `commentator`, `s_win`, `s_team1`, `s_team2`) VALUES (%s, %s, %s, %s, %s);", (id,session['id'],res[f'{s}'],2,l))
+    else:
+        db.query_one("INSERT INTO `tourney`.`com_preducts` (`match_id`, `commentator`, `s_win`, `s_team1`, `s_team2`) VALUES (%s, %s, %s, %s, %s);", (id,session['id'],res[f'{s}'],l,2))
+    
     try:
-        w = request.form['win']
-        l = request.form['lose']
-        s = request.form['man']
-        
-        # fak = db.query_one(f"SELECT id, team1, team2 FROM match WHERE id={id}")
-        # if s == 'team1':
-        #     db.query_one("INSERT INTO `tourney`.`com_preducts` (`match_id`, `commentator`, `s_win`, `s_team1`, `s_team2`) VALUES (%s, %s, %s, %s, %s);", (id,session['id'],res[f'team{s}'],2,l))
-        # else:
-        #     db.query_one("INSERT INTO `tourney`.`com_preducts` (`match_id`, `commentator`, `s_win`, `s_team1`, `s_team2`) VALUES (%s, %s, %s, %s, %s);", (id,session['id'],res[f'team{s}'],l,2))
-        
-        flash('s', 'success')
+        flash('MatchId: %s preduct successfully' % id, 'success')
         return redirect(url_for('backend.matchs'))
     except Exception as e:
         flash(e, 'danger')
@@ -246,7 +246,7 @@ def match_preduct_update(id):
 def match_delete(id):
     try:
         db.query("DELETE FROM `match` WHERE id = %s;", [id])
-        flash('MathId: %s deleted successfully' % id, 'success')
+        flash('MatchId: %s deleted successfully' % id, 'success')
         return redirect(url_for('backend.matchs'))
     except Exception as e:
         flash(e, 'danger')
