@@ -328,8 +328,8 @@ class DB(object):
         else:
             fulldata['currentround'] = [0,0]
 
-        self.query_one(f'UPDATE `tourney`.`match` SET `team1_score`="{o_score[0]}" WHERE  `id`={fulldata["id"]};')
-        self.query_one(f'UPDATE `tourney`.`match` SET `team2_score`="{o_score[1]}" WHERE  `id`={fulldata["id"]};')
+        self.query_one(f'UPDATE `tourney`.`match` SET `team2_score`="{o_score[1]}" WHERE `id`={fulldata["id"]};')
+        self.query_one(f'UPDATE `tourney`.`match` SET `team1_score`="{o_score[0]}" WHERE `id`={fulldata["id"]};')
 
         if set == 1 and finish == True and fulldata['lock'] == 0:
             self.query_one(f'UPDATE `tourney`.`team` SET `points`=`points`+ {o_score[0]} WHERE `id`={fulldata["team1"]["id"]};')
