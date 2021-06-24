@@ -5,7 +5,6 @@ from flask import Blueprint, render_template, redirect, url_for, flash, session,
 from objects.logger import log
 from objects.flag import Staff, Mods
 from rich.console import Console
-from functools import wraps
 from objects import osuapi, mysql
 from PIL import Image
 from objects.decorators import *
@@ -50,7 +49,7 @@ def context():
 def base():
     return render_template('/manager/base.html')
 
-@backend.route('/')
+@backend.route('/', methods=['GET', 'POST'])
 @login_required
 def dashboard():
 
@@ -134,9 +133,22 @@ def dashboard():
             last_data['team1_score'] = ''
             last_data['team2_score'] = ''
 
+    progress = {
+        'start': 0,
+        'regis': 0.07,
+        'playoff': 0.285,
+        'reg1': 0.5,
+        'reg2': 0.715,
+        'champ': 0.935,
+        'end': 1
+    }
+    tour_end = False
+    progress_get = db.query_one("""SELECT rounds from tourney""")['rounds']
+    if progress_get == 'end':
+        tour_end = True
     progress_data = {
-        'current_progress': 0.5,
-        'ended': False
+        'current_progress': progress[progress_get],
+        'ended': tour_end
     }
 
     # reg: 0.07
