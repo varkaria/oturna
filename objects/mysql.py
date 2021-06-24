@@ -141,14 +141,14 @@ class DB(object):
         query = self.query_all(query_text)
         return [json.loads(m['json']) for m in query]
 
-    def get_full_match(self, id=None):
+    def get_full_match(self, id=None, set=0):
         query_text = """SELECT JSON_OBJECT(
         'id', m.id,
         'code', m.code,
         'date', DATE_FORMAT(m.date, '%Y-%m-%d %H:%i'),
         'round', JSON_OBJECT('id', r.id, 'name', r.name, 'description', r.description, 'start_date', DATE_FORMAT(r.start_date, '%Y-%m-%d %H:%i')),
-        'team1', JSON_OBJECT('id', t1.id, 'full_name', t1.full_name, 'flag_name', t1.flag_name, 'acronym', t1.acronym),
-        'team2', JSON_OBJECT('id', t2.id, 'full_name', t2.full_name, 'flag_name', t2.flag_name, 'acronym', t2.acronym),
+        'team1', JSON_OBJECT('id', t1.id, 'full_name', t1.full_name, 'flag_name', t1.flag_name, 'acronym', t1.acronym, 'players', JSON_ARRAY(p1.username)),
+        'team2', JSON_OBJECT('id', t2.id, 'full_name', t2.full_name, 'flag_name', t2.flag_name, 'acronym', t2.acronym, 'players', JSON_ARRAY(p2.username)),
         'referee', JSON_OBJECT('id', ref.id, 'group_id', ref.group_id, 'user_id', ref.user_id, 'username', ref.username),
         'streamer', JSON_OBJECT('id', str.id, 'group_id', str.group_id, 'user_id', str.user_id, 'username', str.username),
         'commentator', JSON_OBJECT('id', com.id, 'group_id', com.group_id, 'user_id', com.user_id, 'username', com.username),
@@ -157,12 +157,15 @@ class DB(object):
         'video_link', m.video_link,
         'live', (m.date < NOW()),
         'loser', (m.loser = 1),
-        'note', m.note
+        'note', m.note,
+        'lock', m.lock
         ) AS `json`
         FROM `match` m
         LEFT JOIN `round` r ON r.id = m.round_id
         LEFT JOIN team t1 ON t1.id = m.team1
         LEFT JOIN team t2 ON t2.id = m.team2
+        LEFT JOIN `player` p1 ON p1.team = t1.id
+        LEFT JOIN `player` p2 ON p2.team = t2.id
         LEFT JOIN staff ref ON ref.id = m.referee
         LEFT JOIN staff str ON str.id = m.streamer
         LEFT JOIN staff com ON com.id = m.commentator
@@ -198,15 +201,10 @@ class DB(object):
             points_to_win = 3 # i'll add in mysql soon
             state = 1 # state : map on 1 2 3 4 5 (Tiebreaker) 10 (Finished)
             finish = False
-            pickbans = self.query_all("""
-            SELECT m.id, m.map_id, m.from, m.type, p.info
-            FROM match_sets_banpick `m` 
-            LEFT JOIN `mappool` `p` ON p.beatmap_id = m.map_id 
-            WHERE set_id=%s""", [s['id']]) # ดึงข้อมูลการแบนและการเลือกของรอบนั้น
+            pickbans = self.query_all("SELECT m.id, m.map_id, m.from, m.type, p.info, p.mods, p.code FROM match_sets_banpick `m` LEFT JOIN `mappool` `p` ON p.beatmap_id = m.map_id WHERE set_id=%s", [s['id']])
             for e in pickbans:
                 e['info'] = json.loads(e['info'])
             
-            # คัดแยกว่าแมพไหนคือแบนหรือเลือก
             bans = list(
                 filter(
                     lambda m: m['type'] == 'ban'
@@ -218,7 +216,6 @@ class DB(object):
                     ,pickbans)
                 )
             
-            # นำคะแนนที่ได้มาจาก osu!api มาใส่ในการเลือกของเซ็ต
             for p in picks:
                 dupli = [] # แมพที่ใช้ไปแล้วจะมาอยู่ในนี้ เพื่อกันว่าจะใส่ในแมพซ้ำหรือปล่าว
                 if score[0] == points_to_win or score[1] == points_to_win:
@@ -247,12 +244,18 @@ class DB(object):
                             multi_games_data.pop(idx) # เอาผลการแข่งนี้ออก
 
             if score[0] == points_to_win - 1 and score[1] == points_to_win - 1:
-                # หาว่า Tiebreaker คือแมพอะไร
                 tie_m = self.query_one("SELECT id, beatmap_id AS map_id, 'tiebreaker' AS 'from', 'pick' AS 'type', info FROM mappool WHERE round_id=%s AND mods='TB'",[fulldata['round']['id']])
                 tie_m['info'] = json.loads(tie_m['info'])
+                tie_m['mods'] = 'Sets Tiebreaker'
+                tie_m['code'] = ''
                 for idx, g in enumerate(multi_games_data): # นำผลที่ได้มาจาก osu!api มาเรียง
                     if str(tie_m['map_id']) == str(g['beatmap_id']) and str(tie_m['map_id']) not in str(dupli):
+                        for w in g['scores']:
+                            q = self.query_one("SELECT player.username AS `player`, team.full_name AS `team` FROM player LEFT JOIN team ON team.id = player.team WHERE user_id=%s", (w['user_id']))
+                            w['username'] = q['player']
+                            w['teamname'] = q['team']
                         tie_m['result'] = g['scores'] # เอาผลของคะแนนใส่ใน pick นั้นๆ
+                        tie_m['winner'] = g['scores'][check_team_win(g['scores'])]
                         win = check_team_win(g['scores']) # เช็คว่าทีมไหนคะแนนเยอะกว่า
                         score[win] += 1 # เพิ่มคะแนนของทีมในเซ้ตๆนั้น
                         o_score[win] += 1 # เพิ่มคะแนนของทีมในเซ้ตๆนั้น
@@ -260,7 +263,6 @@ class DB(object):
                         finish = True
                         multi_games_data.pop(idx) # เอาผลการแข่งนี้ออก
                 picks.append(tie_m)
-            
             o_sets.append({
                 'ban': bans,
                 'pick': picks,
@@ -268,20 +270,25 @@ class DB(object):
                 'state': state,
                 'finish': finish
             })
-            
-        self.query_one("UPDATE `tourney`.`match` SET `team1_score`='%s', `team2_score`='%s' WHERE  `id`=%s;",(o_score[0],o_score[1],fulldata['id']))
-
+        
         if o_score[0] == o_score[1] and o_score[0] == o_score_to_win - 1:
             # match tb
             tiebreaker_match = self.query_one("SELECT id, beatmap_id AS map_id, 'tiebreaker' AS 'from', 'pick' AS 'type', info FROM mappool WHERE round_id=%s AND mods='TBS'",[fulldata['round']['id']])
             tiebreaker_match['info'] = json.loads(tiebreaker_match['info'])
+            tiebreaker_match['mods'] = 'Match Tiebreaker'
+            tiebreaker_match['code'] = ''
             score = [0,0]
             finish = False
             state = 1
             
             for idx, g in enumerate(multi_games_data): # นำผลที่ได้มาจาก osu!api มาเรียง
                 if str(tiebreaker_match['map_id']) == str(g['beatmap_id']) and str(tiebreaker_match['map_id']) not in str(dupli):
+                    for w in g['scores']:
+                        q = self.query_one("SELECT player.username AS `player`, team.full_name AS `team` FROM player LEFT JOIN team ON team.id = player.team WHERE user_id=%s", (w['user_id']))
+                        w['username'] = q['player']
+                        w['teamname'] = q['team']
                     tiebreaker_match['result'] = g['scores'] # เอาผลของคะแนนใส่ใน pick นั้นๆ
+                    tiebreaker_match['winner'] = g['scores'][check_team_win(g['scores'])]
                     win = check_team_win(g['scores']) # เช็คว่าทีมไหนคะแนนเยอะกว่า
                     score[win] += 1 # เพิ่มคะแนนของทีมในเซ้ตๆนั้น
                     o_score[win] += 1 # เพิ่มคะแนนของทีมในเซ้ตๆนั้น
@@ -302,10 +309,13 @@ class DB(object):
         fulldata['finish'] = False
         
         if o_score[0] == 2 or o_score[1] == 2:
+            if o_score[0] == 2:
+                fulldata['winner'] = fulldata['team1']
+            else:
+                fulldata['winner'] = fulldata['team2']
             fulldata['finish'] = True
 
         if o_sets:
-            print(len(o_sets))
             if len(o_sets) == 2:
                 if len(o_sets[len(o_sets)-1]['pick']) >= 4:
                     fulldata['currentround'] = [len(o_sets)-1,o_sets[len(o_sets)-1]['state']-1]
@@ -315,7 +325,24 @@ class DB(object):
                 fulldata['currentround'] = [len(o_sets)-1,o_sets[len(o_sets)-1]['state']-1]
         else:
             fulldata['currentround'] = [0,0]
-        
+
+        self.query_one(f'UPDATE `tourney`.`match` SET `team1_score`="{o_score[0]}" WHERE  `id`={fulldata["id"]};')
+        self.query_one(f'UPDATE `tourney`.`match` SET `team2_score`="{o_score[1]}" WHERE  `id`={fulldata["id"]};')
+
+        if set == 1 and finish == True and fulldata['lock'] == 0:
+            self.query_one(f'UPDATE `tourney`.`team` SET `points`=`points`+ {o_score[0]} WHERE `id`={fulldata["team1"]["id"]};')
+            self.query_one(f'UPDATE `tourney`.`team` SET `points`=`points`+ {o_score[1]} WHERE `id`={fulldata["team2"]["id"]};')
+            if o_score[0] == 2:
+                self.query_one(f'UPDATE `tourney`.`team` SET `win`=`win`+ 1 WHERE `id`={fulldata["team1"]["id"]};')
+                self.query_one(f'UPDATE `tourney`.`team` SET `lose`=`lose`+ 1 WHERE `id`={fulldata["team2"]["id"]};')
+            else:
+                self.query_one(f'UPDATE `tourney`.`team` SET `win`=`win`+ 1 WHERE `id`={fulldata["team2"]["id"]};')
+                self.query_one(f'UPDATE `tourney`.`team` SET `lose`=`lose`+ 1 WHERE `id`={fulldata["team1"]["id"]};')
+            self.query_one(f'UPDATE `tourney`.`team` SET `match_play`=`match_play` + 1 WHERE `id`={fulldata["team1"]["id"]};')
+            self.query_one(f'UPDATE `tourney`.`team` SET `match_play`=`match_play` + 1 WHERE `id`={fulldata["team2"]["id"]};')
+            self.query_one(f'UPDATE `tourney`.`match` SET `lock`="1" WHERE  `id`={fulldata["id"]};')
+            self.query_one(f'UPDATE `tourney`.`match` SET `stats`="1" WHERE  `id`={fulldata["id"]};')
+                
         return fulldata
 
     def get_staff(self, staff_id=None, user_id=None, format=True, viewall=False):
@@ -324,6 +351,7 @@ class DB(object):
             return query
 
         if staff_id:
+            print(staff_id)
             query = self.query_one('select * from staff where id = %s and active = 1', (staff_id,))
             return query
 
@@ -368,8 +396,8 @@ class DB(object):
         mappool = self.query_all("SELECT id, mods, json FROM json_mappool where round_id = %s", res['round_id'])
 
         # checking it's sets 2?
-        prev = self.query_all("SELECT id FROM match_sets WHERE match_id=%s", res['id'])
-        if len(prev) >= 2:
+        prev = self.query_all("SELECT id, finish_ban FROM match_sets WHERE match_id=%s", res['id'])
+        if len(prev) >= 2 and prev[0]['finish_ban'] == 1:
             prevbanspicks = self.query_one("""SELECT JSON_ARRAYAGG(JSON_OBJECT('id', pb.id, 'set_id', pb.set_id, 'type', pb.type, 'map_id', pb.map_id, 'from', s.full_name, 'info', mp.info, 'mods', mp.mods)) AS 'last' 
             FROM match_sets ms
             LEFT JOIN `match_sets_banpick` pb ON pb.set_id = ms.id
@@ -380,12 +408,12 @@ class DB(object):
         available_maps = []
         for s in mappool:
             d = json.loads(s['json'])
-            if len(prev) == 2:
+            if len(prev) == 2 and prev[0]['finish_ban'] == 1:
                 e = json.loads(prevbanspicks['last'])
             if str(d['beatmap_id']) in str(res['banpicks']) or str(d['mods']) == 'TB' or str(d['mods']) == 'TBS':
                 continue
             else:
-                if len(prev) >= 2:
+                if len(prev) >= 2 and prev[0]['finish_ban'] == 1:
                     if res['banpicks'][0]['from'] != None:
                         try:
                             if d['beatmap_id'] == e[len(res['banpicks'])]['map_id']:
@@ -395,7 +423,6 @@ class DB(object):
                     else:
                         if d['beatmap_id'] == e[0]['map_id']:
                             continue
-                        
                 available_maps.append({
                     'id': s['id'],
                     'mods': s['mods'],
@@ -421,6 +448,12 @@ class DB(object):
                 res['picker'] = res['team1']['leader_id']
                 res['picker_t'] = res['team1']['full_name']
                 res['status'] = 'ban'
+
+            if t == 8:
+                self.query(f"UPDATE `tourney`.`match_sets` SET `finish_ban`='1' WHERE  `id`={res['set_id']};")
+                res['picker'] = None
+                res['picker_t'] = None
+
         res['available_maps'] = available_maps
     
         return res

@@ -345,3 +345,74 @@
         font-size: 25px
     }
 }
+
+.matchResult {
+    background: rgb(35 46 60);
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto;
+    grid-row-gap: 10px;
+    padding: 9px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+}
+
+.matchScore {
+    display: grid;
+    grid-auto-flow: column;
+    grid-gap: 20px;
+    justify-self: center;
+    grid-column: 2/3;
+}
+
+.matchWinner {
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: 0.2px;
+    text-align: center;
+    grid-column: 2/3;
+    color: white;
+}
+
+.matchToBottom {
+    justify-self: end;
+    text-align: right;
+    color: #5f5f5f;
+    font-size: 12px;
+    cursor: pointer;
+    grid-row: 1/2;
+    grid-column: 3/4;
+}
+
+.filler1 {
+    grid-area: filler1;
+}
+
+.filler2 {
+    grid-area: filler2;
+}
+
+.teamAMatchScore, .teamBMatchScore {
+    display: grid;
+    grid-auto-flow: column;
+    grid-gap: 5px;
+}
+
+.circle-point-sets {
+    width: 15px;
+    height: 15px;
+    background: white;
+    border-radius: 4px;
+}
+
+.circle-point-all {
+    width: 20px;
+    height: 20px;
+    background: white;
+    border-radius: 4px;
+}
+
+.blank {
+    background: transparent !important;
+    border: 2px solid white;
+}
