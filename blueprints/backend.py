@@ -37,6 +37,11 @@ def conv(x):
     elif type(x) == list:
         return [c(a) for a in x]
 
+def allowed_file(filename):
+    FILE_EX = {'json'}
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in FILE_EX
+
 @backend.context_processor
 def context():
     user = None if session == {} else get('view_staff', str(session['id']))
@@ -150,12 +155,6 @@ def dashboard():
         'current_progress': progress[progress_get],
         'ended': tour_end
     }
-
-    # reg: 0.07
-    # playoff: 0.285
-    # regular 1: 0.5
-    # regular 2: 0.715 
-    # champ: 0.935
 
     return render_template('manager/dashboard.html', players=players, time_delta=time_delta.strip('-'), colour=colour, 
                            next_data=next_data, last_data=last_data, progress_data=progress_data)
@@ -789,13 +788,6 @@ def refree_helper_api(id:int):
 def showlist():
     return render_template('manager/streamer_tools/stream_list.html')
 
-BRACKETS_FOLDER = '.data/brackets'
-FILE_EX = {'json'}
-
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in FILE_EX
-
 @backend.route('/stream/json/upload', methods=['GET', 'POST'])
 def json_upload():
     if request.method == 'POST':
@@ -809,7 +801,7 @@ def json_upload():
                 id = str(session['user_id'])
                 date_time = now.strftime("%d-%m-%Y")
                 filename = '[' + id + ']' + ' ' + date_time + '.json'
-                file.save(os.path.join(BRACKETS_FOLDER, filename))
+                file.save(os.path.join(str(pathlib.Path('.data/brackets')), filename))
                 error = 'File upload successfully'
                 return render_template('manager/streamer_tools/json_upload.html', error=error)
             except KeyError:
@@ -822,7 +814,7 @@ def json_upload():
 
 @backend.route('/stream/json/download/', methods=['GET', 'POST'])
 def json_download():
-    path = BRACKETS_FOLDER
+    path = str(pathlib.Path('.data/brackets'))
     list_brackets = {}
     try:
         id = str(session['user_id'])
@@ -839,12 +831,9 @@ def json_download():
 
 @backend.route('/stream/json/download/<path:filename>')
 def download(filename):
-    file = os.path.join(current_app.root_path,
-                        BRACKETS_FOLDER) + '/' + filename
+    file = str(pathlib.Path('.data/brackets/')) + '/' + filename
     response = send_file(file, mimetype='application/json', attachment_filename='brackets.json', as_attachment=True)
     return response
-
-PICTURE_FOLDER = '.data/team_pics/'
 
 @backend.route('/stream/download_pic/')
 def team_pic():

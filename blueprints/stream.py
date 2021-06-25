@@ -1,5 +1,4 @@
-import os, datetime
-from flask import Blueprint, render_template, request, session, current_app, Response, send_file
+from flask import Blueprint, render_template, request
 from objects import mysql
 
 db = mysql.DB()
@@ -35,10 +34,6 @@ def greeting_host():
 @stream.route('/showcase')
 def m_showcase():
     return render_template('stream/showcase.html')
-
-@stream.route('/match')
-def match():
-    return render_template('stream/match.html')
 
 @stream.route('/countdown')
 def countdown():
