@@ -8,9 +8,9 @@ from rich.console import Console
 from objects import osuapi, mysql
 from PIL import Image
 from objects.decorators import *
-import json, re, requests, datetime, os
+import json, re, requests, datetime, os, io, pathlib
 import pandas as pd
-import random, string
+import random, string, zipfile
 
 backend = Blueprint('backend', __name__)
 db = mysql.DB()
@@ -845,3 +845,20 @@ def download(filename):
     response = send_file(file, mimetype='application/json',
                          attachment_filename='brackets.json', as_attachment=True)
     return response
+
+PICTURE_FOLDER = '.data/team_pics'
+
+@backend.route('/stream/download_pic/')
+def team_pic():
+    base_path = pathlib.Path('.data/team_pics')
+    data = io.BytesIO()
+    with zipfile.ZipFile(data, mode='w') as z:
+        for f_name in base_path.iterdir():
+            z.write(f_name)
+    data.seek(0)
+    return send_file(
+        data,
+        mimetype='application/zip',
+        as_attachment=True,
+        attachment_filename='team_picture.zip'
+    )
