@@ -25,32 +25,32 @@ app.config.from_object(Config)
 socketio = SocketIO(app)
 
 # Pick ban Socket.io
-@socketio.on('firstdata', namespace='/pickban')
+@socketio.on('firstdata', namespace='/pickban_n')
 def handle_data(d):
-    emit(f'data_result_{d["set"]}', db.get_match_sets_ban_pick_full(d['set']))
+    emit(f'data_result_{session["match_set_id"]}', db.get_match_sets_ban_pick_full(session["match_set_id"]))
 
-@socketio.on('pickban', namespace='/pickban')
+@socketio.on('pickban', namespace='/pickban_n')
 def handle_data(d):
     if not session:
         return emit('new_result', 'You are not login yet?')
     t_data = db.query('SELECT team as id FROM player WHERE user_id=%s', session['user_id'])
     db.query('INSERT INTO match_sets_banpick (`set_id`, `map_id`, `from`, `type`) VALUES (%s, %s, %s, %s);', [d['set'], d['map'], t_data['id'], d['type']])
-    emit(f'new_result_{d["set"]}', db.get_match_sets_ban_pick_full(d['set']), broadcast=True)
+    emit(f'new_result_{session["match_set_id"]}', db.get_match_sets_ban_pick_full(session["match_set_id"]), broadcast=True)
 
-@socketio.on('ready', namespace='/pickban')
+@socketio.on('ready', namespace='/pickban_n')
 def handle_data(d):
     if not session:
         return emit('new_result', 'You are not login yet?')
-    emit(f'new_result_{d["setid"]}', db.get_match_sets_ban_pick_full(d['setid']), broadcast=True)
+    emit(f'new_result_{session["match_set_id"]}', db.get_match_sets_ban_pick_full(session["match_set_id"]), broadcast=True)
 
-@socketio.on('disconnect', namespace='/pickban')
+@socketio.on('disconnect', namespace='/pickban_n')
 def handle_dis():
     db.query("UPDATE `tourney`.`player` SET `online`='0' WHERE  `user_id`=%s;", session['user_id'])
     emit(f'new_result_{session["match_set_id"]}', 'gone', broadcast=True)
 
-@socketio.on('connect', namespace='/pickban')
+@socketio.on('connect', namespace='/pickban_n')
 def handle_dis():
-    db.query("UPDATE `tourney`.`player` SET `online`='1' WHERE  `user_id`=%s;", session['user_id'])
+    db.query("UPDATE `tourney`.`player` SET `online`='0' WHERE  `user_id`=%s;", session['user_id'])
     emit(f'new_result_{session["match_set_id"]}', 'connect', broadcast=True)
 # End of Pick ban Socket.io
 
@@ -80,7 +80,6 @@ def callback():
         try:
             next_url = request.args.get('state').split('->')
             user = osuapi.get2(u['access_token'], me='')
-            print(next_url)
             player = db.query('SELECT id, user_id, username from player WHERE `user_id`=%s', [user['id']])
             staff = db.get_staff(user_id=user['id'])
             if staff:

@@ -123,17 +123,6 @@ OM{{ match[0].code }} | {{ match[0].team1.full_name }} vs {{ match[0].team2.full
                                 </div>
                             </div>
                         </div>
-                        <div>
-                            <div class="mpresults">
-                                <span class="mpresults-text">
-                                    <% data.sets[`${current[0]}`].pick[`${current[1]-1}`].winner.teamname %> Wins
-                                </span>
-                                <span class="mpresults-text mpresults-text score">Now Score
-                                    <% data.sets[`${current[0]}`].score[0] %> | <% data.sets[`${current[0]}`].score[1]
-                                            %>
-                                </span>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -455,8 +444,8 @@ OM{{ match[0].code }} | {{ match[0].team1.full_name }} vs {{ match[0].team2.full
                 <input type="text" class="form-control" placeholder="Readonly..." value="!mp timer 300" readonly="">
             </div>
         </div>
-        <div class="mb-3" v-if='data.finish == false && data.sets.length > 0'>
-            <div v-if="data.sets[`${current[0]}`].pick.length > 4">
+        <div class="mb-3" v-if='data.finish == false'>
+            <div v-if="data.sets[`${current[0]}`].pick.length > 0">
                 <div v-if="data.sets[`${current[0]}`].finish == false">
                     <label class="form-label">Paste Commands</label>
                     <div class="input-group mb-2" v-if="data.score[0] == 1 && data.score[1] == 1">
@@ -478,7 +467,7 @@ OM{{ match[0].code }} | {{ match[0].team1.full_name }} vs {{ match[0].team2.full
                     </div>
                 </div>
             </div>
-            <div v-if="data.sets[1].pick.length < 4 && data.sets[0].finish == true">
+            <div v-if="data.sets[1].pick.length < 0 && data.sets[0].finish == true">
                 <label class="form-label">Paste Result</label>
                 <div v-if="data.sets[`${current[0]}`].score[0] > data.sets[`${current[0]}`].score[1]">
                     <div class="input-group mb-2">
