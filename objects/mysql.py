@@ -428,8 +428,7 @@ class DB(object):
             WHERE ms.id=%s""", res['id'])
             result_from_last_set = self.get_full_match(res['id'])['sets'][0]['score']
             team_lose = res[f'team{(result_from_last_set.index(3) + 1) % 2 + 1}']['fullname']
-            def select_team(team_lose):
-                select = input("Select team") # 1 and 2
+            def select_team(team_lose, select):
                 if team_lose == team1['fullname']:
                     if select == "2":
                         ban_first = team2.copy()
@@ -439,7 +438,8 @@ class DB(object):
                         ban_first = team2.copy()
                         pick_first = team1.copy()
 
-            select_team(team_lose)
+            select = "1" # loser from set 1 select team
+            select_team(team_lose, select)
 
         available_maps = []
         for s in mappool:
