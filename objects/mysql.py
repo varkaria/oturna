@@ -115,9 +115,9 @@ class DB(object):
             'streamer', JSON_OBJECT('id', str.id, 'group_id', str.group_id, 'user_id', str.user_id, 'username', str.username),
             'commentator', JSON_OBJECT('id', com.id, 'group_id', com.group_id, 'user_id', com.user_id, 'username', com.username),
             'commentator2', JSON_OBJECT('id', com2.id, 'group_id', com2.group_id, 'user_id', com2.user_id, 'username', com2.username),
-            'preducts', JSON_ARRAY(JSON_OBJECT('id', cp.id, 'commentator', cp.commentator)),
             'mp_link', m.mp_link,
             'video_link', m.video_link,
+            'current', (m.stats = 0 AND m.date < NOW()),
             'live', (m.date < NOW()),
             'loser', (m.loser = 1),
             'stats', m.stats,
@@ -132,14 +132,21 @@ class DB(object):
             LEFT JOIN staff str ON str.id = m.streamer
             LEFT JOIN staff com ON com.id = m.commentator
             LEFT JOIN staff com2 ON com2.id = m.commentator2
-            LEFT JOIN com_preducts cp ON cp.match_id = m.id
             """
         if round_id or id:
             query_text += " WHERE "
         if round_id: query_text += "m.round_id = %s " % round_id
         if id: query_text += "m.id = %d " % id
         query = self.query_all(query_text)
-        return [json.loads(m['json']) for m in query]
+        res = []
+        for m in query:
+            m = json.loads(m['json'])
+            m['preducts'] = []
+            w = self.query_all(f'SELECT * FROM com_preducts WHERE match_id={m["id"]}')
+            for a in w:
+                m['preducts'].append(a)
+            res.append(m)
+        return res
 
     def get_staff(self, staff_id=None, user_id=None, format=True, viewall=False):
         if user_id:

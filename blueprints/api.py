@@ -65,6 +65,11 @@ def getdata_preduct(id:int):
         for w in p:
             d[f'team{i+1}']['players'].append(w['username'])
     return jsonify(data=d)
+
+@api.route('/match_mysql/<id>')
+@login_required
+def getdata_match_mysql(id:int):
+    return jsonify(data=db.get_matchs(id=int(id)))
         
 @api.route('/check_round')
 def check_round():

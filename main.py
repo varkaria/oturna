@@ -168,6 +168,7 @@ def page_not_foubd(error):
 if __name__ == '__main__':
     socketio.run(
         app,
-        host='0.0.0.0',
-        port=int(os.environ.get('PORT', 5000))
+        host='127.0.0.1',
+        port=int(os.environ.get('PORT', 5000)),
+        debug=True
     )

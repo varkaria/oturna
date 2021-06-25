@@ -245,6 +245,10 @@ def match_preduct_update(id:int):
     l = request.form['lose']
     s = request.form['man']
     res = db.query_one(f"SELECT id, team1, team2 FROM `match` WHERE id={id}")
+
+    if int(l) not in [0,1]:
+        flash('you put lose score more than 1 man : (', 'danger')
+        return redirect(url_for('backend.matchs'))
     
     if s == 'team1':
             db.query_one("INSERT INTO `tourney`.`com_preducts` (`match_id`, `commentator`, `s_win`, `s_team1`, `s_team2`) VALUES (%s, %s, %s, %s, %s);", (id,session['id'],res[f'{s}'],2,l))
@@ -739,8 +743,7 @@ def refree_helper(id:int):
         flash("Couldn't found match did you put it", 'danger')
         return redirect(url_for('backend.matchs'))
 
-    # check referee you be in this match?
-    if match['referee'] != session['id']:
+    if int(match_data[0]['referee']['id']) != int(session['id']):
         flash("You didn't be refree in this match. you can be refree by click option and be referee it : )", 'danger')
         return redirect(url_for('backend.matchs'))
 
