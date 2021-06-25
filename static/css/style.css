@@ -1,19 +1,19 @@
 .dark-background {
-    background-color: rgb(0,0,0,0.4);
+    background-color: rgb(0, 0, 0, 0.4);
     transition: background-color 160ms;
 }
 
 .dark-background:hover {
-    background-color: rgb(0,0,0,0.6);
+    background-color: rgb(0, 0, 0, 0.6);
 }
 
 .hover-dark {
-    background-color: rgb(0,0,0,0);
+    background-color: rgb(0, 0, 0, 0);
     transition: background-color 160ms;
 }
 
 .hover-dark:hover {
-    background-color: rgb(0,0,0,0.1);
+    background-color: rgb(0, 0, 0, 0.1);
 }
 
 .hover-light {
@@ -28,4 +28,221 @@
 .song-banner {
     background-color: rgb(178, 178, 178);
     transition: all 160ms;
+}
+
+
+.matchResultTeamPlayer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative
+}
+
+.matchTeamPlayerInfo {
+    display: grid;
+    align-items: center;
+    grid-auto-flow: column;
+    grid-gap: 6px;
+    position: relative
+}
+
+.matchTeamPlayerInfoInput {
+    width: 6em
+}
+
+.matchTeamPlayerName,
+.matchTeamPlayerName::placeholder {
+    font-size: 22px;
+    white-space: nowrap
+}
+
+.matchTeamPlayerNameInput {
+    width: 6em
+}
+
+.matchTeamPlayerMods,
+.matchTeamPlayerMods::placeholder {
+    font-size: 13px;
+    background: 0;
+    outline: 0;
+    border: 0;
+    font-family: inherit
+}
+
+.matchTeamPlayerModsInput {
+    width: 5em
+}
+
+.score {
+    display: flex;
+    align-items: flex-end;
+    flex-direction: column
+}
+
+.fullScore {
+    font-size: 16px;
+    text-align: right
+}
+
+.scoreSpecs {
+    font-size: 12px;
+    display: grid;
+    grid-auto-flow: column;
+    grid-gap: 6px
+}
+
+.scoreSpecsInput {
+    width: 8em
+}
+
+.matchTeamPlayerMods,
+.matchTeamPlayerMods::placeholder,
+.scoreSpecs {
+    color: #866662;
+    font-weight: 700
+}
+
+.fullScore,
+.fullScore::placeholder,
+.matchTeamPlayerName,
+.matchTeamPlayerName::placeholder {
+    letter-spacing: .3px;
+    color: #c8cfd5;
+    text-shadow: 0 0 10px rgba(200, 207, 213, .75);
+    border: 0;
+    outline: 0;
+    background: 0;
+    font-family: inherit
+}
+
+.modResults {
+    left: 0;
+    top: 115%
+}
+
+.scoreAcc,
+.scoreAcc::placeholder,
+.scoreCombo,
+.scoreCombo::placeholder,
+.scoreMiss,
+.scoreMiss::placeholder {
+    background: 0;
+    border: 0;
+    outline: 0;
+    font: inherit;
+    color: inherit
+}
+
+.scoreComboInput {
+    width: 2em
+}
+
+.scoreAccInput {
+    width: 3em
+}
+
+.scoreMissInput {
+    width: 1.5em;
+    padding: 0 3px
+}
+
+.enterScore {
+    cursor: pointer;
+    margin: auto;
+    left: 0;
+    top: 0;
+    right: 0;
+    position: relative;
+    width: 7px;
+    height: 7px;
+    border-radius: 5px;
+    background-color: #0090ff
+}
+
+.scoreInput {
+    z-index: 2
+}
+
+.matchPickWrapper {
+    padding-left: 9px;
+    grid-column: 1/3;
+    grid-row: span 5;
+    background-size: cover
+}
+
+.matchResult {
+    padding-top: 9px;
+    padding-right: 9px;
+    padding-bottom: 20px
+}
+
+.matchTeams {
+    display: grid;
+    grid-auto-flow: column;
+    grid-gap: 20px;
+    font-style: italic;
+    grid-template-columns: 1fr 1fr
+}
+
+.matchTeam {
+    display: grid;
+    grid-gap: 6px;
+    background-color: rgba(0, 0, 0, .5);
+    border: 0;
+    border-radius: 10px;
+    padding: 12px
+}
+
+.matchTeamAScore {
+    grid-row: 2/3;
+    justify-self: center;
+    font-size: 20px;
+    font-style: normal
+}
+
+.matchResultTeamName {
+    justify-self: center;
+    font-size: 24px;
+    letter-spacing: .3px;
+    font-style: normal
+}
+
+.Winner {
+    font-weight: 700
+}
+
+.setResult {
+    display: grid;
+    flex-direction: column;
+    justify-items: center;
+    grid-gap: 10px
+}
+
+.matchTotalScore,
+.setScore {
+    display: grid;
+    grid-auto-flow: column;
+    grid-gap: 20px
+}
+
+.show-enter-active {
+    max-height: 100%
+}
+
+.show-enter-active,
+.show-leave-active {
+    transition: .3s cubic-bezier(0, 0, .25, 1)
+}
+
+.show-enter,
+.show-leave-to {
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden
+}
+
+.show-enter-to,
+.show-leave {
+    opacity: 1;
+    overflow: hidden
 }
