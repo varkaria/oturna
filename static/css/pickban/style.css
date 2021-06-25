@@ -242,7 +242,7 @@ a {
 }
 
 .ready-time {
-    opacity: 0;
+    opacity: 0 !important;
 }
 
 .ban-element {
