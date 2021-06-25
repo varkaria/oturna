@@ -1,10 +1,12 @@
-{% extends 'manager/base.html' %} {% block title %}Home{% endblock title %} {%
-block head %}
+{% extends 'manager/base.html' %} 
+{% block title %}Home{% endblock title %} 
+{% block head %}
 <link
   href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css"
   rel="stylesheet"
 />
-{% endblock %} {% block page_title %}
+{% endblock %} 
+{% block page_title %}
 <svg
   xmlns="http://www.w3.org/2000/svg"
   class="icon icon-tabler icon-tabler-list-check"
@@ -25,7 +27,9 @@ block head %}
   <line x1="11" y1="12" x2="20" y2="12" />
   <line x1="11" y1="18" x2="20" y2="18" />
 </svg>
-Dashboard: {% endblock page_title %} {% block content %}
+Dashboard: 
+{% endblock page_title %} 
+{% block content %}
 <div class="row row row-deck row-cards">
     <div class="col-12">
         <div class="card card-md align-items-center">

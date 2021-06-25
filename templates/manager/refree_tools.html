@@ -1,0 +1,572 @@
+{% extends 'manager/base.html' %}
+{% block title %}Home{% endblock title %}
+{% block page_title %}
+OM{{ match[0].code }} | {{ match[0].team1.full_name }} vs {{ match[0].team2.full_name }}
+{% endblock page_title %}
+{% block head %}
+<script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+<link rel="stylesheet" href="/static/css/manager/ref-tools.css">
+{% endblock head %}
+{% block content %}
+
+<div class="row mb-3" id="app">
+    <div class="col-lg-8" v-if='data.sets.length > 0'>
+        <div v-if="data.sets[`${current[0]}`].pick.length > 0">
+            <div v-if="data.sets[`${current[0]}`].finish == false">
+                <div class="next-match" v-if='data.finish == false'>
+                    <h1 class="text-center ref-header">Next Round</h1>
+                    <div class="mp-history-game">
+                        <a class="mpheader"
+                            :style="ConvertSetToURL(data.sets[`${current[0]}`].pick[`${current[1]}`].info.beatmapset_id)">
+                            <div class="mpheader-overlay"></div>
+                            <div class="mpstats-box"></div>
+                            <div class="mpmetadata-box">
+                                <h1 class="mpmetadata title">
+                                    <% data.sets[`${current[0] }`].pick[`${current[1] }`].info.title %>
+                                        [<% data.sets[`${current[0] }`].pick[`${current[1] }`].info.version %>]
+                                </h1>
+                                <h2 class="mpmetadata artist">
+                                    <% data.sets[`${current[0] }`].pick[`${current[1] }`].info.artist %>
+                                </h2>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="last-round" v-if='data.sets[`${current[0]}`].pick[0].result'>
+                    <h1 class="text-center ref-header">Last Round Result</h1>
+                    <div class="mp-history-game">
+                        <a class="mpheader" href="https://osu.ppy.sh/beatmaps/2065029"
+                            :style="ConvertSetToURL(data.sets[`${current[0]}`].pick[`${current[1]-1}`].info.beatmapset_id)">
+                            <div class="mpheader-overlay"></div>
+                            <div class="mpstats-box"></div>
+                            <div class="mpmetadata-box">
+                                <h1 class="mpmetadata title">
+                                    <% data.sets[`${current[0]}`].pick[`${current[1]-1}`].info.title %>
+                                        [<% data.sets[`${current[0]}`].pick[`${current[1]-1}`].info.version %>]
+                                </h1>
+                                <h2 class="mpmetadata artist">
+                                    <% data.sets[`${current[0]}`].pick[`${current[1]-1}`].info.artist %>
+                                </h2>
+                            </div>
+                            <div class="mpmods"></div>
+                        </a>
+                        <div class="mpplayer-scores">
+                            <div class="mpplayer-score mp-history-player-score"
+                                v-for="s in data.sets[`${current[0]}`].pick[`${current[1]-1}`].result">
+                                <div class="mpsshapes">
+                                    <img :src="'https://a.ppy.sh/'+s.user_id" class="mpsavatar">
+                                </div>
+                                <div class="mpsmain">
+                                    <div class="mpsinfo-box mpsinfo-box user">
+                                        <div class="mpsusername-box">
+                                            <a class="mpsusername">
+                                                <% s.username %>
+                                            </a>
+                                            <a class="mpsteam">team of <% s.teamname %></a>
+                                        </div>
+                                    </div>
+                                    <div class="mpsinfo-box mpsinfo-box stats">
+                                        <div class="mpsstat-row mpsstat-row first">
+                                            <div class="mpsstat combo">
+                                                <span class="mpsstat-label small">คอมโบ</span>
+                                                <span class="mpsstat-number medium">
+                                                    <% s.maxcombo %>
+                                                </span>
+                                            </div>
+                                            <div class="mpsstat score">
+                                                <span class="mpsstat-label small">คะแนน</span>
+                                                <span class="mpsstat-number large">
+                                                    <% s.score %>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="mpsstat-row">
+                                            <div class="mpsstat small">
+                                                <span class="mpsstat-label large">MAX</span>
+                                                <span class="mpsstat-number small">
+                                                    <% s.countgeki %>
+                                                </span>
+                                            </div>
+                                            <div class="mpsstat small">
+                                                <span class="mpsstat-label large">300</span>
+                                                <span class="mpsstat-number small">
+                                                    <% s.count300 %>
+                                                </span>
+                                            </div>
+                                            <div class="mpsstat small">
+                                                <span class="mpsstat-label large">200</span>
+                                                <span class="mpsstat-number small">
+                                                    <% s.countkatu %>
+                                                </span>
+                                            </div>
+                                            <div class="mpsstat small">
+                                                <span class="mpsstat-label large">100</span>
+                                                <span class="mpsstat-number small">
+                                                    <% s.count100 %>
+                                                </span>
+                                            </div>
+                                            <div class="mpsstat small">
+                                                <span class="mpsstat-label large">50</span>
+                                                <span class="mpsstat-number small">
+                                                    <% s.count50 %>
+                                                </span>
+                                            </div>
+                                            <div class="mpsstat small">
+                                                <span class="mpsstat-label large">Miss</span>
+                                                <span class="mpsstat-number small">
+                                                    <% s.countmiss %>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="mpresults">
+                                <span class="mpresults-text">
+                                    <% data.sets[`${current[0]}`].pick[`${current[1]-1}`].winner.teamname %> Wins
+                                </span>
+                                <span class="mpresults-text mpresults-text score">Now Score
+                                    <% data.sets[`${current[0]}`].score[0] %> | <% data.sets[`${current[0]}`].score[1]
+                                            %>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div v-if="data.finish == true">
+                <div class="last-round">
+                    <h1 class="text-center ref-header">Match Result</h1>
+                    <div class="matchResult">
+                        <div class="matchScore">
+                            <div class="teamAMatchScore">
+                                <div v-for="index in 2" :key="index">
+                                    <img v-if="data.score[0] >= index" class="circle-point-all">
+                                    <img v-else class="circle-point-all blank">
+                                </div>
+                            </div>
+                            <div class="teamBMatchScore">
+                                <div v-for="index in 2" :key="index">
+                                    <img v-if="data.score[1] >= index" class="circle-point-all">
+                                    <img v-else class="circle-point-all blank">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="matchScore" v-for="(set, index) in data.sets">
+                            <div class="teamAMatchScore" v-if="index == 2">
+                                <div v-for="index in 1" :key="index">
+                                    <img v-if="set.score[0] >= index" class="circle-point-sets">
+                                    <img v-else class="circle-point-sets blank">
+                                </div>
+                            </div>
+                            <div class="teamBMatchScore" v-if="index == 2">
+                                <div v-for="index in 1" :key="index">
+                                    <img v-if="set.score[1] >= index" class="circle-point-sets">
+                                    <img v-else class="circle-point-sets blank">
+                                </div>
+                            </div>
+                            <div class="teamAMatchScore" v-if="index != 2">
+                                <div v-for="index in 3" :key="index">
+                                    <img v-if="set.score[0] >= index" class="circle-point-sets">
+                                    <img v-else class="circle-point-sets blank">
+                                </div>
+                            </div>
+                            <div class="teamBMatchScore" v-if="index != 2">
+                                <div v-for="index in 3" :key="index">
+                                    <img v-if="set.score[1] >= index" class="circle-point-sets">
+                                    <img v-else class="circle-point-sets blank">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="matchWinner">
+                            <% data.winner.full_name %> wins!
+                        </div>
+                    </div>
+                    <a href="/manager/match_lock/{{ id }}" class="btn btn-primary w-100 mb-2">
+                        Lock this match now
+                    </a>
+                    <div class="mp-history-game">
+                        <div v-for="(s, index) in data.sets">
+                            <h1 class="text-center ref-header" v-if="index+1 == 3">Match Tiebreaker</h1>
+                            <h1 class="text-center ref-header" v-else>Sets <% index+1 %>
+                            </h1>
+                            <div class="mp-history-game" v-for="map in s.pick">
+                                <div v-if="map.result">
+                                    <a class="mpheader" :style="ConvertSetToURL(map.info.beatmapset_id)">
+                                        <div class="mpheader-overlay"></div>
+                                        <div class="mpstats-box"></div>
+                                        <div class="mpmetadata-box">
+                                            <h1 class="mpmetadata title">
+                                                <% map.info.title %>
+                                                    [<% map.info.version %>]
+                                            </h1>
+                                            <h2 class="mpmetadata artist">
+                                                <% map.info.artist %>
+                                            </h2>
+                                        </div>
+                                        <div class="mpmods"></div>
+                                    </a>
+                                    <div class="mpplayer-scores">
+                                        <div class="mpplayer-score mp-history-player-score" v-for="s in map.result">
+                                            <div class="mpsshapes">
+                                                <img :src="'https://a.ppy.sh/'+s.user_id" class="mpsavatar">
+                                            </div>
+                                            <div class="mpsmain">
+                                                <div class="mpsinfo-box mpsinfo-box user">
+                                                    <div class="mpsusername-box">
+                                                        <a class="mpsusername">
+                                                            <% s.username %>
+                                                        </a>
+                                                        <a class="mpsteam">team of <% s.teamname %></a>
+                                                    </div>
+                                                </div>
+                                                <div class="mpsinfo-box mpsinfo-box stats">
+                                                    <div class="mpsstat-row mpsstat-row first">
+                                                        <div class="mpsstat combo">
+                                                            <span class="mpsstat-label small">คอมโบ</span>
+                                                            <span class="mpsstat-number medium">
+                                                                <% s.maxcombo %>
+                                                            </span>
+                                                        </div>
+                                                        <div class="mpsstat score">
+                                                            <span class="mpsstat-label small">คะแนน</span>
+                                                            <span class="mpsstat-number large">
+                                                                <% s.score %>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mpsstat-row">
+                                                        <div class="mpsstat small">
+                                                            <span class="mpsstat-label large">MAX</span>
+                                                            <span class="mpsstat-number small">
+                                                                <% s.countgeki %>
+                                                            </span>
+                                                        </div>
+                                                        <div class="mpsstat small">
+                                                            <span class="mpsstat-label large">300</span>
+                                                            <span class="mpsstat-number small">
+                                                                <% s.count300 %>
+                                                            </span>
+                                                        </div>
+                                                        <div class="mpsstat small">
+                                                            <span class="mpsstat-label large">200</span>
+                                                            <span class="mpsstat-number small">
+                                                                <% s.countkatu %>
+                                                            </span>
+                                                        </div>
+                                                        <div class="mpsstat small">
+                                                            <span class="mpsstat-label large">100</span>
+                                                            <span class="mpsstat-number small">
+                                                                <% s.count100 %>
+                                                            </span>
+                                                        </div>
+                                                        <div class="mpsstat small">
+                                                            <span class="mpsstat-label large">50</span>
+                                                            <span class="mpsstat-number small">
+                                                                <% s.count50 %>
+                                                            </span>
+                                                        </div>
+                                                        <div class="mpsstat small">
+                                                            <span class="mpsstat-label large">Miss</span>
+                                                            <span class="mpsstat-number small">
+                                                                <% s.countmiss %>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mpresults">
+                                        <span class="mpresults-text">
+                                            <% map.winner.teamname %> Wins
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div v-else-if="data.sets[`${current[0]}`].finish == true">
+                <div class="last-round">
+                    <h1 class="text-center ref-header">Sets Result</h1>
+                    <div class="matchResult">
+                        <div class="matchScore">
+                            <div class="teamAMatchScore">
+                                <div v-for="index in 2" :key="index">
+                                    <img v-if="data.score[0] >= index" class="circle-point-all">
+                                    <img v-else class="circle-point-all blank">
+                                </div>
+                            </div>
+                            <div class="teamBMatchScore">
+                                <div v-for="index in 2" :key="index">
+                                    <img v-if="data.score[1] >= index" class="circle-point-all">
+                                    <img v-else class="circle-point-all blank">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="matchScore" v-for="(set, index) in data.sets">
+                            <div class="teamAMatchScore" v-if="index == 2">
+                                <div v-for="index in 1" :key="index">
+                                    <img v-if="set.score[0] >= index" class="circle-point-sets">
+                                    <img v-else class="circle-point-sets blank">
+                                </div>
+                            </div>
+                            <div class="teamBMatchScore" v-if="index == 2">
+                                <div v-for="index in 1" :key="index">
+                                    <img v-if="set.score[1] >= index" class="circle-point-sets">
+                                    <img v-else class="circle-point-sets blank">
+                                </div>
+                            </div>
+                            <div class="teamAMatchScore" v-if="index != 2">
+                                <div v-for="index in 3" :key="index">
+                                    <img v-if="set.score[0] >= index" class="circle-point-sets">
+                                    <img v-else class="circle-point-sets blank">
+                                </div>
+                            </div>
+                            <div class="teamBMatchScore" v-if="index != 2">
+                                <div v-for="index in 3" :key="index">
+                                    <img v-if="set.score[1] >= index" class="circle-point-sets">
+                                    <img v-else class="circle-point-sets blank">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mp-history-game">
+                        <h1 class="text-center" v-else>Sets <% data.current[0] %>
+                        </h1>
+                        <div class="mp-history-game" v-for="map in data.sets[`${current[0]}`].pick">
+                            <div v-if="map.result">
+                                <a class="mpheader" :style="ConvertSetToURL(map.info.beatmapset_id)">
+                                    <div class="mpheader-overlay"></div>
+                                    <div class="mpstats-box"></div>
+                                    <div class="mpmetadata-box">
+                                        <h1 class="mpmetadata title">
+                                            <% map.info.title %>
+                                                [<% map.info.version %>]
+                                        </h1>
+                                        <h2 class="mpmetadata artist">
+                                            <% map.info.artist %>
+                                        </h2>
+                                    </div>
+                                    <div class="mpmods"></div>
+                                </a>
+                                <div class="mpplayer-scores">
+                                    <div class="mpplayer-score mp-history-player-score" v-for="s in map.result">
+                                        <div class="mpsshapes">
+                                            <img :src="'https://a.ppy.sh/'+s.user_id" class="mpsavatar">
+                                        </div>
+                                        <div class="mpsmain">
+                                            <div class="mpsinfo-box mpsinfo-box user">
+                                                <div class="mpsusername-box">
+                                                    <a class="mpsusername">
+                                                        <% s.username %>
+                                                    </a>
+                                                    <a class="mpsteam">team of <% s.teamname %></a>
+                                                </div>
+                                            </div>
+                                            <div class="mpsinfo-box mpsinfo-box stats">
+                                                <div class="mpsstat-row mpsstat-row first">
+                                                    <div class="mpsstat combo">
+                                                        <span class="mpsstat-label small">คอมโบ</span>
+                                                        <span class="mpsstat-number medium">
+                                                            <% s.maxcombo %>
+                                                        </span>
+                                                    </div>
+                                                    <div class="mpsstat score">
+                                                        <span class="mpsstat-label small">คะแนน</span>
+                                                        <span class="mpsstat-number large">
+                                                            <% s.score %>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="mpsstat-row">
+                                                    <div class="mpsstat small">
+                                                        <span class="mpsstat-label large">MAX</span>
+                                                        <span class="mpsstat-number small">
+                                                            <% s.countgeki %>
+                                                        </span>
+                                                    </div>
+                                                    <div class="mpsstat small">
+                                                        <span class="mpsstat-label large">300</span>
+                                                        <span class="mpsstat-number small">
+                                                            <% s.count300 %>
+                                                        </span>
+                                                    </div>
+                                                    <div class="mpsstat small">
+                                                        <span class="mpsstat-label large">200</span>
+                                                        <span class="mpsstat-number small">
+                                                            <% s.countkatu %>
+                                                        </span>
+                                                    </div>
+                                                    <div class="mpsstat small">
+                                                        <span class="mpsstat-label large">100</span>
+                                                        <span class="mpsstat-number small">
+                                                            <% s.count100 %>
+                                                        </span>
+                                                    </div>
+                                                    <div class="mpsstat small">
+                                                        <span class="mpsstat-label large">50</span>
+                                                        <span class="mpsstat-number small">
+                                                            <% s.count50 %>
+                                                        </span>
+                                                    </div>
+                                                    <div class="mpsstat small">
+                                                        <span class="mpsstat-label large">Miss</span>
+                                                        <span class="mpsstat-number small">
+                                                            <% s.countmiss %>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mpresults">
+                                    <span class="mpresults-text">
+                                        <% map.winner.teamname %> Wins
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="mb-3">
+            <label class="form-label">Multiplayer Creation (Stuff)</label>
+            <input type="text" class="form-control mb-1" placeholder="Readonly..."
+                :value="'!mp make OMTHPL : ('+ data.team1.full_name +') vs (' + data.team2.full_name + ')'" readonly="">
+            <input type="text" class="form-control mb-1" placeholder="Readonly..."
+                :value="'!mp addref ' + data.streamer.username" readonly="">
+            <div class="input-group mb-2">
+                <input type="text" class="form-control" placeholder="Readonly..." value="!mp set 2 3 16" readonly="">
+                <input type="text" class="form-control" placeholder="Readonly..." value="!mp mods freemod" readonly="">
+            </div>
+            <div class="input-group mb-2">
+                <input type="text" class="form-control" placeholder="Readonly..." value="!mp timer 120" readonly="">
+                <input type="text" class="form-control" placeholder="Readonly..." value="!mp timer 300" readonly="">
+            </div>
+        </div>
+        <div class="mb-3" v-if='data.finish == false && data.sets.length > 0'>
+            <div v-if="data.sets[`${current[0]}`].pick.length > 4">
+                <div v-if="data.sets[`${current[0]}`].finish == false">
+                    <label class="form-label">Paste Commands</label>
+                    <div class="input-group mb-2" v-if="data.score[0] == 1 && data.score[1] == 1">
+                        <input type="text" class="form-control" :value="'Sets Result | ' + data.team1.full_name + ' ' + data.score[0] + ' - ' 
+                            + data.score[1] + ' ' + data.team2.full_name + ' | Match Tiebreaker | Next Round: ' 
+                            + data.sets[`${current[0] }`].pick[`${current[1] }`].info.title" readonly="">
+                        <input type="text" class="form-control"
+                            :value="'!mp map ' + data.sets[`${data.currentround[0]}`].pick[`${data.currentround[1]}`].map_id + ' 3'"
+                            readonly="">
+                    </div>
+                    <div class="input-group mb-2" v-else>
+                        <input type="text" class="form-control" :value="data.team1.full_name + ' ' + this.Bigtosmall(data.score[0]) + data.sets[`${current[0]}`].score[0] + ' - ' 
+                        + data.sets[`${current[0]}`].score[1] + this.Bigtosmall(data.score[1]) + ' ' + data.team2.full_name + ' | BO5 | Next Round: ' 
+                        + data.sets[`${current[0] }`].pick[`${current[1] }`].info.title + ' [' + data.sets[`${current[0] }`].pick[`${current[1] }`].mods + 
+                        data.sets[`${current[0] }`].pick[`${current[1] }`].code + ']'" readonly="">
+                        <input type="text" class="form-control"
+                            :value="'!mp map ' + data.sets[`${data.currentround[0]}`].pick[`${data.currentround[1]}`].map_id + ' 3'"
+                            readonly="">
+                    </div>
+                </div>
+            </div>
+            <div v-if="data.sets[1].pick.length < 4 && data.sets[0].finish == true">
+                <label class="form-label">Paste Result</label>
+                <div v-if="data.sets[`${current[0]}`].score[0] > data.sets[`${current[0]}`].score[1]">
+                    <div class="input-group mb-2">
+                        <input type="text" class="form-control" :value="`Set Result | ${data.team1.full_name} Win from this sets in ${data.sets[`${current[0]}`].score[0]} - ${data.sets[`${current[0]}`].score[1]}!! | Now match score is ${data.score[0]} - ${data.score[1]}`" readonly="">
+                    </div>
+                </div>
+                <div v-if="data.sets[`${current[0]}`].score[0] < data.sets[`${current[0]}`].score[1]">
+                    <div class="input-group mb-2">
+                        <input type="text" class="form-control" :value="`Set Result | ${data.team1.full_name} Win from this sets in ${data.sets[`${current[0]}`].score[0]} - ${data.sets[`${current[0]}`].score[1]}!! | Now match score is ${data.score[0]} - ${data.score[1]}`" readonly="">
+                    </div>
+                </div>
+                <input type="text" class="form-control" :value="`Start drafting in set 2 | https://omthpl.varkaria.tech/pickban/${banlink[1]}`" readonly="">
+            </div>
+        </div>
+        <div class="mb-3" v-if="data.finish == true">
+            <label class="form-label">Paste Result</label>
+            <div class="input-group mb-2">
+                <input type="text" class="form-control" :value="'Match Result | ' + data.team1.full_name + ' ' + data.score[0] + ' - ' 
+                    + data.score[1] + ' ' + data.team2.full_name + ' | '+ data.winner.full_name + ' Wins from this match. GG!!!'" readonly="">
+            </div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Multiplayer Link</label>
+            <div class="input-group mb-2">
+                <input type="text" class="form-control" placeholder="Waiting MP_Link" :value="data.mp_link" readonly="">
+            </div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Invite Player</label>
+            <div class="input-group mb-2">
+                <input v-for='a in data.team1.players' type="text" class="form-control" :value="'!mp invite '+ a"
+                    readonly="">
+            </div>
+            <div class="input-group mb-2">
+                <input v-for='a in data.team2.players' type="text" class="form-control" :value="'!mp invite '+ a"
+                    readonly="">
+            </div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Pick / Ban Link</label>
+            {% for e in banurl %}
+            <input type="text" class="form-control" value="https://omthpl.varkaria.tech/pickban/{{ e['random'] }}" readonly="">
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script>
+    new Vue({
+        el: "#app",
+        delimiters: ["<%", "%>"],
+        data() {
+            return {
+                data: {},
+                sets: [{}, {}],
+                current: [],
+                banlink: ['{{ banurl[0]["random"] }}','{{ banurl[1]["random"] }}']
+            }
+        },
+        created() {
+            this.LoadMatch();
+        },
+        methods: {
+            LoadMatch() {
+                axios.get('https://omthpl.varkaria.tech/manager/matchapi/{{ id }}/')
+                    .then(res => {
+                        this.$set(this, 'data', res.data)
+                        this.$set(this, 'current', res.data.currentround)
+                        console.log(this.data)
+                    })
+                setTimeout(this.LoadMatch, 5000);
+            },
+            ConvertSetToURL(set_id) {
+                return `background-image: url('https://assets.ppy.sh/beatmaps/${set_id}/covers/cover.jpg');`
+            },
+            Bigtosmall(i) {
+                if (i == 0) {
+                    return '₍₀₎'
+                } else if (i == 1) {
+                    return '₍₁₎'
+                } else if (i == 2) {
+                    return '₍₂₎'
+                } else {
+                    return 'ඞ'
+                }
+            }
+        },
+        computed: {}
+    });
+</script>
+{% endblock content %}

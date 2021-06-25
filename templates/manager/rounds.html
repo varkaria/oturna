@@ -14,7 +14,6 @@
                 <tr class="text-nowrap">
                     <th class="w-1">Id</th>
                     <th>Name</th>
-                    <th class="w-1">Best Of</th>
                     <th>Start Date</th>
                     <th>Pool Overview</th>
                     <th class="w-1">Publish</th>
@@ -29,7 +28,6 @@
                         <div class="font-weight-medium">{{ r.name }}</div>
                         <div class="text-muted">{{ r.description }}</div>
                     </td>
-                    <td>{{ r.best_of }}</td>
                     <td>{{ r.start_date | strdtf(sep=' ') }}</td>
                     <td>
                         <div class="d-flex">
@@ -92,10 +90,6 @@
                         <input type="text" class="form-control" name="description" maxlength="50" placeholder="(Optional) Simple Remarks">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label required">Best Of</label>
-                        <input type="number" class="form-control" name="best_of" min="0" value="9" required>
-                    </div>
-                    <div class="mb-3">
                         <label class="form-label required">Starting time</label>
                         <input type="datetime-local" class="form-control" name="start_date" step="1" required>
                     </div>
@@ -117,7 +111,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="" method="post" id="update-round-form" autocomplete="off">
+                <form method="post" id="update-round-form" autocomplete="off">
                     <input type="hidden" name="id" id="u-id">
                     <div class="mb-3">
                         <label class="form-label required">Round Name</label>
@@ -126,10 +120,6 @@
                     <div class="mb-3">
                         <label class="form-label">Short description</label>
                         <input type="text" class="form-control" id="u-description" name="description" maxlength="50" placeholder="(Optional) Simple Remarks">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label required">Best Of</label>
-                        <input type="number" class="form-control" id="u-best_of" name="best_of" min="0" value="9" required>
                     </div>
                     <div class="mb-3">
                         <label class="form-label required">Starting time</label>
@@ -232,7 +222,6 @@
                 $("#u-id").val(data.data.id);
                 $("#u-name").val(data.data.name);
                 $("#u-description").val(data.data.description);
-                $("#u-best_of").val(data.data.best_of);
                 $("#u-start_date").val(data.data.start_date);
                 $("#u-pool_publish")[0].checked = data.data.pool_publish == 1 ? true : false;
             })
