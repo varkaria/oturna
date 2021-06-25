@@ -6,30 +6,41 @@
     <title>leaderboard</title>
     <link rel="stylesheet" href="/static/css/stream/background.css">
     <link rel="stylesheet" href="/static/css/stream/leaderboard.css">
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <link rel="stylesheet" href="/static/css/stream/fonts/stylesheet.css">
 </head>
 
 <body class="fhe-body">
     <div class="fhe-mainFrame" id="app">
         <div class="c_main-lead">
             <div class="c_leaders">
-                <div class="c_leaderd1" v-for="(i , index) in data">
+                {% for i in d %}
+                <div class="c_leaderd1">
                     <div class="c_blockd2">
                         <img class="NLlR5AtN" src="/static/img/stream/leaderboard/man2.svg">
-                        <div class="c_team-name"><% i.full_name %></div>
-                        <div class="c_team-a" :style="`background-image:url(/team_flag/${i.id})`"></div>
+                        <div class="c_team-name">
+                            {{ i.full_name }}
+                        </div>
+                        <div class="c_team-a" style="background-image:url(/team_flag/{{i.id}})"></div>
                         <div class="c_points">
-                            <div class="c_d2"><% i.match_play %></div>
-                            <div class="c_d2"><% i.win %> - <% i.lose %></div>
-                            <div class="c_d2"><% i.points %></div>
+                            <div class="c_d2">
+                                {{i.match_play}}
+                            </div>
+                            <div class="c_d2">
+                                {{i.win}} - {{i.lose}}
+                            </div>
+                            <div class="c_d2">
+                                {{i.points}}
+                            </div>
                         </div>
                     </div>
                     <div class="c_blockd1">
                         <img class="Y5R0NBvI" src="/static/img/stream/leaderboard/man.svg">
-                        <div class="c_undun"><% index + 1 %></div>
+                        <div class="c_undun">
+                            {{loop.index}}
+                        </div>
                     </div>
                 </div>
+                {% endfor %}
             </div>
             <div class="c_td3">MP</div>
             <div class="c_td2">PTS</div>
@@ -41,30 +52,6 @@
             <div class="wave"></div>
         </section>
     </div>
-    <script>
-        new Vue({
-            el: "#app",
-            delimiters: ["<%", "%>"],
-            data() {
-                return {
-                    data: [],
-                }
-            },
-            created() {
-                this.LoadLeader();
-            },
-            methods: {
-                LoadLeader() {
-                    axios.get('http://localhost:5000/api/teams/leaderboard/')
-                        .then(res => {
-                            this.$set(this, 'data', res.data)
-                            console.log(this.data)
-                        })
-                }
-            },
-            computed: {}
-        });
-    </script>
 </body>
 
 </html>

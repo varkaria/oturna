@@ -77,7 +77,7 @@ p {
     top: 3px;
     left: 199px;
     color: rgba(255, 255, 255, 1);
-    font-family: DB Helvethaica X;
+    font-family: 'DB Helvethaica X';
     font-weight: 400;
     font-size: 48px;
     text-align: LEFT;
@@ -95,7 +95,7 @@ p {
     left: 38.2750301361084px;
     background-repeat: no-repeat;
     background-size: cover;
-    transform: rotate(360deg);
+    transform: rotate(356deg);
 }
 
 .c_points {
@@ -117,7 +117,7 @@ p {
     top: 0px;
     left: -4px;
     color: rgba(255, 255, 255, 1);
-    font-family: DB Helvethaica X;
+    font-family: 'DB Helvethaica X';
     font-weight: 400;
     font-size: 48px;
     text-align: center;
@@ -153,7 +153,7 @@ p {
     top: 3px;
     left: 26px;
     color: rgba(255, 255, 255, 1);
-    font-family: DB Helvethaica X;
+    font-family: 'DB Helvethaica X';
     font-weight: 400;
     font-size: 64px;
     text-align: center;
@@ -179,9 +179,9 @@ p {
     top: 3px;
     left: 199px;
     color: rgba(255, 255, 255, 1);
-    font-family: DB Helvethaica X;
-    font-weight: 400;
-    font-size: 48px;
+    font-family: 'DB Helvethaica X';
+    font-weight: 700;
+    font-size: 43px;
     text-align: LEFT;
     align-items: flex-start;
     line-height: 56.25px;
@@ -269,7 +269,7 @@ p {
     top: 0px;
     left: 1153px;
     color: rgba(255, 255, 255, 1);
-    font-family: DB Helvethaica X;
+    font-family: 'DB Helvethaica X';
     font-weight: 400;
     font-size: 36px;
     text-align: center;
@@ -286,7 +286,7 @@ p {
     top: 0px;
     left: 1433px;
     color: rgba(255, 255, 255, 1);
-    font-family: DB Helvethaica X;
+    font-family: 'DB Helvethaica X';
     font-weight: 400;
     font-size: 36px;
     text-align: center;
@@ -303,7 +303,7 @@ p {
     top: 0px;
     left: 1282px;
     color: rgba(255, 255, 255, 1);
-    font-family: DB Helvethaica X;
+    font-family: 'DB Helvethaica X';
     font-weight: 400;
     font-size: 36px;
     text-align: center;
@@ -320,7 +320,7 @@ p {
     top: 149px;
     left: 83px;
     color: rgba(255, 255, 255, 1);
-    font-family: DB Helvethaica X;
+    font-family: 'DB Helvethaica X';
     font-weight: 400;
     font-size: 48px;
     text-align: LEFT;
@@ -337,7 +337,7 @@ p {
     top: 54px;
     left: 80px;
     color: rgba(255, 255, 255, 1);
-    font-family: DB Helvethaica X;
+    font-family: 'DB Helvethaica X';
     font-weight: 400;
     font-size: 112px;
     text-align: LEFT;

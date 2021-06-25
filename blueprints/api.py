@@ -93,15 +93,6 @@ def teams(team_id: int):
         return jsonify(json.loads(data['json']))
     except Exception as e:
         abort(400, e)
-        
-@api.route('/teams/leaderboard/')
-@login_required
-def teams_leaderboard():
-    try:
-        data = db.query_all("SELECT * FROM `tourney`.`team` ORDER BY `points` DESC;")
-        return jsonify(data)
-    except Exception as e:
-        abort(400, e)
 
 @api.route('/maps/<int:map_id>/')
 @login_required
