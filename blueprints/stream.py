@@ -52,5 +52,11 @@ def leaderboard():
 @stream.route('/comment_points')
 def commentator_points():
     score = db.query_all("SELECT c_score AS `a` FROM `tourney`.`staff` ORDER BY `id` ASC;")
-    print(score)
     return render_template('stream/compre-point.html', s=score)
+
+@stream.route('/comment_match')
+def commentator_match():
+    lastest = db.query_one("SELECT id FROM `match` WHERE DATE > NOW() LIMIT 1")
+    print(lastest['id'])
+    preducts = db.query_all(f"SELECT cp.commentator, tw.full_name, tw.flag_name, tw.id, st.user_id, st.username, cp.s_team1, cp.s_team2, t1.full_name AS `team1`, t2.full_name AS `team2` FROM `com_preducts` `cp` LEFT JOIN `staff` `st` ON st.id = cp.commentator LEFT JOIN `team` `tw` ON tw.id = cp.s_win LEFT JOIN `match` `m` ON m.id = cp.match_id LEFT JOIN `team` `t1` ON t1.id = m.team1 LEFT JOIN `team` `t2` ON t2.id = m.team2 WHERE match_id=12 AND finish = 0")
+    return render_template('stream/preduction-match.html', preducts=preducts)
