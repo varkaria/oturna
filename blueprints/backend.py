@@ -94,13 +94,13 @@ def dashboard():
         'cancel': False,
         'nodata': False
         }
-        time = str(next_match['date'])[12:]
+        time = str(next_match['date'])[11:]
         orignal_date = next_data['n_match_time']
         date_sr = pd.to_datetime(pd.Series(orignal_date))
         change_format = date_sr.dt.strftime('%d/%m/%Y')
         next_data['n_match_time'] = str(change_format).replace('dtype: object', '')[2:] + time
 
-        if next_data['n_team1_name'] == None:
+        if next_data['n_team1_name'] == []:
             next_data['nodata'] = True
 
     last_match = db.query_one("""SELECT m.id, t1.full_name AS `team1_name`, t2.full_name AS `team2_name`, 
@@ -122,13 +122,13 @@ def dashboard():
         'cancel': False,
         'nodata': False
         }
-        time = str(last_match['date'])[12:]
+        time = str(last_match['date'])[11:]
         orignal_date = last_data['l_match_time']
         date_sr = pd.to_datetime(pd.Series(orignal_date))
         change_format = date_sr.dt.strftime('%d/%m/%Y')
         last_data['l_match_time'] = str(change_format).replace('dtype: object', '')[2:] + time
 
-        if last_data['l_team1_name'] == None:
+        if last_data['l_team1_name'] == []:
             last_data['nodata'] = True
 
         if last_data['stats'] == 1: # match not cancelled
