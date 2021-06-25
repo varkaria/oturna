@@ -272,6 +272,9 @@ class DB(object):
                 'state': state,
                 'finish': finish
             })
+
+            
+                
         
         if o_score[0] == o_score[1] and o_score[0] == o_score_to_win - 1:
             # match tb
@@ -411,6 +414,10 @@ class DB(object):
         mappool = self.query_all("SELECT id, mods, json FROM json_mappool where round_id = %s", res['round_id'])
 
         # checking it's sets 2?
+        team1 = res['team1']
+        team2 = res['team2']
+        ban_first = team1.copy()
+        pick_first = team2.copy()
         prev = self.query_all("SELECT id, finish_ban FROM match_sets WHERE match_id=%s", res['id'])
         if len(prev) >= 2 and prev[0]['finish_ban'] == 1:
             prevbanspicks = self.query_one("""SELECT JSON_ARRAYAGG(JSON_OBJECT('id', pb.id, 'set_id', pb.set_id, 'type', pb.type, 'map_id', pb.map_id, 'from', s.full_name, 'info', mp.info, 'mods', mp.mods)) AS 'last' 
@@ -419,6 +426,20 @@ class DB(object):
             LEFT JOIN `mappool` mp ON mp.beatmap_id = pb.map_id
             LEFT JOIN `team` s ON s.id = pb.from
             WHERE ms.id=%s""", res['id'])
+            result_from_last_set = self.get_full_match(res['id'])['sets'][0]['score']
+            team_lose = res[f'team{(result_from_last_set.index(3) + 1) % 2 + 1}']['fullname']
+            def select_team(team_lose):
+                select = input("Select team") # 1 and 2
+                if team_lose == team1['fullname']:
+                    if select == "2":
+                        ban_first = team2.copy()
+                        pick_first = team1.copy()
+                else:
+                    if select == "1":
+                        ban_first = team2.copy()
+                        pick_first = team1.copy()
+
+            select_team(team_lose)
 
         available_maps = []
         for s in mappool:
@@ -453,15 +474,15 @@ class DB(object):
                     res['status'] = 'pick'
 
                 if t in [0,3,5,6]:
-                    res['picker'] = res['team1']['leader_id']
-                    res['picker_t'] = res['team1']['full_name']
+                    res['picker'] = ban_first['leader_id']
+                    res['picker_t'] = ban_first['full_name']
                 else:
-                    res['picker'] = res['team2']['leader_id']
-                    res['picker_t'] = res['team2']['full_name']
+                    res['picker'] = pick_first['leader_id']
+                    res['picker_t'] = pick_first['full_name']
                 
             elif res['banpicks'][0]['from'] == None:
-                res['picker'] = res['team1']['leader_id']
-                res['picker_t'] = res['team1']['full_name']
+                res['picker'] = ban_first['leader_id']
+                res['picker_t'] = ban_first['full_name']
                 res['status'] = 'ban'
 
             if t == 8:
