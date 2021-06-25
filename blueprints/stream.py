@@ -43,3 +43,7 @@ def match():
 @stream.route('/countdown')
 def countdown():
     return render_template('stream/countdown.html')
+
+@stream.route('/leaderboard')
+def leaderboard():
+    return render_template('stream/leaderboard.html')
