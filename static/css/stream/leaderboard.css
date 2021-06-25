@@ -1,0 +1,358 @@
+p {
+    margin: 0;
+    padding: 0;
+}
+
+.fhe-body {
+    margin: 0;
+    background-color: rgba(44, 44, 44, 1);
+    height: 1080px;
+}
+
+.fhe-mainFrame {
+    background-color: rgba(44, 44, 44, 1);
+    height: 1080px;
+    width: 100%;
+    position: relative;
+    overflow: hidden
+}
+
+.c_main-lead {
+    display: flex;
+    position: absolute;
+    width: 1544px;
+    height: 680px;
+    top: 204px;
+    left: 188px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.c_leaders {
+    display: flex;
+    position: absolute;
+    width: 1544px;
+    height: 637px;
+    top: 43px;
+    left: 0px;
+    background-color: rgba(0, 0, 0, 0);
+    flex-direction: column;
+}
+
+.c_leaderd1 {
+    display: flex;
+    position: relative;
+    width: 1544px;
+    height: 87px;
+    top: 0px;
+    left: 0px;
+    background-color: rgba(0, 0, 0, 0);
+    margin-bottom: 20px;
+}
+
+.c_blockd2 {
+    display: flex;
+    position: absolute;
+    width: 1472px;
+    height: 65px;
+    top: 11px;
+    left: 72px;
+    background-color: rgba(0, 0, 0, 0);
+    overflow: hidden;
+}
+
+.NLlR5AtN {
+    position: absolute;
+    width: 1477.5px;
+    height: 64px;
+    top: 0px;
+    left: -7px;
+}
+
+.c_team-name--tname {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 749px;
+    height: 57px;
+    top: 3px;
+    left: 199px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 48px;
+    text-align: LEFT;
+    align-items: flex-start;
+    line-height: 56.25px;
+}
+
+.c_team-a {
+    display: flex;
+    position: absolute;
+    box-sizing: border-box;
+    width: 139.44993591308594px;
+    height: 139.44993591308594px;
+    top: -43.7249755859375px;
+    left: 38.2750301361084px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    transform: rotate(356deg);
+}
+
+.c_points {
+    display: flex;
+    position: absolute;
+    width: 385px;
+    height: 58px;
+    top: 3px;
+    left: 1051px;
+    background-color: rgba(0, 0, 0, 0);
+    gap: 46px;
+}
+
+.c_d2 {
+    display: flex;
+    flex-flow: row;
+    width: 500px;
+    height: 58px;
+    top: 0px;
+    left: -4px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 48px;
+    text-align: center;
+    align-items: flex-start;
+    line-height: 56.25px;
+    justify-content: center;
+}
+
+.c_blockd1 {
+    display: flex;
+    position: absolute;
+    width: 100px;
+    height: 87px;
+    top: 0px;
+    left: 0px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.Y5R0NBvI {
+    position: absolute;
+    width: 100px;
+    height: 87px;
+    top: 0px;
+    left: 0px;
+}
+
+.c_undun {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 48px;
+    height: 77px;
+    top: 3px;
+    left: 26px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 64px;
+    text-align: center;
+    align-items: flex-end;
+    line-height: 75px;
+    justify-content: center;
+}
+
+.P41llR93 {
+    position: absolute;
+    width: 1477.5px;
+    height: 64px;
+    top: 0px;
+    left: -7px;
+}
+
+.c_team-name {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 749px;
+    height: 57px;
+    top: 3px;
+    left: 199px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 700;
+    font-size: 43px;
+    text-align: LEFT;
+    align-items: flex-start;
+    line-height: 56.25px;
+    z-index: 2;
+}
+
+.t1UYIrjL {
+    position: absolute;
+    width: 100px;
+    height: 87px;
+    top: 0px;
+    left: 0px;
+}
+
+.yQXhxG1 {
+    position: absolute;
+    width: 1477.5px;
+    height: 64px;
+    top: 0px;
+    left: -7px;
+}
+
+.hfdqOVvl {
+    position: absolute;
+    width: 100px;
+    height: 87px;
+    top: 0px;
+    left: 0px;
+}
+
+.lWhA2Y0x {
+    position: absolute;
+    width: 1477.5px;
+    height: 64px;
+    top: 0px;
+    left: -7px;
+}
+
+.fjNGO4Ak {
+    position: absolute;
+    width: 100px;
+    height: 87px;
+    top: 0px;
+    left: 0px;
+}
+
+.xMuUJohw {
+    position: absolute;
+    width: 1477.5px;
+    height: 64px;
+    top: 0px;
+    left: -7px;
+}
+
+.mSceCZQt {
+    position: absolute;
+    width: 100px;
+    height: 87px;
+    top: 0px;
+    left: 0px;
+}
+
+.A342FcfV {
+    position: absolute;
+    width: 1477.5px;
+    height: 64px;
+    top: 0px;
+    left: -7px;
+}
+
+.mmMDL9Yd {
+    position: absolute;
+    width: 100px;
+    height: 87px;
+    top: 0px;
+    left: 0px;
+}
+
+.c_td3 {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 39px;
+    height: 43px;
+    top: 0px;
+    left: 1153px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 36px;
+    text-align: center;
+    align-items: flex-end;
+    line-height: 42.1875px;
+}
+
+.c_td2 {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 47px;
+    height: 43px;
+    top: 0px;
+    left: 1433px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 36px;
+    text-align: center;
+    align-items: flex-end;
+    line-height: 42.1875px;
+}
+
+.c_td1 {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 63px;
+    height: 43px;
+    top: 0px;
+    left: 1282px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 36px;
+    text-align: center;
+    align-items: flex-end;
+    line-height: 42.1875px;
+}
+
+.c_League_Phase_One {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 297px;
+    height: 58px;
+    top: 149px;
+    left: 83px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 48px;
+    text-align: LEFT;
+    align-items: flex-start;
+    line-height: 56.25px;
+}
+
+.c_Leaderboard {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 435px;
+    height: 134px;
+    top: 54px;
+    left: 80px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 112px;
+    text-align: LEFT;
+    align-items: flex-start;
+    line-height: 131.25px;
+}
+
+img {
+    filter: blur(0px)
+}
+
+section {
+    position: absolute;
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    z-index: 3;
+}

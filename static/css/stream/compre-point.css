@@ -1,0 +1,191 @@
+p {
+    margin: 0;
+    padding: 0;
+}
+
+.fhe-body {
+    margin: 0;
+    background-color: rgba(44, 45, 44, 1);
+    height: 768px;
+}
+
+.fhe-mainFrame {
+    background-color: rgba(44, 45, 44, 1);
+    height: 768px;
+    width: 100%;
+    position: relative;
+    overflow: hidden
+}
+
+.c_pointd6-7 {
+    font-size: 48px;
+}
+
+.c_pointd6-8 {
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+}
+
+.c_pointd6 {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 115px;
+    height: 24px;
+    top: 518px;
+    left: 527px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 48px;
+    text-align: LEFT;
+    align-items: flex-start;
+    line-height: 24px;
+}
+
+.c_pointd5-7 {
+    font-size: 48px;
+}
+
+.c_pointd5-8 {
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+}
+
+.c_pointd5 {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 115px;
+    height: 24px;
+    top: 519px;
+    left: 163px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 48px;
+    text-align: LEFT;
+    align-items: flex-start;
+    line-height: 24px;
+}
+
+.c_pointd4-7 {
+    font-size: 48px;
+}
+
+.c_pointd4-8 {
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+}
+
+.c_pointd4 {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 115px;
+    height: 24px;
+    top: 374px;
+    left: 527px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 48px;
+    text-align: LEFT;
+    align-items: flex-start;
+    line-height: 24px;
+}
+
+.c_pointd3-7 {
+    font-size: 48px;
+}
+
+.c_pointd3-8 {
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+}
+
+.c_pointd3 {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 115px;
+    height: 24px;
+    top: 375px;
+    left: 163px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 48px;
+    text-align: LEFT;
+    align-items: flex-start;
+    line-height: 24px;
+}
+
+.c_pointd2-7 {
+    font-size: 48px;
+}
+
+.c_pointd2-8 {
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+}
+
+.c_pointd2 {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 115px;
+    height: 24px;
+    top: 234px;
+    left: 527px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 48px;
+    text-align: LEFT;
+    align-items: flex-start;
+    line-height: 24px;
+}
+
+.c_pointd1-7 {
+    font-size: 48px;
+}
+
+.c_pointd1-8 {
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+}
+
+.c_pointd1 {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 115px;
+    height: 24px;
+    top: 234px;
+    left: 163px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 48px;
+    text-align: LEFT;
+    align-items: flex-start;
+    line-height: 24px;
+}
+
+.c_Infographic_d {
+    display: flex;
+    position: absolute;
+    box-sizing: border-box;
+    width: 1366px;
+    height: 768px;
+    top: 0px;
+    left: 0px;
+    background-image: url("/static/img/stream/comprepoint_sam.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.gap {
+    gap: 3px;
+}
