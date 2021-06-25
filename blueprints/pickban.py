@@ -41,4 +41,13 @@ def pickban_main(code):
 @pickban.route('/<code>/spectator')
 def pickban_spec(code):
     set_match = db.query('SELECT id, match_id FROM match_sets WHERE `random`=%s',[code])
-    return render_template('pickban/pickban.html', match_code=code, match_set=set_match['id'])
+    if set_match:
+        session['match_set_id'] = set_match['id']
+    return render_template('pickban/pickban_spec.html', match_code=code, match_set=set_match['id'])
+
+@pickban.route('/recent/spectator')
+def pickban_spec_recent(code):
+    set_match = db.query('SELECT id, match_id FROM match_sets WHERE `random`=%s',[code])
+    if set_match:
+        session['match_set_id'] = set_match['id']
+    return render_template('pickban/pickban_spec.html', match_code=code, match_set=set_match['id'])

@@ -204,6 +204,13 @@ class DB(object):
         man = osuapi.get(osuapi.V1Path.get_match, mp=int(parsed[1]))
         multi_games_data = man['games']
 
+        temp = self.query_all("SELECT mp_link FROM temp_mplink WHERE match_id=%s", (fulldata['id']))
+        if temp:
+            for a in temp:
+                x = os.path.split(a['mp_link'])
+                man = osuapi.get(osuapi.V1Path.get_match, mp=int(x[1]))
+                multi_games_data.append(a['games'])
+
         for s in l_sets: # นำข้อมูล sets มาเรียง
             score = [0,0]
             points_to_win = 3 # i'll add in mysql soon
@@ -230,8 +237,10 @@ class DB(object):
                     # มอบคะแนนให้กับทีมนั้นๆ 🧶
                     if score[0] == points_to_win:
                         o_score[0] += 1
+                        print('hrer')
                     else:
                         o_score[1] += 1
+                        print('here2')
                     # เปลี่ยนสถานะของเซ็ตนี้ให้กลายเป็น 10 (เซ็ตนี้จบแล้ว)
                     state = 0
                     finish = True
@@ -393,6 +402,7 @@ class DB(object):
             f"""SELECT JSON_OBJECT(
             'id', m.id,
             'set_id', ms.id,
+            'reverse', ms.reverse,
             'round_id', r.id,
             'mp_link', m.mp_link,
             'team1', JSON_OBJECT('id', t1.id, 'full_name', t1.full_name, 'flag_name', t1.flag_name, 'acronym', t1.acronym, 'online', p1.online, 'leader_id', p1.user_id, 'leader_name', p1.username),
@@ -416,34 +426,14 @@ class DB(object):
         res = json.loads(res['json'])
         mappool = self.query_all("SELECT id, mods, json FROM json_mappool where round_id = %s", res['round_id'])
 
-        # checking it's sets 2?
-        prev = self.query_all("SELECT id, finish_ban FROM match_sets WHERE match_id=%s", res['id'])
-        if len(prev) >= 2 and prev[0]['finish_ban'] == 1:
-            prevbanspicks = self.query_one("""SELECT JSON_ARRAYAGG(JSON_OBJECT('id', pb.id, 'set_id', pb.set_id, 'type', pb.type, 'map_id', pb.map_id, 'from', s.full_name, 'info', mp.info, 'mods', mp.mods)) AS 'last' 
-            FROM match_sets ms
-            LEFT JOIN `match_sets_banpick` pb ON pb.set_id = ms.id
-            LEFT JOIN `mappool` mp ON mp.beatmap_id = pb.map_id
-            LEFT JOIN `team` s ON s.id = pb.from
-            WHERE ms.id=%s""", res['id'])
+        e = []
 
         available_maps = []
         for s in mappool:
             d = json.loads(s['json'])
-            if len(prev) == 2 and prev[0]['finish_ban'] == 1:
-                e = json.loads(prevbanspicks['last'])
             if str(d['beatmap_id']) in str(res['banpicks']) or str(d['mods']) == 'TB' or str(d['mods']) == 'TBS':
                 continue
             else:
-                if len(prev) >= 2 and prev[0]['finish_ban'] == 1:
-                    if res['banpicks'][0]['from'] != None:
-                        try:
-                            if d['beatmap_id'] == e[len(res['banpicks'])]['map_id']:
-                                continue
-                        except IndexError:
-                            continue
-                    else:
-                        if d['beatmap_id'] == e[0]['map_id']:
-                            continue
                 available_maps.append({
                     'id': s['id'],
                     'mods': s['mods'],
@@ -457,13 +447,22 @@ class DB(object):
                     res['status'] = 'ban'
                 else:
                     res['status'] = 'pick'
-
-                if t in [0,3,5,6]:
-                    res['picker'] = res['team1']['leader_id']
-                    res['picker_t'] = res['team1']['full_name']
+                
+                reverse = self.query("SELECT reverse FROM `match_sets` WHERE `finish_ban`=0 LIMIT 1")
+                if reverse['reverse'] == 1:
+                    if t in [0,3,5,6]:
+                        res['picker'] = res['team2']['leader_id']
+                        res['picker_t'] = res['team2']['full_name']
+                    else:
+                        res['picker'] = res['team1']['leader_id']
+                        res['picker_t'] = res['team1']['full_name']
                 else:
-                    res['picker'] = res['team2']['leader_id']
-                    res['picker_t'] = res['team2']['full_name']
+                    if t in [0,3,5,6]:
+                        res['picker'] = res['team1']['leader_id']
+                        res['picker_t'] = res['team1']['full_name']
+                    else:
+                        res['picker'] = res['team2']['leader_id']
+                        res['picker_t'] = res['team2']['full_name']
                 
             elif res['banpicks'][0]['from'] == None:
                 res['picker'] = res['team1']['leader_id']

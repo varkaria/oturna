@@ -747,9 +747,9 @@ def refree_helper(id:int):
         flash("Couldn't found match did you put it", 'danger')
         return redirect(url_for('backend.matchs'))
 
-    if int(match_data[0]['referee']['id']) != int(session['id']):
-        flash("You didn't be refree in this match. you can be refree by click option and be referee it : )", 'danger')
-        return redirect(url_for('backend.matchs'))
+    # if int(match_data[0]['referee']['id']) != int(session['id']):
+    #     flash("You didn't be refree in this match. you can be refree by click option and be referee it : )", 'danger')
+    #     return redirect(url_for('backend.matchs'))
     
     if 'https://osu.ppy.sh/community/matches/' not in match_data[0]['mp_link']:
         return render_template('/manager/refree_tools_insert.html',match=match_data, id=id)
