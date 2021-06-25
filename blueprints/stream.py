@@ -46,4 +46,11 @@ def countdown():
 
 @stream.route('/leaderboard')
 def leaderboard():
-    return render_template('stream/leaderboard.html')
+    data = db.query_all("SELECT * FROM `tourney`.`team` ORDER BY `points` DESC;")
+    return render_template('stream/leaderboard.html', d=data)
+
+@stream.route('/comment_points')
+def commentator_points():
+    score = db.query_all("SELECT c_score AS `a` FROM `tourney`.`staff` ORDER BY `id` ASC;")
+    print(score)
+    return render_template('stream/compre-point.html', s=score)
