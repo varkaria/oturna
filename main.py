@@ -54,7 +54,7 @@ def handle_dis():
 @socketio.on('connect', namespace='/pickban')
 def handle_dis():
     try:
-        db.query("UPDATE `tourney`.`player` SET `online`='0' WHERE `user_id`=%s;", session['user_id'])
+        db.query("UPDATE `tourney`.`player` SET `online`='1' WHERE `user_id`=%s;", session['user_id'])
     except KeyError:
         print("Someone connecting socket with Anonymous person")
     emit(f'new_result_{session["match_set_id"]}', 'connect', broadcast=True)
