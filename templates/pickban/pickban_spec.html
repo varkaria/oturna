@@ -266,9 +266,8 @@
     </section>
     <section id="mappool" class="h-screen mx-auto pt-8 pr-20 pl-20" v-if='once == 0'>
         <div class="flex flex-wrap justify-center gap-4">
-            <div id="mapsel" :class="'card bg-dark map-card text-start ' + (results.picker != userid ? 'disabled':'')"
+            <div id="mapsel" :class="'card bg-dark map-card text-start disabled'"
                 v-for="(item, index) in results.available_maps" :key="item.id"
-                @click="pickban(results.set_id, item.info.beatmap_id, results.status)"
                 :style="'background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(https://assets.ppy.sh/beatmaps/'+ item.info.info.beatmapset_id +'/covers/cover.jpg);'">
                 <div class="card-img-overlay dark-background">
                     <div class="flex">
@@ -325,12 +324,6 @@
                 this.once = 0
                 console.log(this.results)
             })
-        },
-        methods: {
-            pickban(set, map, type) {
-                this.once = 1
-                socket.emit('pickban', { set, map, type })
-            }
         }
     });
 </script>
