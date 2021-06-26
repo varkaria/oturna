@@ -28,15 +28,9 @@ def matchs(match=None):
 def registeredlist():
     return render_template('registeredlist.html', players=db.get_players())
 
-
 @frontend.route('/player/<user_id>')
 def player(user_id=None):
     return render_template('player.html', user=user_id)
-
-# @frontend.route('/teams/')
-# @frontend.route('/teams/<team_id>')
-# def teams(team=None):
-#     return render_template('teams.html', team=team)
 
 @frontend.route('/mappools/')
 @frontend.route('/mappools/<pool_id>')

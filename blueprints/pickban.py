@@ -23,7 +23,7 @@ def get_leaders_match(id):
 
 @pickban.route('/')
 def index():
-    return 'hi uwu'
+    return '<h1>Hi uwu</h1>'
 
 @pickban.route('/<code>')
 @login_required
@@ -36,5 +36,24 @@ def pickban_main(code):
             return "you aren't being the leader of this match"
         return render_template('pickban/pickban.html', match_code=code, match_set=set_match['id'] )
 
-    return 'hi uwu 2'
+    return '<h1>Hi uwu 2</h1>'
+
+@pickban.route('/<code>/spectator')
+def pickban_spec(code):
+    set_match = db.query('SELECT id, match_id FROM match_sets WHERE `random`=%s',[code])
     
+    if set_match:
+        session['match_set_id'] = set_match['id']
+        return render_template('pickban/pickban_spec.html', match_code=code, match_set=set_match['id'])
+
+    return '<h1>Hi uwu 2</h1>'
+
+@pickban.route('/recent/spectator')
+def pickban_spec_recent(code):
+    set_match = db.query('SELECT id, match_id FROM match_sets WHERE `random`=%s',[code])
+    
+    if set_match:
+        session['match_set_id'] = set_match['id']
+        return render_template('pickban/pickban_spec.html', match_code=code, match_set=set_match['id'])
+
+    return '<h1>Hi uwu 2</h1>'

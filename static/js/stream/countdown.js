@@ -1,5 +1,5 @@
 // Set the date we're counting down to
-var countDownDate = new Date("June 13, 2021 19:00:00").getTime();
+var countDownDate = new Date("June 25, 2021 20:06:00").getTime();
 
 // Update the count down every 1 second
 anime({

@@ -196,7 +196,7 @@
                                     <li><button class="dropdown-item job_action comm remove text-danger"
                                             type="button">Delete Commentator</button></li>
                                     {% endif %}
-                                    {% if (cur_user.group_id == 4) and (cur_user.id not in m.preducts|map(attribute="commentator")) %}
+                                    {% if (cur_user.id not in m.preducts|map(attribute="commentator")) and m.current != true %}
                                     <li>
                                         <button class="dropdown-item go-preduction" type="button" data-bs-toggle="modal"
                                             data-bs-target="#preduction-modal">Preduction</button>

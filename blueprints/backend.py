@@ -8,9 +8,8 @@ from rich.console import Console
 from objects import osuapi, mysql
 from PIL import Image
 from objects.decorators import *
-import json, re, requests, datetime, os
+import json, re, requests, datetime, os, io, pathlib, random, string, zipfile
 import pandas as pd
-import random, string
 
 backend = Blueprint('backend', __name__)
 db = mysql.DB()
@@ -37,6 +36,11 @@ def conv(x):
         return x
     elif type(x) == list:
         return [c(a) for a in x]
+
+def allowed_file(filename):
+    FILE_EX = {'json'}
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in FILE_EX
 
 @backend.context_processor
 def context():
@@ -90,13 +94,13 @@ def dashboard():
         'cancel': False,
         'nodata': False
         }
-        time = str(next_match['date'])[12:]
+        time = str(next_match['date'])[11:]
         orignal_date = next_data['n_match_time']
         date_sr = pd.to_datetime(pd.Series(orignal_date))
         change_format = date_sr.dt.strftime('%d/%m/%Y')
         next_data['n_match_time'] = str(change_format).replace('dtype: object', '')[2:] + time
 
-        if next_data['n_team1_name'] == None:
+        if next_data['n_team1_name'] == []:
             next_data['nodata'] = True
 
     last_match = db.query_one("""SELECT m.id, t1.full_name AS `team1_name`, t2.full_name AS `team2_name`, 
@@ -118,13 +122,13 @@ def dashboard():
         'cancel': False,
         'nodata': False
         }
-        time = str(last_match['date'])[12:]
+        time = str(last_match['date'])[11:]
         orignal_date = last_data['l_match_time']
         date_sr = pd.to_datetime(pd.Series(orignal_date))
         change_format = date_sr.dt.strftime('%d/%m/%Y')
         last_data['l_match_time'] = str(change_format).replace('dtype: object', '')[2:] + time
 
-        if last_data['l_team1_name'] == None:
+        if last_data['l_team1_name'] == []:
             last_data['nodata'] = True
 
         if last_data['stats'] == 1: # match not cancelled
@@ -151,12 +155,6 @@ def dashboard():
         'current_progress': progress[progress_get],
         'ended': tour_end
     }
-
-    # reg: 0.07
-    # playoff: 0.285
-    # regular 1: 0.5
-    # regular 2: 0.715 
-    # champ: 0.935
 
     return render_template('manager/dashboard.html', players=players, time_delta=time_delta.strip('-'), colour=colour, 
                            next_data=next_data, last_data=last_data, progress_data=progress_data)
@@ -250,6 +248,10 @@ def match_preduct_update(id:int):
     l = request.form['lose']
     s = request.form['man']
     res = db.query_one(f"SELECT id, team1, team2 FROM `match` WHERE id={id}")
+
+    if int(l) not in [0,1]:
+        flash('you put lose score more than 1 man : (', 'danger')
+        return redirect(url_for('backend.matchs'))
     
     if s == 'team1':
             db.query_one("INSERT INTO `tourney`.`com_preducts` (`match_id`, `commentator`, `s_win`, `s_team1`, `s_team2`) VALUES (%s, %s, %s, %s, %s);", (id,session['id'],res[f'{s}'],2,l))
@@ -581,7 +583,6 @@ def staff():
                 db.query("Update staff Set active = 1 Where user_id = %s", (user_id))
         except Exception as e:
             flash(e.args[0], 'danger')
-            log.exception(e)
         finally:
             return redirect(url_for('backend.staff'))
 
@@ -678,7 +679,6 @@ def mappool_add(round):
         flash(info, 'success')
     except Exception as e:
         flash(e.args[0], 'danger')
-        log.exception(e)
     finally:
         return redirect(url_for('backend.mappool', round_id=round))
             
@@ -715,7 +715,6 @@ def mappool_update(round):
         flash(info, 'success')
     except Exception as e:
         flash(e.args, 'danger')
-        log.exception(e)
     finally:
         return redirect(url_for('backend.mappool', round_id=round))
 
@@ -728,7 +727,6 @@ def mappool_del(id, round):
         flash('Remove Success :happy:', 'success')
     except Exception as e:
         flash(e.args[0], 'danger')
-        log.exception(e)
     finally:
         return redirect(url_for('backend.mappool', round_id=round))
 
@@ -744,9 +742,9 @@ def refree_helper(id:int):
         flash("Couldn't found match did you put it", 'danger')
         return redirect(url_for('backend.matchs'))
 
-    if match_data['referee']['id'] != session['id']:
-        flash("You didn't be refree in this match. you can be refree by click option and be referee it : )", 'danger')
-        return redirect(url_for('backend.matchs'))
+    # if int(match_data[0]['referee']['id']) != int(session['id']):
+    #     flash("You didn't be refree in this match. you can be refree by click option and be referee it : )", 'danger')
+    #     return redirect(url_for('backend.matchs'))
     
     if 'https://osu.ppy.sh/community/matches/' not in match_data[0]['mp_link']:
         return render_template('/manager/refree_tools_insert.html',match=match_data, id=id)
@@ -786,13 +784,6 @@ def refree_helper_api(id:int):
 def showlist():
     return render_template('manager/streamer_tools/stream_list.html')
 
-BRACKETS_FOLDER = '.data/brackets'
-FILE_EX = {'json'}
-
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in FILE_EX
-
 @backend.route('/stream/json/upload', methods=['GET', 'POST'])
 def json_upload():
     if request.method == 'POST':
@@ -806,7 +797,7 @@ def json_upload():
                 id = str(session['user_id'])
                 date_time = now.strftime("%d-%m-%Y")
                 filename = '[' + id + ']' + ' ' + date_time + '.json'
-                file.save(os.path.join(BRACKETS_FOLDER, filename))
+                file.save(os.path.join(str(pathlib.Path('.data/brackets')), filename))
                 error = 'File upload successfully'
                 return render_template('manager/streamer_tools/json_upload.html', error=error)
             except KeyError:
@@ -819,7 +810,7 @@ def json_upload():
 
 @backend.route('/stream/json/download/', methods=['GET', 'POST'])
 def json_download():
-    path = BRACKETS_FOLDER
+    path = str(pathlib.Path('.data/brackets'))
     list_brackets = {}
     try:
         id = str(session['user_id'])
@@ -836,8 +827,16 @@ def json_download():
 
 @backend.route('/stream/json/download/<path:filename>')
 def download(filename):
-    file = os.path.join(current_app.root_path,
-                        BRACKETS_FOLDER) + '/' + filename
-    response = send_file(file, mimetype='application/json',
-                         attachment_filename='brackets.json', as_attachment=True)
+    file = str(pathlib.Path('.data/brackets/')) + '/' + filename
+    response = send_file(file, mimetype='application/json', attachment_filename='brackets.json', as_attachment=True)
     return response
+
+@backend.route('/stream/download_pic/')
+def team_pic():
+    path = pathlib.Path('.data/team_pics')
+    file = io.BytesIO()
+    with zipfile.ZipFile(file, mode='w') as z:
+        for f_name in path.iterdir():
+            z.write(f_name)
+    file.seek(0)
+    return send_file(file, mimetype='application/zip', attachment_filename='team_picture.zip', as_attachment=True)

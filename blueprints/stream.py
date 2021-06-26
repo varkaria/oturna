@@ -1,5 +1,4 @@
-import os, datetime
-from flask import Blueprint, render_template, request, session, current_app, Response, send_file
+from flask import Blueprint, render_template, request
 from objects import mysql
 
 db = mysql.DB()
@@ -36,10 +35,22 @@ def greeting_host():
 def m_showcase():
     return render_template('stream/showcase.html')
 
-@stream.route('/match')
-def match():
-    return render_template('stream/match.html')
-
 @stream.route('/countdown')
 def countdown():
     return render_template('stream/countdown.html')
+
+@stream.route('/leaderboard')
+def leaderboard():
+    data = db.query_all("SELECT * FROM `tourney`.`team` ORDER BY `points` DESC;")
+    return render_template('stream/leaderboard.html', d=data)
+
+@stream.route('/comment_points')
+def commentator_points():
+    score = db.query_all("SELECT c_score AS `a` FROM `tourney`.`staff` ORDER BY `id` ASC;")
+    return render_template('stream/compre-point.html', s=score)
+
+@stream.route('/comment_match')
+def commentator_match():
+    lastest = db.query_one("SELECT id FROM `match` WHERE DATE > NOW() LIMIT 1")
+    preducts = db.query_all(f"SELECT cp.commentator, tw.full_name, tw.flag_name, tw.id, st.user_id, st.username, cp.s_team1, cp.s_team2, t1.full_name AS `team1`, t2.full_name AS `team2` FROM `com_preducts` `cp` LEFT JOIN `staff` `st` ON st.id = cp.commentator LEFT JOIN `team` `tw` ON tw.id = cp.s_win LEFT JOIN `match` `m` ON m.id = cp.match_id LEFT JOIN `team` `t1` ON t1.id = m.team1 LEFT JOIN `team` `t2` ON t2.id = m.team2 WHERE match_id=%s AND finish = 0", (lastest['id']))
+    return render_template('stream/preduction-match.html', preducts=preducts)
