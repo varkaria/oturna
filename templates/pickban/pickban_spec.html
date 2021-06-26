@@ -12,15 +12,6 @@
 <div id="app">
     <nav class="mx-auto px-8">
         <div class="flex h-14 justify-between items-center">
-            <div class="flex-row justify-start text-white text-3xl">
-                <a href="/pickban">Pick & Ban</a>
-            </div>
-            <div class="flex-row justify-end text-white text-3xl">
-                <div class='flex gap-2 items-center'>
-                    <img src="https://a.ppy.sh/{{ session.user_id }}" class="avatar">
-                    <a href="/" class="text-xl right-16 top-4">{{ session.username }}</a>
-                </div>
-            </div>
         </div>
     </nav>
 
@@ -293,7 +284,7 @@
     integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
     crossorigin="anonymous"></script>
 <script type="text/javascript" charset="utf-8">
-    const socket = io('/pickban_n');
+    const socket = io('/pickban');
 
     new Vue({
         el: '#app',

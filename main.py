@@ -25,11 +25,11 @@ app.config.from_object(Config)
 socketio = SocketIO(app)
 
 # Pick ban Socket.io
-@socketio.on('firstdata', namespace='/pickban_n')
+@socketio.on('firstdata', namespace='/pickban')
 def handle_data(d):
     emit(f'data_result_{session["match_set_id"]}', db.get_match_sets_ban_pick_full(session["match_set_id"]))
 
-@socketio.on('pickban', namespace='/pickban_n')
+@socketio.on('pickban', namespace='/pickban')
 def handle_data(d):
     if not session:
         return emit('new_result', 'You are not login yet?')
@@ -37,18 +37,18 @@ def handle_data(d):
     db.query('INSERT INTO match_sets_banpick (`set_id`, `map_id`, `from`, `type`) VALUES (%s, %s, %s, %s);', [d['set'], d['map'], t_data['id'], d['type']])
     emit(f'new_result_{session["match_set_id"]}', db.get_match_sets_ban_pick_full(session["match_set_id"]), broadcast=True)
 
-@socketio.on('ready', namespace='/pickban_n')
+@socketio.on('ready', namespace='/pickban')
 def handle_data(d):
     if not session:
         return emit('new_result', 'You are not login yet?')
     emit(f'new_result_{session["match_set_id"]}', db.get_match_sets_ban_pick_full(session["match_set_id"]), broadcast=True)
 
-@socketio.on('disconnect', namespace='/pickban_n')
+@socketio.on('disconnect', namespace='/pickban')
 def handle_dis():
     db.query("UPDATE `tourney`.`player` SET `online`='0' WHERE  `user_id`=%s;", session['user_id'])
-    emit(f'new_result_{session["match_set_id"]}', 'gone', broadcast=True)
+    emit(f'new_result_{session["match_set_id"]}', 'disconnected', broadcast=True)
 
-@socketio.on('connect', namespace='/pickban_n')
+@socketio.on('connect', namespace='/pickban')
 def handle_dis():
     db.query("UPDATE `tourney`.`player` SET `online`='0' WHERE  `user_id`=%s;", session['user_id'])
     emit(f'new_result_{session["match_set_id"]}', 'connect', broadcast=True)

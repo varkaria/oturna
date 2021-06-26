@@ -390,7 +390,7 @@ class DB(object):
             """)
 
         res = json.loads(res['json'])
-        mappool = self.query_all("SELECT id, mods, json FROM json_mappool where round_id = %s", res['round_id'])
+        mappool = self.query_all(f"SELECT id, mods, json FROM json_mappool where `round_id`={res['round_id']}")
 
         e = []
 
