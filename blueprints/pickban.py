@@ -51,6 +51,10 @@ def pickban_spec(code):
 @pickban.route('/recent/spectator')
 def pickban_spec_recent():
     findcode = db.query('SELECT `match_sets`.`random`, `match`.id FROM `match_sets` LEFT JOIN `match` ON `match`.id = `match_sets`.match_id WHERE `match`.`date` < NOW() AND finish_ban=0 LIMIT 1')
+    
+    if not findcode:
+        return "now banpicks didn't found"
+    
     code = findcode['random']
     set_match = db.query('SELECT id, match_id FROM match_sets WHERE `random`=%s',[code])
     
@@ -63,8 +67,11 @@ def pickban_spec_recent():
 @pickban.route('/recent/streamer')
 def pickban_stream_recent():
     findcode = db.query('SELECT `match_sets`.`random`, `match`.id FROM `match_sets` LEFT JOIN `match` ON `match`.id = `match_sets`.match_id WHERE `match`.`date` < NOW() AND finish_ban=0 LIMIT 1')
+    
+    if not findcode:
+        return "now banpicks didn't found"
+    
     code = findcode['random']
-    print(code)
     set_match = db.query('SELECT id, match_id FROM match_sets WHERE `random`=%s',[code])
     
     if set_match:
