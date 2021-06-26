@@ -311,14 +311,17 @@ class DB(object):
         else:
             fulldata['currentround'] = [0,0]
 
-       
+        def calculate_point(o_score):
+            r, b = o_score
+            return [r + 1 - min(b, 1), b + 1 - min(r, 1)]
+        team_1_score, team_2_score = calculate_point(o_score)
         # Saving data in database       
-        self.query_one(f'UPDATE `tourney`.`match` SET `team2_score`="{o_score[1]}" WHERE `id`={fulldata["id"]};')
-        self.query_one(f'UPDATE `tourney`.`match` SET `team1_score`="{o_score[0]}" WHERE `id`={fulldata["id"]};')
+        self.query_one(f'UPDATE `tourney`.`match` SET `team2_score`="{team_2_score}" WHERE `id`={fulldata["id"]};')
+        self.query_one(f'UPDATE `tourney`.`match` SET `team1_score`="{team_1_score}" WHERE `id`={fulldata["id"]};')
 
         if set == 1 and finish == True and fulldata['lock'] == 0:
-            self.query_one(f'UPDATE `tourney`.`team` SET `points`=`points`+ {o_score[0]} WHERE `id`={fulldata["team1"]["id"]};')
-            self.query_one(f'UPDATE `tourney`.`team` SET `points`=`points`+ {o_score[1]} WHERE `id`={fulldata["team2"]["id"]};')
+            self.query_one(f'UPDATE `tourney`.`team` SET `points`=`points`+ {team_1_score} WHERE `id`={fulldata["team1"]["id"]};')
+            self.query_one(f'UPDATE `tourney`.`team` SET `points`=`points`+ {team_2_score} WHERE `id`={fulldata["team2"]["id"]};')
             if o_score[0] == 2:
                 self.query_one(f'UPDATE `tourney`.`team` SET `win`=`win`+ 1 WHERE `id`={fulldata["team1"]["id"]};')
                 self.query_one(f'UPDATE `tourney`.`team` SET `lose`=`lose`+ 1 WHERE `id`={fulldata["team2"]["id"]};')

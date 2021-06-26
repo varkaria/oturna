@@ -361,7 +361,6 @@
             socket.on(`new_result_${setid}`, msg => {
                 this.results = msg
                 this.once = 0
-                console.log(this.results)
             })
         },
         methods: {
