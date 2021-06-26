@@ -187,5 +187,5 @@ p {
 }
 
 .gap {
-    gap: 3px;
+    place-content: space-between;
 }

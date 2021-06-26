@@ -1,0 +1,679 @@
+p {
+    margin: 0;
+    padding: 0;
+}
+
+.fhe-body {
+    margin: 0;
+    background-color: rgba(44, 45, 44, 1);
+    height: 768px;
+}
+
+.fhe-mainFrame {
+    background-color: rgba(44, 45, 44, 1);
+    height: 768px;
+    width: 100%;
+    position: relative;
+    overflow: hidden
+}
+
+.picker-text-5 {
+    font-size: 48px;
+    margin-left: 10px;
+}
+
+.picker-text-6 {
+    font-family: 'DB Helvethaica X';
+    font-weight: 600;
+    font-size: 48px;
+}
+
+.picker-text {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 724px;
+    height: 39px;
+    top: 689px;
+    left: 321px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 48px;
+    text-align: center;
+    align-items: center;
+    line-height: 38.819061279296875px;
+    justify-content: center;
+    z-index: 5;
+}
+
+.ban-elements {
+    display: flex;
+    position: absolute;
+    width: 665px;
+    height: 579px;
+    top: 58px;
+    left: 351px;
+    background-color: rgba(0, 0, 0, 0);
+    z-index: 5;
+}
+
+.banpick-1 {
+    display: flex;
+    position: absolute;
+    width: 320px;
+    height: 83px;
+    top: 0px;
+    left: 0px;
+    background-color: rgb(0 0 0 / 22%);
+    overflow: hidden;
+}
+
+.mods-block {
+    display: flex;
+    position: absolute;
+    width: 26px;
+    height: 83px;
+    top: 0px;
+    right: 0px;
+    background-color: rgba(47, 118, 202, 1);
+    overflow: hidden;
+}
+
+.mods-text {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 15px;
+    height: 18px;
+    top: 33px;
+    left: 5px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 18px;
+    text-align: center;
+    align-items: center;
+    line-height: 14.557148933410645px;
+}
+
+.song-title {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 281px;
+    height: 19px;
+    top: 31px;
+    left: 13px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 24px;
+    text-align: LEFT;
+    align-items: center;
+    line-height: 19.409530639648438px;
+}
+
+.song-artist {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 281px;
+    height: 15px;
+    top: 15px;
+    left: 13px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 18px;
+    text-align: LEFT;
+    align-items: center;
+    line-height: 14.557148933410645px;
+}
+
+.banpick-2 {
+    display: flex;
+    position: absolute;
+    width: 320px;
+    height: 83px;
+    top: 42px;
+    left: 345px;
+    background-color: rgba(0, 0, 0, 0);
+    overflow: hidden;
+    background-color: rgb(0 0 0 / 22%);
+}
+
+.banpick-3 {
+    display: flex;
+    position: absolute;
+    width: 320px;
+    height: 84px;
+    top: 143px;
+    left: 345px;
+    background-color: rgba(0, 0, 0, 0.30000001192092896);
+    overflow: hidden;
+}
+
+.picking-text {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 189px;
+    height: 39px;
+    top: 23px;
+    left: 65px;
+    color: rgb(103 103 103);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 43px;
+    text-align: center;
+    align-items: center;
+    line-height: 38.819061279296875px;
+    justify-content: center;
+    animation-name: stroke-fade;
+    animation-duration: 5s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+.banpick-4 {
+    display: flex;
+    position: absolute;
+    width: 320px;
+    height: 84px;
+    top: 204px;
+    left: 0px;
+    background-color: rgba(0, 0, 0, 0.30000001192092896);
+    overflow: hidden;
+}
+
+.banpick-5 {
+    display: flex;
+    position: absolute;
+    width: 320px;
+    height: 84px;
+    top: 272px;
+    left: 345px;
+    background-color: rgba(0, 0, 0, 0.30000001192092896);
+    overflow: hidden;
+}
+
+.banpick-6 {
+    display: flex;
+    position: absolute;
+    width: 320px;
+    height: 83px;
+    top: 340px;
+    left: 0px;
+    background-color: rgba(0, 0, 0, 0.30000001192092896);
+    overflow: hidden;
+}
+
+.banpick-7 {
+    display: flex;
+    position: absolute;
+    width: 320px;
+    height: 83px;
+    top: 441px;
+    left: 0px;
+    background-color: rgba(0, 0, 0, 0.30000001192092896);
+    overflow: hidden;
+}
+
+.banpick-8 {
+    display: flex;
+    position: absolute;
+    width: 320px;
+    height: 83px;
+    top: 496px;
+    left: 345px;
+    background-color: rgba(0, 0, 0, 0.30000001192092896);
+    overflow: hidden;
+}
+
+.team1-main {
+    display: flex;
+    position: absolute;
+    width: 321px;
+    height: 768px;
+    top: 0px;
+    left: 0px;
+    background-color: rgba(0, 0, 0, 0);
+    z-index: 5;
+}
+
+.team1-req02 {
+    display: flex;
+    position: absolute;
+    box-sizing: border-box;
+    width: 308px;
+    height: 768px;
+    top: 0px;
+    left: 0px;
+    background-color: rgb(72 72 72);
+}
+
+.team1-req01 {
+    display: flex;
+    position: absolute;
+    width: 13px;
+    height: 768px;
+    top: 0px;
+    left: 300px;
+    background-color: rgb(72 72 72);
+    overflow: hidden;
+}
+
+.team1-avatar {
+    display: flex;
+    position: absolute;
+    width: 308px;
+    height: 308px;
+    top: 76px;
+    left: 0px;
+    background-color: rgba(0, 0, 0, 0);
+    overflow: hidden;
+    background-size: cover;
+}
+
+.team1-name-block {
+    display: flex;
+    position: absolute;
+    width: 275px;
+    height: 39px;
+    top: 359px;
+    left: 10px;
+    background-color: rgba(255, 255, 255, 1);
+    overflow: hidden;
+}
+
+.team1-name {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 263px;
+    height: 29px;
+    top: 5px;
+    left: 12px;
+    color: rgb(72 72 72);
+    font-family: 'DB Helvethaica X';
+    font-weight: 600;
+    font-size: 36px;
+    text-align: LEFT;
+    align-items: center;
+    line-height: 29.11429786682129px;
+}
+
+.team1-player1 {
+    display: flex;
+    position: absolute;
+    width: 134px;
+    height: 81px;
+    top: 445px;
+    left: 22px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.team1-player-username {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    top: 62px;
+    left: 0px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 24px;
+    text-align: LEFT;
+    align-items: center;
+    line-height: 19.409530639648438px;
+}
+
+.team1-player-ava {
+    display: flex;
+    position: absolute;
+    width: 57px;
+    height: 57px;
+    top: 0px;
+    left: 0px;
+    background-color: rgb(255 255 255 / 63%);
+    overflow: hidden;
+    border-radius: 3px;
+}
+
+.team1-player2 {
+    display: flex;
+    position: absolute;
+    width: 165px;
+    height: 81px;
+    top: 445px;
+    left: 156px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.team1-playerlist {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 100px;
+    height: 19px;
+    top: 419px;
+    left: 22px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 24px;
+    text-align: LEFT;
+    align-items: center;
+    line-height: 19.409530639648438px;
+}
+
+.scores {
+    display: flex;
+    position: absolute;
+    width: 160px;
+    height: 30px;
+    top: 23px;
+    left: 74px;
+    background-color: rgba(0, 0, 0, 0);
+    justify-content: center;
+}
+
+.blue-movable-block {
+    display: flex;
+    position: absolute;
+    box-sizing: border-box;
+    width: 16px;
+    height: 50px;
+    top: 75px;
+    left: 321px;
+    background-color: rgb(72 72 72);
+    transition: 1s ease;
+    z-index: 5;
+}
+
+.red-movable-block {
+    display: flex;
+    position: absolute;
+    box-sizing: border-box;
+    width: 16px;
+    height: 50px;
+    top: 117px;
+    left: 1030px;
+    background-color: rgb(72 72 72);
+    transition: 1s ease;
+    z-index: 5;
+}
+
+.team2-main {
+    display: flex;
+    position: absolute;
+    width: 321px;
+    height: 768px;
+    top: 0px;
+    left: 1045px;
+    background-color: rgba(0, 0, 0, 0);
+    z-index: 5;
+}
+
+.team2-req02 {
+    display: flex;
+    position: absolute;
+    width: 13px;
+    height: 768px;
+    top: 0px;
+    left: 6px;
+    background-color: rgb(72 72 72);
+    overflow: hidden;
+}
+
+.team2-req01 {
+    display: flex;
+    position: absolute;
+    box-sizing: border-box;
+    width: 308px;
+    height: 768px;
+    top: 0px;
+    left: 13px;
+    background-color: rgb(72 72 72);
+}
+
+.team2-avatar {
+    display: flex;
+    position: absolute;
+    width: 308px;
+    height: 308px;
+    top: 76px;
+    left: 13px;
+    background-color: rgba(0, 0, 0, 0);
+    overflow: hidden;
+    background-size: cover;
+}
+
+.team2-name-block {
+    display: flex;
+    position: absolute;
+    width: 275px;
+    height: 39px;
+    top: 359px;
+    left: 36px;
+    background-color: rgba(255, 255, 255, 1);
+    overflow: hidden;
+}
+
+.team2-name {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    top: 5px;
+    right: 12px;
+    color: rgb(72 72 72);
+    font-family: 'DB Helvethaica X';
+    font-weight: 600;
+    font-size: 36px;
+    text-align: RIGHT;
+    align-items: center;
+    line-height: 29.11429786682129px;
+    justify-content: flex-end;
+}
+
+.score-circle {
+    width: 30px;
+    height: 30px;
+    background: white;
+    border-radius: 20px;
+    opacity: 0.3;
+    margin: 0px 10px;
+}
+
+.score-circle.pop {
+    opacity: 1 !important;
+}
+
+.team2-player2 {
+    display: flex;
+    position: absolute;
+    width: 167px;
+    height: 81px;
+    top: 445px;
+    left: 0px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.team2-player-username {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    top: 62px;
+    right: 0px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 24px;
+    text-align: RIGHT;
+    align-items: center;
+    line-height: 19.409530639648438px;
+    justify-content: flex-end;
+}
+
+.team2-player-ava {
+    display: flex;
+    position: absolute;
+    width: 57px;
+    height: 57px;
+    top: 0px;
+    right: 0;
+    background-color: rgb(255 255 255);
+    overflow: hidden;
+    border-radius: 3px;
+}
+
+.team2-player1 {
+    display: flex;
+    position: absolute;
+    width: 133px;
+    height: 81px;
+    top: 445px;
+    left: 167px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.team2-playerlist {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 95px;
+    height: 19px;
+    top: 419px;
+    left: 219px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 24px;
+    text-align: LEFT;
+    align-items: center;
+    line-height: 19.409530639648438px;
+}
+
+.header {
+    display: flex;
+    position: absolute;
+    width: 723px;
+    height: 37px;
+    top: 0px;
+    left: 321px;
+    background-color: rgba(0, 0, 0, 0.46000000834465027);
+    overflow: hidden;
+}
+
+.header-title {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 541px;
+    height: 19px;
+    top: 9px;
+    left: 29px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 24px;
+    text-align: LEFT;
+    align-items: center;
+    line-height: 19.409530639648438px;
+}
+
+.header-sub {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 124px;
+    height: 19px;
+    top: 9px;
+    left: 570px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 24px;
+    text-align: RIGHT;
+    align-items: center;
+    line-height: 19.409530639648438px;
+}
+
+.red-t {
+    color: rgba(202, 48, 71, 1);
+}
+
+.red-b {
+    background-color: rgba(202, 48, 71, 1);
+}
+
+.blue-t {
+    color: rgba(47, 118, 202, 1);
+}
+
+.blue-b {
+    background-color: rgba(47, 118, 202, 1);
+}
+
+@keyframes stroke-fade {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.blue-movable-block.stage-1 {
+    transform: translateY(0px);
+}
+.blue-movable-block.stage-2 {
+    transform: translateY(0px);
+}
+.blue-movable-block.stage-3 {
+    transform: translateY(0px);
+}
+.blue-movable-block.stage-4 {
+    transform: translateY(202px);
+}
+.blue-movable-block.stage-5 {
+    transform: translateY(202px);
+}
+.blue-movable-block.stage-6 {
+    transform: translateY(339px);
+}
+.blue-movable-block.stage-7 {
+    transform: translateY(440px);
+}
+.blue-movable-block.stage-8 {
+    transform: translateY(440px);
+}
+
+.red-movable-block.stage-1 {
+    transform: translateY(0px);
+}
+.red-movable-block.stage-2 {
+    transform: translateY(0px);
+}
+.red-movable-block.stage-3 {
+    transform: translateY(100px);
+}
+.red-movable-block.stage-4 {
+    transform: translateY(100px);
+}
+.red-movable-block.stage-5 {
+    transform: translateY(227px);
+}
+.red-movable-block.stage-6 {
+    transform: translateY(227px);
+}
+.red-movable-block.stage-7 {
+    transform: translateY(227px);
+}
+.red-movable-block.stage-8 {
+    transform: translateY(455px);
+}

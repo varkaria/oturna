@@ -19,6 +19,7 @@ var x = setInterval(function () {
     // Time calculations for days, hours, minutes and seconds
     var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
     var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    var vid = document.getElementById("myVideo"); 
 
     function formatTime(time) {
         return time < 10 ? `0${time}` : time;
@@ -29,40 +30,9 @@ var x = setInterval(function () {
     if (distance < 0) {
         clearInterval(x);
         if (doasone == 0) {
-            anime.timeline()
-                .add({
-                    targets: '.countdown',
-                    opacity: [1, 0],
-                    easing: "easeInOutExpo",
-                    duration: 700
-                }).add({
-                    targets: '.now_playing',
-                    opacity: [1, 0],
-                    easing: "easeInOutExpo",
-                    duration: 600
-                }, '-=700').add({
-                    targets: '.started',
-                    opacity: [0, 1],
-                    easing: "easeInOutExpo",
-                    duration: 700
-                }, '-=200').add({
-                    targets: '.logo',
-                    opacity: [0, 1],
-                    translateX: ["1em", 0],
-                    easing: "easeOutExpo",
-                    duration: 600,
-                }, '-=600').add({
-                    targets: '.mascot',
-                    opacity: [0, 1],
-                    translateX: ["-1em", 0],
-                    easing: "easeOutExpo",
-                    duration: 600,
-                }, '-=400').add({
-                    targets: '.console',
-                    opacity: [0, 1],
-                    duration: 500,
-                    easing: "easeOutExpo",
-                });
+            document.getElementById('timer').remove()
+            vid.mute = true; // without this line it's not working although I have "muted" in HTML
+            vid.play();
             doasone = 1
         }
     }
