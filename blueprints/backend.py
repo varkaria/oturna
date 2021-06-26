@@ -861,18 +861,24 @@ def image_leaderboard():
     margin = 110
     teams = 6
 
+    data = db.query_all("SELECT * FROM `tourney`.`team` ORDER BY `points` DESC;")
+
     for i in range(teams):
-        sample = Image.open("pillow/leaderboard/team_sample.png")
+        try:
+            sample = Image.open(f".data/team_pics/{data[i]['id']}.jpg")
+        except:
+            sample = Image.open(f"pillow/leaderboard/team_sample.png")
+            
         sample = sample.resize((201,201), Image.ANTIALIAS)
         sample = ImageOps.crop(sample, (0,72,0,65))
         mask = Image.open("pillow/leaderboard/team_mask.png").resize(sample.size).convert('L')
         im.paste(sample, (334,258+(margin*i)), mask=mask)
 
         # Drawing some text
-        draw.text((562, 262+(margin*i)), "Varkaria", font=default)
-        draw.text((1360, 302+(margin*i)), "21", font=default, anchor='ms')
-        draw.text((1503, 302+(margin*i)), "2 - 8", font=default, anchor='ms')
-        draw.text((1645, 302+(margin*i)), "51", font=bold, anchor='ms')
+        draw.text((562, 262+(margin*i)), f"{data[i]['full_name']}", font=default)
+        draw.text((1360, 302+(margin*i)), f"{data[i]['match_play']}", font=default, anchor='ms')
+        draw.text((1503, 302+(margin*i)), f"{data[i]['win']} - {data[i]['lose']}", font=default, anchor='ms')
+        draw.text((1645, 302+(margin*i)), f"{data[i]['points']}", font=bold, anchor='ms')
 
     return serve_pil_image(im)
 
