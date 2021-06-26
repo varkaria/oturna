@@ -479,7 +479,7 @@ OM{{ match[0].code }} | {{ match[0].team1.full_name }} vs {{ match[0].team2.full
                             </div>
                         </div>
                     </div>
-                    <div v-if="data.sets[1].pick.length < 0 && data.sets[0].finish == true">
+                    <div v-if="data.sets[1].pick.length == 0 && data.sets[0].finish == true">
                         <label class="form-label">Paste Result</label>
                         <div v-if="data.sets[`${current[0]}`].score[0] > data.sets[`${current[0]}`].score[1]">
                             <div class="input-group mb-2">
