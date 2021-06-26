@@ -256,27 +256,6 @@ class DB(object):
                             q = self.query_one("SELECT player.username AS `player`, team.full_name AS `team` FROM player LEFT JOIN team ON team.id = player.team WHERE user_id=%s", (w['user_id']))
                             w['username'] = q['player']
                             w['teamname'] = q['team']
-<<<<<<< HEAD
-                        tie_m['result'] = g['scores'] # เอาผลของคะแนนใส่ใน pick นั้นๆ
-                        tie_m['winner'] = g['scores'][check_team_win(g['scores'])]
-                        win = check_team_win(g['scores']) # เช็คว่าทีมไหนคะแนนเยอะกว่า
-                        score[win] += 1 # เพิ่มคะแนนของทีมในเซ้ตๆนั้น
-                        o_score[win] += 1 # เพิ่มคะแนนของทีมในเซ้ตๆนั้น
-                        state = 0
-                        finish = True
-                        multi_games_data.pop(idx) # เอาผลการแข่งนี้ออก
-                picks.append(tie_m)
-            o_sets.append({
-                'ban': bans,
-                'pick': picks,
-                'score': score,
-                'state': state,
-                'finish': finish
-            })
-
-            
-                
-=======
                         win = check_team_win(g['scores'])
                         tie_set['result'], tie_set['winner'] = g['scores'], g['scores'][win]
                         score[win] += 1 
@@ -285,7 +264,6 @@ class DB(object):
                         multi_games_data.pop(idx)
                 picks.append(tie_set)
             o_sets.append({'ban': bans, 'pick': picks, 'score': score, 'state': state, 'finish': finish})
->>>>>>> 053ae1a83493cc88aa456f6939629414783f541a
         
         # match tiebreaker
         if o_score[0] == o_score[1] and o_score[0] == o_score_to_win - 1:
@@ -329,14 +307,17 @@ class DB(object):
         else:
             fulldata['currentround'] = [0,0]
 
-       
+        def calculate_point(o_score):
+            r, b = o_score
+            return [r + 1 - min(b, 1), b + 1 - min(r, 1)]
+        team_1_score, team_2_score = calculate_point(o_score)
         # Saving data in database       
-        self.query_one(f'UPDATE `tourney`.`match` SET `team2_score`="{o_score[1]}" WHERE `id`={fulldata["id"]};')
-        self.query_one(f'UPDATE `tourney`.`match` SET `team1_score`="{o_score[0]}" WHERE `id`={fulldata["id"]};')
+        self.query_one(f'UPDATE `tourney`.`match` SET `team2_score`="{team_2_score}" WHERE `id`={fulldata["id"]};')
+        self.query_one(f'UPDATE `tourney`.`match` SET `team1_score`="{team_1_score}" WHERE `id`={fulldata["id"]};')
 
         if set == 1 and finish == True and fulldata['lock'] == 0:
-            self.query_one(f'UPDATE `tourney`.`team` SET `points`=`points`+ {o_score[0]} WHERE `id`={fulldata["team1"]["id"]};')
-            self.query_one(f'UPDATE `tourney`.`team` SET `points`=`points`+ {o_score[1]} WHERE `id`={fulldata["team2"]["id"]};')
+            self.query_one(f'UPDATE `tourney`.`team` SET `points`=`points`+ {team_1_score} WHERE `id`={fulldata["team1"]["id"]};')
+            self.query_one(f'UPDATE `tourney`.`team` SET `points`=`points`+ {team_2_score} WHERE `id`={fulldata["team2"]["id"]};')
             if o_score[0] == 2:
                 self.query_one(f'UPDATE `tourney`.`team` SET `win`=`win`+ 1 WHERE `id`={fulldata["team1"]["id"]};')
                 self.query_one(f'UPDATE `tourney`.`team` SET `lose`=`lose`+ 1 WHERE `id`={fulldata["team2"]["id"]};')
@@ -413,37 +394,7 @@ class DB(object):
         res = json.loads(res['json'])
         mappool = self.query_all(f"SELECT id, mods, json FROM json_mappool where `round_id`={res['round_id']}")
 
-<<<<<<< HEAD
-        # checking it's sets 2?
-        team1 = res['team1']
-        team2 = res['team2']
-        ban_first = team1.copy()
-        pick_first = team2.copy()
-        prev = self.query_all("SELECT id, finish_ban FROM match_sets WHERE match_id=%s", res['id'])
-        if len(prev) >= 2 and prev[0]['finish_ban'] == 1:
-            prevbanspicks = self.query_one("""SELECT JSON_ARRAYAGG(JSON_OBJECT('id', pb.id, 'set_id', pb.set_id, 'type', pb.type, 'map_id', pb.map_id, 'from', s.full_name, 'info', mp.info, 'mods', mp.mods)) AS 'last' 
-            FROM match_sets ms
-            LEFT JOIN `match_sets_banpick` pb ON pb.set_id = ms.id
-            LEFT JOIN `mappool` mp ON mp.beatmap_id = pb.map_id
-            LEFT JOIN `team` s ON s.id = pb.from
-            WHERE ms.id=%s""", res['id'])
-            result_from_last_set = self.get_full_match(res['id'])['sets'][0]['score']
-            team_lose = res[f'team{(result_from_last_set.index(3) + 1) % 2 + 1}']['fullname']
-            def select_team(team_lose, select):
-                if team_lose == team1['fullname']:
-                    if select == "2":
-                        ban_first = team2.copy()
-                        pick_first = team1.copy()
-                else:
-                    if select == "1":
-                        ban_first = team2.copy()
-                        pick_first = team1.copy()
-
-            select = "1" # loser from set 1 select team
-            select_team(team_lose, select)
-=======
         e = []
->>>>>>> 053ae1a83493cc88aa456f6939629414783f541a
 
         available_maps = []
         for s in mappool:
@@ -464,15 +415,6 @@ class DB(object):
                     res['status'] = 'ban'
                 else:
                     res['status'] = 'pick'
-<<<<<<< HEAD
-
-                if t in [0,3,5,6]:
-                    res['picker'] = ban_first['leader_id']
-                    res['picker_t'] = ban_first['full_name']
-                else:
-                    res['picker'] = pick_first['leader_id']
-                    res['picker_t'] = pick_first['full_name']
-=======
                 
                 reverse = self.query("SELECT reverse FROM `match_sets` WHERE `finish_ban`=0 LIMIT 1")
                 if reverse['reverse'] == 1:
@@ -489,11 +431,10 @@ class DB(object):
                     else:
                         res['picker'] = res['team2']['leader_id']
                         res['picker_t'] = res['team2']['full_name']
->>>>>>> 053ae1a83493cc88aa456f6939629414783f541a
                 
             elif res['banpicks'][0]['from'] == None:
-                res['picker'] = ban_first['leader_id']
-                res['picker_t'] = ban_first['full_name']
+                res['picker'] = res['team1']['leader_id']
+                res['picker_t'] = res['team1']['full_name']
                 res['status'] = 'ban'
 
             if t == 8:
