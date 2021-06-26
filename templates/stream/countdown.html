@@ -10,16 +10,6 @@
 
 <body class="varkaria-body">
     <div class="varkaria-mainFrame">
-        <div class="started">
-            <div class="logo">
-                <div class="coffeelogo"></div>
-                <div class="logotitle">
-                    <div class="osutext">osu!mania Thailand</div>
-                    <div class="thailandtext">Pro League 2021</div>
-                </div>
-            </div>
-            <div class="console">This Tournament Hosted by <b>HowtoplayLN</b></div>
-        </div>
         <div class="countdown">
             <div class="count-number" id="timer">Loading..</div>
         </div>
@@ -27,8 +17,13 @@
             <div class="now_title">Now playing</div>
             <div class="song_data" id="song"></div>
         </div>
+        <video id="myVideo" width="1280" height="720">
+            <source src="/static/img/stream/countdown.mp4" type="video/mp4">
+            Your browser does not support HTML5 video.
+        </video>
+          
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha512-z4OUqw38qNLpn1libAN9BsoDx6nbNFio5lA6CuTp9NlK83b89hgyCVq+N5FdBJptINztxn1Z3SaKSKUS5UP60Q==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/reconnecting-websocket/1.0.0/reconnecting-websocket.min.js"></script>
     <script src="/static/js/stream/countdown.js"></script>
 </body>

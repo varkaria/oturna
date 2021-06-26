@@ -193,17 +193,21 @@ class DB(object):
         o_sets = []
         l_sets = self.query_all("SELECT id FROM match_sets WHERE match_id=%s", [id]) # ดึงข้อมูล sets จาก database
 
-        # osu!api part
-        import os.path
-        parsed = os.path.split(fulldata['mp_link'])
-        man = osuapi.get(osuapi.V1Path.get_match, mp=int(parsed[1]))
-        multi_games_data = man['games']
-        temp = self.query_all("SELECT mp_link FROM temp_mplink WHERE match_id=%s", (fulldata['id']))
-        if temp:
-            for a in temp:
-                x = os.path.split(a['mp_link'])
-                man = osuapi.get(osuapi.V1Path.get_match, mp=int(x[1]))
-                multi_games_data.append(a['games'])
+        if fulldata['mp_link'] != '':
+            # osu!api part
+            import os.path
+            parsed = os.path.split(fulldata['mp_link'])
+            man = osuapi.get(osuapi.V1Path.get_match, mp=int(parsed[1]))
+            multi_games_data = man['games']
+            temp = self.query_all("SELECT mp_link FROM temp_mplink WHERE match_id=%s", (fulldata['id']))
+            if temp:
+                for a in temp:
+                    x = os.path.split(a['mp_link'])
+                    man = osuapi.get(osuapi.V1Path.get_match, mp=int(x[1]))
+                    multi_games_data.append(a['games'])
+        else:
+            multi_games_data = []
+
 
         for s in l_sets:
             score, points_to_win, state, finish = [0,0], 3, 1, False
@@ -324,14 +328,20 @@ class DB(object):
             preducts = self.query_all(f'SELECT * FROM `tourney`.`com_preducts` WHERE `match_id`={fulldata["id"]} AND `finish`=0;')
             for p in preducts:
                 point = 0
+                parsed = f"{p['s_team1']} - {p['s_team2']}"
                 if o_score[0] == 2 and o_score[0] == p['s_team1']:
                     point = point + 3
                     if o_score[1] == p['s_team2']:
                         point = point + 2
+                    continue
                 elif o_score[1] == 2 and o_score[1] == p['s_team2']:
                     point = point + 3
                     if o_score[0] == p['s_team1']:
                         point = point + 2
+                    continue
+                elif parsed == f"{o_score[0]} - {o_score[1]}" or f"{o_score[1]} - {o_score[0]}":
+                    point = point + 2
+                    continue
                 self.query_one(f'UPDATE `tourney`.`staff` SET `c_score`=`c_score` + {point} WHERE `id`={p["commentator"]};')
             self.query_one(f'UPDATE `tourney`.`com_preducts` SET `finish`=1 WHERE `match_id`={fulldata["id"]} AND `finish`=0;')
             self.query_one(f'UPDATE `tourney`.`team` SET `match_play`=`match_play` + 1 WHERE `id`={fulldata["team1"]["id"]};')
@@ -370,9 +380,12 @@ class DB(object):
             'reverse', ms.reverse,
             'round_id', r.id,
             'mp_link', m.mp_link,
-            'team1', JSON_OBJECT('id', t1.id, 'full_name', t1.full_name, 'flag_name', t1.flag_name, 'acronym', t1.acronym, 'online', p1.online, 'leader_id', p1.user_id, 'leader_name', p1.username),
-            'team2', JSON_OBJECT('id', t2.id, 'full_name', t2.full_name, 'flag_name', t2.flag_name, 'acronym', t2.acronym, 'online', p2.online, 'leader_id', p2.user_id, 'leader_name', p2.username),
-            'banpicks', JSON_ARRAYAGG(JSON_OBJECT('id', pb.id, 'set_id', pb.set_id, 'type', pb.type, 'map_id', pb.map_id, 'from', s.full_name, 'info', mp.info, 'mods', mp.mods)),
+            'team1', JSON_OBJECT('id', t1.id, 'full_name', t1.full_name, 'flag_name', t1.flag_name, 
+            'acronym', t1.acronym, 'online', p1.online, 'leader_id', p1.user_id, 'leader_name', p1.username),
+            'team2', JSON_OBJECT('id', t2.id, 'full_name', t2.full_name, 'flag_name', t2.flag_name, 
+            'acronym', t2.acronym, 'online', p2.online, 'leader_id', p2.user_id, 'leader_name', p2.username),
+            'banpicks', JSON_ARRAYAGG(JSON_OBJECT('id', pb.id, 'set_id', pb.set_id, 'type', pb.type, 
+            'map_id', pb.map_id, 'from', s.full_name, 'info', mp.info, 'mods', mp.mods)),
             'date', DATE_FORMAT(m.date, '%Y-%m-%d %H:%i')
             ) AS `json`
             FROM `match` m

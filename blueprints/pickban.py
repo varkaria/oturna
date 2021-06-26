@@ -49,11 +49,26 @@ def pickban_spec(code):
     return '<h1>Hi uwu 2</h1>'
 
 @pickban.route('/recent/spectator')
-def pickban_spec_recent(code):
+def pickban_spec_recent():
+    findcode = db.query('SELECT `match_sets`.`random`, `match`.id FROM `match_sets` LEFT JOIN `match` ON `match`.id = `match_sets`.match_id WHERE `match`.`date` < NOW() AND finish_ban=0 LIMIT 1')
+    code = findcode['random']
     set_match = db.query('SELECT id, match_id FROM match_sets WHERE `random`=%s',[code])
     
     if set_match:
         session['match_set_id'] = set_match['id']
         return render_template('pickban/pickban_spec.html', match_code=code, match_set=set_match['id'])
+
+    return '<h1>Hi uwu 2</h1>'
+
+@pickban.route('/recent/streamer')
+def pickban_stream_recent():
+    findcode = db.query('SELECT `match_sets`.`random`, `match`.id FROM `match_sets` LEFT JOIN `match` ON `match`.id = `match_sets`.match_id WHERE `match`.`date` < NOW() AND finish_ban=0 LIMIT 1')
+    code = findcode['random']
+    print(code)
+    set_match = db.query('SELECT id, match_id FROM match_sets WHERE `random`=%s',[code])
+    
+    if set_match:
+        session['match_set_id'] = set_match['id']
+        return render_template('pickban/pickban_stream.html', match_code=code, match_set=set_match['id'], match_data=db.get_full_match(id=findcode['id']))
 
     return '<h1>Hi uwu 2</h1>'
