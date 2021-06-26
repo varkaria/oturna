@@ -988,4 +988,4 @@ def image_match_result():
         bg.paste(match, (87,180+(margin*i)), match)
         
     return serve_pil_image(bg)
-    db.get_full_match(id=int(id),set=1)
+    
