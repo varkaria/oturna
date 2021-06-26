@@ -1,0 +1,55 @@
+{% extends 'manager/base.html' %}
+{% block title %}Streamer Tools{% endblock title %} 
+{% block head %}
+<link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet"/>
+{% endblock %} 
+{% block page_title %}
+Streamer Tools
+{% endblock page_title %}
+{% block content %}
+<div class="row row row-deck row-cards">
+    <div class="col-6">
+        <div class="card card-md align-items-center">
+            <div class="card-header">
+                <p class="text-2xl">Streaming Elements</p><br>
+            </div>
+            <div class="card-body w-full h-full">
+                <ul class="text-black text-lg">
+                    <li><a href="/stream/countdown" target="_blank" style="text-decoration: none;">• Countdown</a></li>
+                    <li><a href="/stream/greeting_cm" target="_blank" style="text-decoration: none;">• Greeting commentator</a></li>
+                    <li><a href="/stream/greeting_host" target="_blank" style="text-decoration: none;">• Greeting host</a></li>
+                    <li><a href="/stream/showcase" target="_blank" style="text-decoration: none;">• Showcase</a></li>
+                    <li><a href="/stream/leaderboard" target="_blank" style="text-decoration: none;">• Leaderboard</a></li>
+                    <li><a href="/stream/comment_points" target="_blank" style="text-decoration: none;">• Comment Points</a></li>
+                    <li><a href="/stream/comment_match" target="_blank" style="text-decoration: none;">• Comment Match</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="card card-md align-items-center">
+            <div class="card-header">
+                <p class="text-2xl">JSON</p><br>
+            </div>
+            <div class="card-body w-full h-full">
+                <ul class="text-black text-lg">
+                    <li><a href="/manager/stream/json/upload" target="_blank" style="text-decoration: none;">• Json upload</a></li>
+                    <li><a href="/manager/stream/json/download" target="_blank"  style="text-decoration: none;">• Json download</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="card card-md align-items-center">
+            <div class="card-header">
+                <p class="text-2xl">Tools</p><br>
+            </div>
+            <div class="card-body w-full h-full">
+                <ul class="text-black text-lg">
+                    <li><a href="/manager/stream/download_pic" target="_blank" style="text-decoration: none;">• Download team pictures</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

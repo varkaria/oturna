@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>preduction-match</title>
+    <link rel="stylesheet" href="/static/css/stream/fonts/stylesheet.css">
+    <link rel="stylesheet" href="/static/css/stream/preduction-match.css">
+</head>
+
+<body class="fhe-body">
+    <div class="fhe-mainFrame">
+        <div class="c_match-title">{{ preducts[0]['team1'] }} vs {{ preducts[0]['team2'] }}</div>
+        <div class="c_preducts">
+            {% for d in preducts %}
+            <div class="c_block">
+                <div class="c_comment-a" style="background-image: url(https://a.ppy.sh/{{ d['user_id'] }})"></div>
+                <div class="c_comment-n">{{ d['username'] }}</div>
+                <div class="c_team-win">
+                    <div class="c_tw-n">{{ d['full_name'] }}</div>
+                    <div class="c_tw-a" style="background-image: url(https://omthpl.varkaria.tech/team_flag/{{ d['id'] }})"></div>
+                </div>
+                <div class="c_score-preduct">{{ d['s_team1'] }} - {{ d['s_team2'] }}</div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="c_Sample"></div>
+    </div>
+</body>
+
+</html>

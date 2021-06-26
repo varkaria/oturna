@@ -35,7 +35,7 @@
 <nav class="mx-auto px-8">
     <div class="flex h-14 justify-between items-center">
         <div class="flex-row justify-start text-white text-3xl">
-            <a href="/stream/json/download">JSON Download</a>
+            <a href="/manager/stream/json/download">JSON Download</a>
         </div>
         <div class="flex-row justify-end text-white text-3xl">
             <div class='flex gap-4 items-center'>
@@ -52,7 +52,7 @@
         </div>
         <div class="grid grid-cols-6 auto-cols-auto gap-1 gap-y-10 items-center">
             {% for filename in list_brackets %}
-                <a class="json-file text-white text-lg pl-5" href="/stream/json/download/{{ filename }}" target="_blank">{{ filename }}</a>
+                <a class="json-file text-white text-lg pl-5" href="/manager/stream/json/download/{{ filename }}" target="_blank">{{ filename }}</a>
             {% endfor %}
         </div>
     </div>

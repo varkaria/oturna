@@ -1,15 +1,15 @@
 from config import Config
 from pymysql.err import *
 from blueprints.api import getdata
-from flask import Blueprint, render_template, redirect, url_for, flash, session,request, send_file
+from flask import Blueprint, render_template, redirect, url_for, flash, session, request, current_app, send_file
 from objects.logger import log
 from objects.flag import Staff, Mods
 from rich.console import Console
-from functools import wraps
 from objects import osuapi, mysql
 from PIL import Image
 from objects.decorators import *
-import json, re, requests, io
+import json, re, requests, datetime, os, io, pathlib, random, string, zipfile
+import pandas as pd
 
 backend = Blueprint('backend', __name__)
 db = mysql.DB()
@@ -37,6 +37,11 @@ def conv(x):
     elif type(x) == list:
         return [c(a) for a in x]
 
+def allowed_file(filename):
+    FILE_EX = {'json'}
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in FILE_EX
+
 @backend.context_processor
 def context():
     user = None if session == {} else get('view_staff', str(session['id']))
@@ -49,10 +54,110 @@ def context():
 def base():
     return render_template('/manager/base.html')
 
-@backend.route('/')
+@backend.route('/', methods=['GET', 'POST'])
 @login_required
 def dashboard():
-    return render_template('manager/dashboard.html')
+
+    players = db.query_one('select count(*) as count from player')['count']
+
+    colour = ''
+    currentDate = datetime.date.today()
+    reg_get = str(db.query_one('select register_end_date as reg_end from tourney where id=1')['reg_end'])[:10]
+    reg_end_year, reg_end_month, reg_end_day = reg_get[:4], reg_get[5:7], reg_get[8:10]
+    reg_end = datetime.date(int(reg_end_year), int(reg_end_month), int(reg_end_day))
+    time_delta = str(reg_end - currentDate).strip(', 0:00:00')
+    if time_delta == '':
+        time_delta = 'Ending Today'
+        colour = 'text-green'
+    if reg_end < currentDate:
+        time_delta = 'Ended'
+        colour = 'text-red'
+    if reg_end > currentDate:
+        colour = 'text-green'
+        
+    next_data = []
+    last_data = []
+
+    next_match = db.query_one("""SELECT m.id, t1.full_name AS `team1_name`, t2.full_name AS `team2_name`, 
+    t1.flag_name AS `team1_flag`, t2.flag_name AS `team2_flag`, m.date
+    FROM `match` `m`
+    LEFT JOIN `team` `t1` ON t1.id = m.team1
+    LEFT JOIN `team` `t2` ON t2.id = m.team2
+    WHERE m.date > NOW()""")
+    if next_match:
+        next_data = {
+        'n_team1_flag': next_match['team1_flag'],
+        'n_team2_flag': next_match['team2_flag'],
+        'n_team1_name': next_match['team1_name'],
+        'n_team2_name': next_match['team2_name'],
+        'n_match_time': (str(next_match['date'])[:16]),
+        'cancel': False,
+        'nodata': False
+        }
+        time = str(next_match['date'])[11:]
+        orignal_date = next_data['n_match_time']
+        date_sr = pd.to_datetime(pd.Series(orignal_date))
+        change_format = date_sr.dt.strftime('%d/%m/%Y')
+        next_data['n_match_time'] = str(change_format).replace('dtype: object', '')[2:] + time
+
+        if next_data['n_team1_name'] == []:
+            next_data['nodata'] = True
+
+    last_match = db.query_one("""SELECT m.id, t1.full_name AS `team1_name`, t2.full_name AS `team2_name`, 
+    t1.flag_name AS `team1_flag`, t2.flag_name AS `team2_flag`, team1_score, team2_score, m.date, m.stats
+    FROM `match` `m`
+    LEFT JOIN `team` `t1` ON t1.id = m.team1
+    LEFT JOIN `team` `t2` ON t2.id = m.team2
+    WHERE m.date <= NOW()""")
+    if last_match:
+        last_data = {
+        'stats': int(last_match['stats']),
+        'l_team1_flag': last_match['team1_flag'],
+        'l_team2_flag': last_match['team2_flag'],
+        'l_team1_name': last_match['team1_name'],
+        'l_team2_name': last_match['team2_name'],
+        'team1_score': last_match['team1_score'],
+        'team2_score': last_match['team2_score'],
+        'l_match_time': (str(last_match['date'])[:16]),
+        'cancel': False,
+        'nodata': False
+        }
+        time = str(last_match['date'])[11:]
+        orignal_date = last_data['l_match_time']
+        date_sr = pd.to_datetime(pd.Series(orignal_date))
+        change_format = date_sr.dt.strftime('%d/%m/%Y')
+        last_data['l_match_time'] = str(change_format).replace('dtype: object', '')[2:] + time
+
+        if last_data['l_team1_name'] == []:
+            last_data['nodata'] = True
+
+        if last_data['stats'] == 1: # match not cancelled
+            pass
+        if last_data['stats'] == 2: # match cancelled
+            last_data['cancel'] = True
+            last_data['team1_score'] = ''
+            last_data['team2_score'] = ''
+
+    progress = {
+        'start': 0,
+        'regis': 0.07,
+        'playoff': 0.285,
+        'reg1': 0.5,
+        'reg2': 0.715,
+        'champ': 0.935,
+        'end': 1
+    }
+    tour_end = False
+    progress_get = db.query_one("""SELECT rounds from tourney""")['rounds']
+    if progress_get == 'end':
+        tour_end = True
+    progress_data = {
+        'current_progress': progress[progress_get],
+        'ended': tour_end
+    }
+
+    return render_template('manager/dashboard.html', players=players, time_delta=time_delta.strip('-'), colour=colour, 
+                           next_data=next_data, last_data=last_data, progress_data=progress_data)
 
 @backend.route('/planning/')
 @login_required
@@ -86,6 +191,10 @@ def matchs_add():
 
     try:
         db.query('Insert into `match` (`round_id`, `code`, `team1`, `team2`, `date`, `loser`) values (%s, %s, %s, %s, %s, %s)', (round_id, code, team1_id, team2_id, date, loser))
+        id = db.query('SELECT LAST_INSERT_ID() AS `id`;')
+        for i in range(2):
+            ranstr = ''.join(random.choices(string.ascii_lowercase + string.digits, k = 32))
+            db.query("Insert into `match_sets` (`match_id`, `random`) VALUES (%s, %s);", (id['id'], ranstr))
         flash('%s added successfully' % code, 'success')
         return redirect(url_for('backend.matchs'))
     except Exception as e:
@@ -131,13 +240,38 @@ def match_update(id):
         flash(e, 'danger')
         return redirect(url_for('backend.matchs'))
 
+@backend.route('/schedule/match/<id>/preduct', methods=['POST'])
+@login_required
+@need_privilege(Staff.COMMENTATOR)
+def match_preduct_update(id:int):
+    w = request.form['win']
+    l = request.form['lose']
+    s = request.form['man']
+    res = db.query_one(f"SELECT id, team1, team2 FROM `match` WHERE id={id}")
+
+    if int(l) not in [0,1]:
+        flash('you put lose score more than 1 man : (', 'danger')
+        return redirect(url_for('backend.matchs'))
+    
+    if s == 'team1':
+            db.query_one("INSERT INTO `tourney`.`com_preducts` (`match_id`, `commentator`, `s_win`, `s_team1`, `s_team2`) VALUES (%s, %s, %s, %s, %s);", (id,session['id'],res[f'{s}'],2,l))
+    else:
+        db.query_one("INSERT INTO `tourney`.`com_preducts` (`match_id`, `commentator`, `s_win`, `s_team1`, `s_team2`) VALUES (%s, %s, %s, %s, %s);", (id,session['id'],res[f'{s}'],l,2))
+    
+    try:
+        flash('MatchId: %s preduct successfully' % id, 'success')
+        return redirect(url_for('backend.matchs'))
+    except Exception as e:
+        flash(e, 'danger')
+        return redirect(url_for('backend.matchs'))
+
 @backend.route('/schedule/match/<id>/delete', methods=['POST'])
 @login_required
 @need_privilege(Staff.ADMIN)
 def match_delete(id):
     try:
         db.query("DELETE FROM `match` WHERE id = %s;", [id])
-        flash('MathId: %s deleted successfully' % id, 'success')
+        flash('MatchId: %s deleted successfully' % id, 'success')
         return redirect(url_for('backend.matchs'))
     except Exception as e:
         flash(e, 'danger')
@@ -374,11 +508,10 @@ def rounds():
         values = (
             request.form.get('name', type=str),
             request.form.get('description', None, str),
-            request.form.get('best_of', type=int),
             request.form.get('start_date', type=str)
         )
         try:
-            db.query("INSERT INTO `round` (name, description, best_of, start_date) VALUES (%s, %s, %s, %s)", values)
+            db.query("INSERT INTO `round` (name, description, start_date) VALUES (%s, %s, %s)", values)
             flash('Round: {} added successfully'.format(values[0]), 'success')
             return redirect(url_for('backend.rounds'))
         except Exception as e:
@@ -394,7 +527,6 @@ def rounds_update(round_id):
         id=request.form.get('id', type=int),
         name=request.form.get('name', type=str),
         description=request.form.get('description', None, str),
-        best_of=request.form.get('best_of', type=int),
         start_date=request.form.get('start_date', None, str),
         pool_publish=request.form.get('pool_publish', 0, int)
     )
@@ -451,7 +583,6 @@ def staff():
                 db.query("Update staff Set active = 1 Where user_id = %s", (user_id))
         except Exception as e:
             flash(e.args[0], 'danger')
-            log.exception(e)
         finally:
             return redirect(url_for('backend.staff'))
 
@@ -548,7 +679,6 @@ def mappool_add(round):
         flash(info, 'success')
     except Exception as e:
         flash(e.args[0], 'danger')
-        log.exception(e)
     finally:
         return redirect(url_for('backend.mappool', round_id=round))
             
@@ -585,7 +715,6 @@ def mappool_update(round):
         flash(info, 'success')
     except Exception as e:
         flash(e.args, 'danger')
-        log.exception(e)
     finally:
         return redirect(url_for('backend.mappool', round_id=round))
 
@@ -598,7 +727,6 @@ def mappool_del(id, round):
         flash('Remove Success :happy:', 'success')
     except Exception as e:
         flash(e.args[0], 'danger')
-        log.exception(e)
     finally:
         return redirect(url_for('backend.mappool', round_id=round))
 
@@ -607,17 +735,111 @@ def mappool_del(id, round):
 @need_privilege(Staff.REFEREE)
 def refree_helper(id:int):
     # check match is have it?
-    match = db.query("SELECT * FROM `match` WHERE id = %s",[id])
+    banpick_urls = db.query_all("SELECT random FROM `match_sets` WHERE `match_id`=%s",[id])
+    match = db.query("SELECT id FROM `match` WHERE `id`=%s",[id])
+    match_data = db.get_matchs(id=int(id))
     if not match:
         flash("Couldn't found match did you put it", 'danger')
         return redirect(url_for('backend.matchs'))
 
-    # check referee you be in this match?
-    if match['referee'] != session['id']:
-        flash("You didn't be refree in this match. you can be refree by click option and be referee it : )", 'danger')
-        return redirect(url_for('backend.matchs'))
+    # if int(match_data[0]['referee']['id']) != int(session['id']):
+    #     flash("You didn't be refree in this match. you can be refree by click option and be referee it : )", 'danger')
+    #     return redirect(url_for('backend.matchs'))
+    
+    if 'https://osu.ppy.sh/community/matches/' not in match_data[0]['mp_link']:
+        return render_template('/manager/refree_tools_insert.html',match=match_data, id=id)
 
-    return render_template('/manager/refree_tools.html',match=db.get_matchs(id=int(id)))
+    return render_template('/manager/refree_tools.html',match=match_data, id=id, banurl=banpick_urls)
+
+@backend.route('/match_lock/<id>/')
+@login_required
+@need_privilege(Staff.REFEREE)
+def refree_helper_lock(id:int):
+    # check match is have it?
+    match = db.query("SELECT id FROM `match` WHERE `id`=%s",[id])
+    if not match:
+        flash("Couldn't found match did you put it", 'danger')
+        return redirect(url_for('backend.matchs'))
+    
+    db.get_full_match(id=int(id),set=0)
+
+    flash("This Match is finished!! Thanks you for refree this match (i luv you)", 'success')
+    return redirect(url_for('backend.matchs'))
+
+@backend.route('/match/update_mp/<id>/', methods=['POST'])
+@login_required
+@need_privilege(Staff.REFEREE)
+def refree_helper_update(id:int):
+    mp_link = request.form['mplink']
+    db.query_one(f"UPDATE `tourney`.`match` SET `mp_link`='{mp_link}' WHERE  `id`={id};")
+    return redirect(url_for('backend.refree_helper', id=id))
+
+@backend.route('/matchapi/<id>/')
+@login_required
+@need_privilege(Staff.REFEREE)
+def refree_helper_api(id:int):
+    return db.get_full_match(id=int(id))
+
+@backend.route('/stream/')
+def showlist():
+    return render_template('manager/streamer_tools/stream_list.html')
+
+@backend.route('/stream/json/upload', methods=['GET', 'POST'])
+def json_upload():
+    if request.method == 'POST':
+        file = request.files['file']
+        if file.filename == '':
+            error = 'No file chosen'
+            return render_template('manager/streamer_tools/json_upload.html', error=error)
+        if file and allowed_file(file.filename):
+            try:
+                now = datetime.datetime.now()
+                id = str(session['user_id'])
+                date_time = now.strftime("%d-%m-%Y")
+                filename = '[' + id + ']' + ' ' + date_time + '.json'
+                file.save(os.path.join(str(pathlib.Path('.data/brackets')), filename))
+                error = 'File upload successfully'
+                return render_template('manager/streamer_tools/json_upload.html', error=error)
+            except KeyError:
+                error = 'You need to login to upload this file'
+                return render_template('manager/streamer_tools/json_upload.html', error=error)
+        else:
+            error = 'Invalid file type'
+            return render_template('manager/streamer_tools/json_upload.html', error=error)
+    return render_template('manager/streamer_tools/json_upload.html')
+
+@backend.route('/stream/json/download/', methods=['GET', 'POST'])
+def json_download():
+    path = str(pathlib.Path('.data/brackets'))
+    list_brackets = {}
+    try:
+        id = str(session['user_id'])
+        if os.listdir(path) != []:
+            for filename in os.listdir(path):
+                list_brackets[filename] = filename
+            return render_template('manager/streamer_tools/json_download.html', filename=filename, list_brackets=list_brackets)
+        else:
+            error = 'No json uploaded'
+            return render_template('manager/streamer_tools/json_download.html', error=error)
+    except KeyError:
+        error = 'You need to login to view the file'
+        return render_template('manager/streamer_tools/json_download.html', error=error)
+
+@backend.route('/stream/json/download/<path:filename>')
+def download(filename):
+    file = str(pathlib.Path('.data/brackets/')) + '/' + filename
+    response = send_file(file, mimetype='application/json', attachment_filename='brackets.json', as_attachment=True)
+    return response
+
+@backend.route('/stream/download_pic/')
+def team_pic():
+    path = pathlib.Path('.data/team_pics')
+    file = io.BytesIO()
+    with zipfile.ZipFile(file, mode='w') as z:
+        for f_name in path.iterdir():
+            z.write(f_name)
+    file.seek(0)
+    return send_file(file, mimetype='application/zip', attachment_filename='team_picture.zip', as_attachment=True)
 
 from PIL import Image, ImageFont, ImageDraw, ImageOps
 
@@ -760,3 +982,4 @@ def image_match_result():
         bg.paste(match, (87,180+(margin*i)), match)
         
     return serve_pil_image(bg)
+    db.get_full_match(id=int(id),set=1)

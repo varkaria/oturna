@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>leaderboard</title>
+    <link rel="stylesheet" href="/static/css/stream/background.css">
+    <link rel="stylesheet" href="/static/css/stream/leaderboard.css">
+    <link rel="stylesheet" href="/static/css/stream/fonts/stylesheet.css">
+</head>
+
+<body class="fhe-body">
+    <div class="fhe-mainFrame" id="app">
+        <div class="c_main-lead">
+            <div class="c_leaders">
+                {% for i in d %}
+                <div class="c_leaderd1">
+                    <div class="c_blockd2">
+                        <img class="NLlR5AtN" src="/static/img/stream/leaderboard/man2.svg">
+                        <div class="c_team-name">
+                            {{ i.full_name }}
+                        </div>
+                        <div class="c_team-a" style="background-image:url(/team_flag/{{i.id}})"></div>
+                        <div class="c_points">
+                            <div class="c_d2">
+                                {{i.match_play}}
+                            </div>
+                            <div class="c_d2">
+                                {{i.win}} - {{i.lose}}
+                            </div>
+                            <div class="c_d2">
+                                {{i.points}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="c_blockd1">
+                        <img class="Y5R0NBvI" src="/static/img/stream/leaderboard/man.svg">
+                        <div class="c_undun">
+                            {{loop.index}}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="c_td3">MP</div>
+            <div class="c_td2">PTS</div>
+            <div class="c_td1">W - L</div>
+        </div>
+        <div class="c_League_Phase_One">League Phase One</div>
+        <div class="c_Leaderboard">Leaderboard</div>
+        <section id="wave-background">
+            <div class="wave"></div>
+        </section>
+    </div>
+</body>
+
+</html>

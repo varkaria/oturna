@@ -19,12 +19,11 @@ def get_leaders_match(id):
     AND p2.leader = 1
     WHERE m.id={id}
     ''')
-    print(out['json'])
     return out['json']
 
 @pickban.route('/')
 def index():
-    return 'hi uwu'
+    return '<h1>Hi uwu</h1>'
 
 @pickban.route('/<code>')
 @login_required
@@ -33,10 +32,50 @@ def pickban_main(code):
     
     if set_match:
         session['match_set_id'] = set_match['id']
-        print(session['user_id'])
         if str(session['user_id']) not in str(get_leaders_match(set_match['match_id'])):
             return "you aren't being the leader of this match"
-        return render_template('pickban/pickban.html', match_code=code)
+        return render_template('pickban/pickban.html', match_code=code, match_set=set_match['id'] )
 
-    return 'hi uwu 2'
+    return '<h1>Hi uwu 2</h1>'
+
+@pickban.route('/<code>/spectator')
+def pickban_spec(code):
+    set_match = db.query('SELECT id, match_id FROM match_sets WHERE `random`=%s',[code])
     
+    if set_match:
+        session['match_set_id'] = set_match['id']
+        return render_template('pickban/pickban_spec.html', match_code=code, match_set=set_match['id'])
+
+    return '<h1>Hi uwu 2</h1>'
+
+@pickban.route('/recent/spectator')
+def pickban_spec_recent():
+    findcode = db.query('SELECT `match_sets`.`random`, `match`.id FROM `match_sets` LEFT JOIN `match` ON `match`.id = `match_sets`.match_id WHERE `match`.`date` < NOW() AND finish_ban=0 LIMIT 1')
+    
+    if not findcode:
+        return "now banpicks didn't found"
+    
+    code = findcode['random']
+    set_match = db.query('SELECT id, match_id FROM match_sets WHERE `random`=%s',[code])
+    
+    if set_match:
+        session['match_set_id'] = set_match['id']
+        return render_template('pickban/pickban_spec.html', match_code=code, match_set=set_match['id'])
+
+    return '<h1>Hi uwu 2</h1>'
+
+@pickban.route('/recent/streamer')
+def pickban_stream_recent():
+    findcode = db.query('SELECT `match_sets`.`random`, `match`.id FROM `match_sets` LEFT JOIN `match` ON `match`.id = `match_sets`.match_id WHERE `match`.`date` < NOW() AND finish_ban=0 LIMIT 1')
+    
+    if not findcode:
+        return "now banpicks didn't found"
+    
+    code = findcode['random']
+    set_match = db.query('SELECT id, match_id FROM match_sets WHERE `random`=%s',[code])
+    
+    if set_match:
+        session['match_set_id'] = set_match['id']
+        return render_template('pickban/pickban_stream.html', match_code=code, match_set=set_match['id'], match_data=db.get_full_match(id=findcode['id']))
+
+    return '<h1>Hi uwu 2</h1>'

@@ -1,0 +1,157 @@
+p {
+    margin: 0;
+    padding: 0;
+}
+
+.fhe-body {
+    margin: 0;
+    background-color: rgba(44, 45, 44, 1);
+    height: 768px;
+}
+
+.fhe-mainFrame {
+    background-color: rgba(44, 45, 44, 1);
+    height: 768px;
+    width: 100%;
+    position: relative;
+    overflow: hidden
+}
+
+.c_match-title {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 500px;
+    height: 43px;
+    top: 107px;
+    left: 65px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 36px;
+    text-align: LEFT;
+    align-items: flex-start;
+    line-height: 42.1875px;
+}
+
+.c_preducts {
+    display: flex;
+    position: absolute;
+    top: 184px;
+    left: 65px;
+    background-color: rgba(0, 0, 0, 0);
+    flex-direction: column;
+}
+
+.c_block {
+    display: flex;
+    position: relative;
+    width: 717px;
+    height: 65px;
+    top: 0px;
+    left: 0px;
+    background-color: rgba(0, 0, 0, 0);
+    margin-bottom: 12px;
+}
+
+.c_comment-a {
+    display: flex;
+    position: absolute;
+    width: 65px;
+    height: 65px;
+    top: 0px;
+    left: 0px;
+    background-color: rgba(0, 0, 0, 0);
+    overflow: hidden;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    background-size: cover;
+}
+
+.c_comment-n {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 176px;
+    height: 24px;
+    top: 21px;
+    left: 81px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 28px;
+    text-align: LEFT;
+    align-items: center;
+    line-height: 24px;
+}
+
+.c_team-win {
+    display: flex;
+    position: absolute;
+    width: 177px;
+    height: 44px;
+    top: 11px;
+    left: 312px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.c_tw-n {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 204px;
+    height: 24px;
+    top: 9px;
+    left: 65px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 28px;
+    text-align: LEFT;
+    align-items: flex-start;
+    line-height: 24px;
+}
+
+.c_tw-a {
+    display: flex;
+    position: absolute;
+    box-sizing: border-box;
+    width: 49px;
+    height: 49px;
+    top: -4px;
+    left: 0px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 7px;
+}
+
+.c_score-preduct {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 84px;
+    height: 24px;
+    top: 21px;
+    left: 633px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 36px;
+    text-align: center;
+    justify-content: center;
+    align-items: flex-start;
+    line-height: 24px;
+}
+
+.c_Sample {
+    display: flex;
+    position: absolute;
+    box-sizing: border-box;
+    width: 1366px;
+    height: 768px;
+    top: 0px;
+    left: 0px;
+    background-image: url(/static/img/stream/comprematch-sam.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+}

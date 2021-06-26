@@ -87,7 +87,7 @@
     <nav class="mx-auto px-8">
         <div class="flex h-14 justify-between items-center">
             <div class="flex-row justify-start text-white text-3xl">
-                <a href="/stream/json/upload">JSON Uploader</a>
+                <a href="/manager/stream/json/upload">JSON Uploader</a>
             </div>
             <div class="flex-row justify-end text-white text-3xl">
                 <div class='flex gap-4 items-center'></a>
@@ -98,7 +98,7 @@
         </div>
     </nav>
     <section id="upload" class="flex h-screen justify-center items-center pb-60">
-        <form class="flex flex-col space-y-8 justify-center items-center" action="/stream/json/upload" method="POST" enctype="multipart/form-data">
+        <form class="flex flex-col space-y-8 justify-center items-center" action="/manager/stream/json/upload" method="POST" enctype="multipart/form-data">
             <h2 class="text-3xl text-white">{{ error }}</h2>
             <div class="file-input">
                 <input name="file" type="file" id="file" class="file">

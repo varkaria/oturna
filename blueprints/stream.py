@@ -1,20 +1,8 @@
-import os, datetime
-from flask import Blueprint, render_template, request, session, current_app, Response, send_file
+from flask import Blueprint, render_template, request
 from objects import mysql
 
 db = mysql.DB()
 stream = Blueprint('stream', __name__)
-
-BRACKETS_FOLDER = '.data/brackets'
-FILE_EX = {'json'}
-
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in FILE_EX
-
-@stream.route('/')
-def showlist():
-    return render_template('stream/stream_list.html')
 
 @stream.route('/bg')
 def background():
@@ -47,57 +35,27 @@ def greeting_host():
 def m_showcase():
     return render_template('stream/showcase.html')
 
-@stream.route('/match')
-def match():
-    return render_template('stream/match.html')
-
 @stream.route('/countdown')
 def countdown():
     return render_template('stream/countdown.html')
 
-@stream.route('/json/upload', methods=['GET', 'POST'])
-def json_upload():
-    if request.method == 'POST':
-        file = request.files['file']
-        if file.filename == '':
-            error = 'No file chosen'
-            return render_template('stream/json_upload.html', error=error)
-        if file and allowed_file(file.filename):
-            try:
-                now = datetime.datetime.now()
-                id = str(session['user_id'])
-                date_time = now.strftime("%d-%m-%Y")
-                filename = '[' + id + ']' + ' ' + date_time + '.json'
-                file.save(os.path.join(BRACKETS_FOLDER, filename))
-                error = 'File upload successfully'
-                return render_template('stream/json_upload.html', error=error)
-            except KeyError:
-                error = 'You need to login to upload this file'
-                return render_template('stream/json_upload.html', error=error)
-        else:
-            error = 'Invalid file type'
-            return render_template('stream/json_upload.html', error=error)
-    return render_template('stream/json_upload.html')
+@stream.route('/leaderboard')
+def leaderboard():
+    data = db.query_all("SELECT * FROM `tourney`.`team` ORDER BY `points` DESC;")
+    return render_template('stream/leaderboard.html', d=data)
 
-@stream.route('/json/download/', methods=['GET', 'POST'])
-def json_download():
-    path = BRACKETS_FOLDER
-    list_brackets = {}
-    try:
-        id = str(session['user_id'])
-        if os.listdir(path) != []:
-            for filename in os.listdir(path):
-                list_brackets[filename] = filename
-            return render_template('stream/json_download.html', filename=filename, list_brackets=list_brackets)
-        else:
-            error = 'No json uploaded'
-            return render_template('stream/json_download.html', error=error)
-    except KeyError:
-        error = 'You need to login to view the file'
-        return render_template('stream/json_download.html', error=error)
-    
-@stream.route('/json/download/<path:filename>')
-def download(filename):
-    file = os.path.join(current_app.root_path, BRACKETS_FOLDER) + '/' + filename
-    response = send_file(file, mimetype='application/json', attachment_filename='brackets.json', as_attachment=True)
-    return response
+@stream.route('/comment_points')
+def commentator_points():
+    score = db.query_all("SELECT c_score AS `a` FROM `tourney`.`staff` ORDER BY `id` ASC;")
+    return render_template('stream/compre-point.html', s=score)
+
+@stream.route('/comment_match')
+def commentator_match():
+    lastest = db.query_one("SELECT id FROM `match` WHERE DATE > NOW() LIMIT 1")
+    preducts = db.query_all(f"SELECT cp.commentator, tw.full_name, tw.flag_name, tw.id, st.user_id, st.username, cp.s_team1, cp.s_team2, t1.full_name AS `team1`, t2.full_name AS `team2` FROM `com_preducts` `cp` LEFT JOIN `staff` `st` ON st.id = cp.commentator LEFT JOIN `team` `tw` ON tw.id = cp.s_win LEFT JOIN `match` `m` ON m.id = cp.match_id LEFT JOIN `team` `t1` ON t1.id = m.team1 LEFT JOIN `team` `t2` ON t2.id = m.team2 WHERE match_id=%s AND finish = 0", (lastest['id']))
+    return render_template('stream/preduction-match.html', preducts=preducts)
+
+@stream.route('/comment_match/<id>')
+def commentator_match_id(id):
+    preducts = db.query_all(f"SELECT cp.commentator, tw.full_name, tw.flag_name, tw.id, st.user_id, st.username, cp.s_team1, cp.s_team2, t1.full_name AS `team1`, t2.full_name AS `team2` FROM `com_preducts` `cp` LEFT JOIN `staff` `st` ON st.id = cp.commentator LEFT JOIN `team` `tw` ON tw.id = cp.s_win LEFT JOIN `match` `m` ON m.id = cp.match_id LEFT JOIN `team` `t1` ON t1.id = m.team1 LEFT JOIN `team` `t2` ON t2.id = m.team2 WHERE match_id=%s", (id))
+    return render_template('stream/preduction-match.html', preducts=preducts)
