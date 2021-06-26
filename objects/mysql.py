@@ -347,7 +347,6 @@ class DB(object):
             return query
 
         if staff_id:
-            print(staff_id)
             query = self.query_one('select * from staff where id = %s and active = 1', (staff_id,))
             return query
 

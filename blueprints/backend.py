@@ -583,7 +583,6 @@ def staff():
                 db.query("Update staff Set active = 1 Where user_id = %s", (user_id))
         except Exception as e:
             flash(e.args[0], 'danger')
-            log.exception(e)
         finally:
             return redirect(url_for('backend.staff'))
 
@@ -680,7 +679,6 @@ def mappool_add(round):
         flash(info, 'success')
     except Exception as e:
         flash(e.args[0], 'danger')
-        log.exception(e)
     finally:
         return redirect(url_for('backend.mappool', round_id=round))
             
@@ -717,7 +715,6 @@ def mappool_update(round):
         flash(info, 'success')
     except Exception as e:
         flash(e.args, 'danger')
-        log.exception(e)
     finally:
         return redirect(url_for('backend.mappool', round_id=round))
 
@@ -730,7 +727,6 @@ def mappool_del(id, round):
         flash('Remove Success :happy:', 'success')
     except Exception as e:
         flash(e.args[0], 'danger')
-        log.exception(e)
     finally:
         return redirect(url_for('backend.mappool', round_id=round))
 
