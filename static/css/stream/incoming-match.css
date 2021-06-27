@@ -434,7 +434,7 @@ p {
 
 .hide {
     opacity: 0;
-    transform: translateY(5px);
+    transform: translateY(10px);
 }
 
 .show {
