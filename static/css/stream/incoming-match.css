@@ -1,0 +1,442 @@
+p {
+    margin: 0;
+    padding: 0;
+}
+
+.fhe-body {
+    margin: 0;
+    background-color: rgba(44, 45, 44, 1);
+    height: 768px;
+}
+
+.fhe-mainFrame {
+    background-color: rgba(44, 45, 44, 1);
+    height: 768px;
+    width: 100%;
+    position: relative;
+    overflow: hidden
+}
+
+.imcoming_sample {
+    display: flex;
+    position: absolute;
+    box-sizing: border-box;
+    width: 1366px;
+    height: 768px;
+    top: 0px;
+    left: 0px;
+    background-image: url("/static/img/stream/imcoming_sam.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.round_title-1 {
+    font-family: 'DB Helvethaica X';
+    font-weight: 600;
+}
+
+.round_title {
+    position: absolute;
+    width: 1302px;
+    height: 36px;
+    top: 105px;
+    left: 64px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 31px;
+    text-align: LEFT;
+    align-items: flex-start;
+    line-height: 36.328125px;
+}
+
+.team-info {
+    display: flex;
+    position: absolute;
+    width: 1366px;
+    height: 768px;
+    top: 0px;
+    left: 0px;
+    background-color: rgba(0, 0, 0, 0);
+    overflow: hidden;
+    opacity: 1;
+    transition: 0.5s ease;
+}
+
+.info-team2 {
+    display: flex;
+    position: absolute;
+    width: 444px;
+    height: 292px;
+    top: 266px;
+    left: 253px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.team-info-ava02 {
+    display: flex;
+    position: absolute;
+    box-sizing: border-box;
+    width: 211px;
+    height: 211px;
+    top: 0px;
+    left: 50.08%;
+    transform: translatex(-50%);
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 20px;
+}
+
+.team-info-name02 {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 444px;
+    height: 58px;
+    top: 234px;
+    left: 0px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 48px;
+    text-align: center;
+    align-items: flex-start;
+    line-height: 56.25px;
+    justify-content: center;
+}
+
+.info-team1 {
+    display: flex;
+    position: absolute;
+    width: 460px;
+    height: 292px;
+    top: 266px;
+    left: 652px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.team-info-ava01 {
+    display: flex;
+    position: absolute;
+    box-sizing: border-box;
+    width: 211px;
+    height: 211px;
+    top: 0px;
+    left: 50.08%;
+    transform: translatex(-50%);
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 20px;
+}
+
+.team-info-name01 {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 460px;
+    height: 58px;
+    top: 234px;
+    left: 0px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 48px;
+    text-align: center;
+    align-items: flex-start;
+    line-height: 56.25px;
+    justify-content: center;
+}
+
+
+.players-team2 {
+    display: flex;
+    position: absolute;
+    width: 510px;
+    height: 341px;
+    top: 216px;
+    left: 245px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.players-team2-info {
+    display: flex;
+    position: absolute;
+    width: 322px;
+    height: 126px;
+    top: 0px;
+    left: 0px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.player-team-info-ava02 {
+    display: flex;
+    position: absolute;
+    box-sizing: border-box;
+    width: 126px;
+    height: 126px;
+    top: 0px;
+    left: 19.57%;
+    transform: translatex(-50%);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: rgba(255, 255, 255, 1);
+    border-radius: 16px;
+}
+
+.player-team-info-name02 {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 500px;
+    height: 58px;
+    top: 34px;
+    left: 162px;
+    color: rgba(255, 255, 255, 1);
+    font-family: DB Helvethaica X;
+    font-weight: 400;
+    font-size: 42px;
+    text-align: center;
+    align-items: flex-start;
+    line-height: 56.25px;
+}
+
+.player2-team1 {
+    display: flex;
+    position: absolute;
+    width: 422px;
+    height: 74px;
+    top: 267px;
+    left: 88px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.a04 {
+    display: flex;
+    position: absolute;
+    width: 74px;
+    height: 74px;
+    top: 0px;
+    left: 0px;
+    background-color: rgba(255, 255, 255, 1);
+    overflow: hidden;
+    border-radius: 12px;
+    background-size: cover;
+}
+
+.n04 {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 314px;
+    height: 43px;
+    top: 15px;
+    left: 108px;
+    color: rgba(255, 255, 255, 1);
+    font-family: DB Helvethaica X;
+    font-weight: 400;
+    font-size: 36px;
+    text-align: LEFT;
+    align-items: flex-start;
+    line-height: 42.1875px;
+}
+
+.player1-team1 {
+    display: flex;
+    position: absolute;
+    width: 423px;
+    height: 74px;
+    top: 168px;
+    left: 87px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.a03 {
+    display: flex;
+    position: absolute;
+    width: 74px;
+    height: 74px;
+    top: 0px;
+    left: 0px;
+    background-color: rgba(255, 255, 255, 1);
+    overflow: hidden;
+    border-radius: 12px;
+    background-size: cover;
+}
+
+.n03 {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 314px;
+    height: 43px;
+    top: 15px;
+    left: 109px;
+    color: rgba(255, 255, 255, 1);
+    font-family: DB Helvethaica X;
+    font-weight: 400;
+    font-size: 36px;
+    text-align: LEFT;
+    align-items: flex-start;
+    line-height: 42.1875px;
+}
+
+.players-team1 {
+    display: flex;
+    position: absolute;
+    width: 513px;
+    height: 341px;
+    top: 216px;
+    left: 607px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.players-team1-info {
+    display: flex;
+    position: absolute;
+    width: 300px;
+    height: 137px;
+    top: -10px;
+    left: 213px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.player-team-info-ava01 {
+    display: flex;
+    position: absolute;
+    box-sizing: border-box;
+    width: 137px;
+    height: 137px;
+    top: 0px;
+    left: 77.17%;
+    transform: translatex(-50%);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: rgba(255, 255, 255, 1);
+    border-radius: 16px;
+}
+
+.player-team-info-name01 {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 500px;
+    height: 58px;
+    top: 45px;
+    right: 172px;
+    color: rgba(255, 255, 255, 1);
+    font-family: DB Helvethaica X;
+    font-weight: 400;
+    font-size: 42px;
+    text-align: center;
+    align-items: flex-start;
+    line-height: 56.25px;
+    justify-content: flex-end;
+}
+
+.player1-team2 {
+    display: flex;
+    position: absolute;
+    width: 405px;
+    height: 74px;
+    top: 168px;
+    left: 0px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.a02 {
+    display: flex;
+    position: absolute;
+    width: 74px;
+    height: 74px;
+    top: 0px;
+    left: 340px;
+    background-color: rgba(255, 255, 255, 1);
+    overflow: hidden;
+    background-size: cover;
+    border-radius: 12px;
+}
+
+.n02 {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 310px;
+    height: 43px;
+    top: 15px;
+    left: 0px;
+    color: rgba(255, 255, 255, 1);
+    font-family: DB Helvethaica X;
+    font-weight: 400;
+    font-size: 36px;
+    text-align: RIGHT;
+    align-items: flex-start;
+    line-height: 42.1875px;
+    justify-content: flex-end;
+}
+
+.player2-team2 {
+    display: flex;
+    position: absolute;
+    width: 406px;
+    height: 74px;
+    top: 267px;
+    left: 0px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.a01 {
+    display: flex;
+    position: absolute;
+    width: 74px;
+    height: 74px;
+    top: 0px;
+    left: 340px;
+    background-color: rgba(255, 255, 255, 1);
+    overflow: hidden;
+    border-radius: 12px;
+    background-size: cover;
+}
+
+.n01 {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 310px;
+    height: 43px;
+    top: 15px;
+    left: 0px;
+    color: rgba(255, 255, 255, 1);
+    font-family: DB Helvethaica X;
+    font-weight: 400;
+    font-size: 36px;
+    text-align: RIGHT;
+    align-items: flex-start;
+    line-height: 42.1875px;
+    justify-content: flex-end;
+}
+
+.player-info {
+    width: 1366px;
+    height: 768px;
+    position: absolute;
+    opacity: 0;
+    transition: 0.5s ease;
+}
+
+.title {
+    text-align: right !important;
+}
+
+.song-data {
+    text-align: right !important;
+}
+
+
+.hide {
+    opacity: 0;
+    transform: translateY(5px);
+}
+
+.show {
+    opacity: 1;
+}
