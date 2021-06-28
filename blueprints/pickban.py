@@ -25,6 +25,15 @@ def get_leaders_match(id):
 def index():
     return '<h1>Hi uwu</h1>'
 
+@pickban.route('/gusbell')
+def gusbell():
+    session.clear()
+    session.permanent = True
+    session['id'] = '11357248'
+    session['user_id'] = '11357248'
+    session['username'] = 'Gusbell'
+    return 'logged'
+
 @pickban.route('/<code>')
 @login_required
 def pickban_main(code):

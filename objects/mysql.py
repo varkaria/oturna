@@ -406,21 +406,7 @@ class DB(object):
 
         res = json.loads(res['json'])
         mappool = self.query_all(f"SELECT id, mods, json FROM json_mappool where `round_id`={res['round_id']}")
-
-        e = []
-
-        available_maps = []
-        for s in mappool:
-            d = json.loads(s['json'])
-            if str(d['beatmap_id']) in str(res['banpicks']) or str(d['mods']) == 'TB' or str(d['mods']) == 'TBS':
-                continue
-            else:
-                available_maps.append({
-                    'id': s['id'],
-                    'mods': s['mods'],
-                    'info': d
-                })
-
+        
         if res['banpicks']:
             t = len(res['banpicks'])
             if res['banpicks'][0]['from'] != None:
@@ -454,6 +440,31 @@ class DB(object):
                 self.query(f"UPDATE `tourney`.`match_sets` SET `finish_ban`='1' WHERE  `id`={res['set_id']};")
                 res['picker'] = None
                 res['picker_t'] = None
+
+        prohibited_ban = []
+         # checking it's sets 2?
+        prev = self.query_all("SELECT id FROM match_sets WHERE match_id=%s AND finish_ban=1", res['id'])
+        if prev:
+            if str(res['set_id']) != str(prev[0]['id']):
+                prevbanspicks = self.query_all("SELECT pb.map_id AS 'map_id' FROM match_sets ms LEFT JOIN `match_sets_banpick` pb ON pb.set_id = ms.id WHERE ms.id=%s AND pb.type='ban'", prev[0]['id'])
+                prohibited_ban = prevbanspicks
+
+        available_maps = []
+        for s in mappool:
+            d = json.loads(s['json'])
+            if str(d['beatmap_id']) in str(res['banpicks']) or str(d['mods']) == 'TB' or str(d['mods']) == 'TBS':
+                continue
+            else:
+                if res['status'] == 'ban' and str(d['beatmap_id']) in str(prohibited_ban):
+                    prohi = 1
+                else:
+                    prohi = 0
+                available_maps.append({
+                    'id': s['id'],
+                    'mods': s['mods'],
+                    'info': d,
+                    'prohi': prohi
+                })
 
         res['available_maps'] = available_maps
     
