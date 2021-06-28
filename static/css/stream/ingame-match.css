@@ -5,7 +5,6 @@ p {
 
 .fhe-body {
     margin: 0;
-    background-color: rgba(0, 0, 0, 0);
     height: 768px;
 }
 
@@ -437,5 +436,5 @@ p {
 }
 
 .songSelect .ur-c {
-    transform: translateY(50px);
+    transform: translateY(100px);
 }
