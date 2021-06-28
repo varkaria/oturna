@@ -171,10 +171,14 @@ def privilege(num):
 def page_not_foubd(error):
     return error
 
+@app.template_global()
+def base_url():
+    return str(os.environ.get('BASE_URL', 'http://localhost:5000'))
+
 if __name__ == '__main__':
     socketio.run(
         app,
-        host='127.0.0.1',
+        host=str(os.environ.get('HOST', '127.0.0.1')),
         port=int(os.environ.get('PORT', 5000)),
-        debug=True
+        debug=bool(os.environ.get('DEBUG', True)),
     )

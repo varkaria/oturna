@@ -494,7 +494,7 @@ OM{{ match[0].code }} | {{ match[0].team1.full_name }} vs {{ match[0].team2.full
                             </div>
                         </div>
                         <input type="text" class="form-control"
-                            :value="`Start drafting in set 2 | https://omthpl.varkaria.tech/pickban/${banlink[1]}`"
+                            :value="`Start drafting in set 2 | {{ base_url() }}/pickban/${banlink[1]}`"
                             readonly="">
                     </div>
                     <div v-if="data.sets[0].pick.length == 0">
@@ -506,7 +506,7 @@ OM{{ match[0].code }} | {{ match[0].team1.full_name }} vs {{ match[0].team2.full
                         </div>
                         <label class="form-label">Warmup Ended</label>
                         <input type="text" class="form-control"
-                            :value="`วอร์มอัพได้จบลงแล้ว จะเริ่มการ drafting เซ็ตแรก ในขนะนี้ | ลิงค์การ drafting https://omthpl.varkaria.tech/pickban/${banlink[0]} | ก่อนกดแมพไหนให้โฟกัสด้วยนะว่าแบนหรือเลือกถูกแมพหรือปล่าวด้วยนะครับ`"
+                            :value="`วอร์มอัพได้จบลงแล้ว จะเริ่มการ drafting เซ็ตแรก ในขนะนี้ | ลิงค์การ drafting {{ base_url() }}/pickban/${banlink[0]} | ก่อนกดแมพไหนให้โฟกัสด้วยนะว่าแบนหรือเลือกถูกแมพหรือปล่าวด้วยนะครับ`"
                             readonly="">
                     </div>
                 </div>
@@ -540,9 +540,9 @@ OM{{ match[0].code }} | {{ match[0].team1.full_name }} vs {{ match[0].team2.full
                     <label class="form-label">Pick / Ban Link</label>
                     {% for e in banurl %}
                     <div class="input-group mb-2">
-                        <input type="text" class="form-control" value="https://omthpl.varkaria.tech/pickban/{{ e['random'] }}"
+                        <input type="text" class="form-control" value="{{ base_url() }}/pickban/{{ e['random'] }}"
                         readonly="">
-                        <a class="btn" href="https://omthpl.varkaria.tech/pickban/{{ e['random'] }}/spectator" type="button">Spectator!</a>
+                        <a class="btn" href="{{ base_url() }}/pickban/{{ e['random'] }}/spectator" type="button">Spectator!</a>
                     </div>
                     {% endfor %}
                 </div>
@@ -571,7 +571,7 @@ OM{{ match[0].code }} | {{ match[0].team1.full_name }} vs {{ match[0].team2.full
         },
         methods: {
             LoadMatch() {
-                axios.get('https://omthpl.varkaria.tech/manager/matchapi/{{ id }}/')
+                axios.get('/manager/matchapi/{{ id }}/')
                     .then(res => {
                         this.$set(this, 'data', res.data)
                         this.$set(this, 'current', res.data.currentround)
