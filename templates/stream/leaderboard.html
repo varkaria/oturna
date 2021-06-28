@@ -20,23 +20,23 @@
                         <div class="c_team-name">
                             {{ i.full_name }}
                         </div>
-                        <div class="c_team-a" style="background-image:url(/team_flag/{{i.id}})"></div>
+                        <div class="c_team-a" style="background-image:url(/team_flag/{{ i.id }})"></div>
                         <div class="c_points">
                             <div class="c_d2">
-                                {{i.match_play}}
+                                {{ i.match_play }}
                             </div>
                             <div class="c_d2">
-                                {{i.win}} - {{i.lose}}
+                                {{ i.win }} - {{ i.lose }}
                             </div>
                             <div class="c_d2">
-                                {{i.points}}
+                                {{ i.points }}
                             </div>
                         </div>
                     </div>
                     <div class="c_blockd1">
                         <img class="Y5R0NBvI" src="/static/img/stream/leaderboard/man.svg">
                         <div class="c_undun">
-                            {{loop.index}}
+                            {{ loop.index }}
                         </div>
                     </div>
                 </div>
