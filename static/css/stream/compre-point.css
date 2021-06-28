@@ -30,7 +30,6 @@ p {
     position: absolute;
     display: flex;
     flex-flow: row;
-    width: 115px;
     height: 24px;
     top: 518px;
     left: 527px;
@@ -56,7 +55,6 @@ p {
     position: absolute;
     display: flex;
     flex-flow: row;
-    width: 115px;
     height: 24px;
     top: 519px;
     left: 163px;
@@ -82,7 +80,6 @@ p {
     position: absolute;
     display: flex;
     flex-flow: row;
-    width: 115px;
     height: 24px;
     top: 374px;
     left: 527px;
@@ -108,7 +105,6 @@ p {
     position: absolute;
     display: flex;
     flex-flow: row;
-    width: 115px;
     height: 24px;
     top: 375px;
     left: 163px;
@@ -134,7 +130,6 @@ p {
     position: absolute;
     display: flex;
     flex-flow: row;
-    width: 115px;
     height: 24px;
     top: 234px;
     left: 527px;
@@ -160,7 +155,6 @@ p {
     position: absolute;
     display: flex;
     flex-flow: row;
-    width: 115px;
     height: 24px;
     top: 234px;
     left: 163px;
