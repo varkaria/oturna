@@ -51,18 +51,23 @@ def commentator_points():
 def commentator_match():
     lastest = db.query_one("SELECT id FROM `match` WHERE DATE < NOW() ORDER BY id DESC LIMIT 1")
     preducts = db.query_all(f"SELECT cp.commentator, tw.full_name, tw.flag_name, tw.id, st.user_id, st.username, cp.s_team1, cp.s_team2, t1.full_name AS `team1`, t2.full_name AS `team2` FROM `com_preducts` `cp` LEFT JOIN `staff` `st` ON st.id = cp.commentator LEFT JOIN `team` `tw` ON tw.id = cp.s_win LEFT JOIN `match` `m` ON m.id = cp.match_id LEFT JOIN `team` `t1` ON t1.id = m.team1 LEFT JOIN `team` `t2` ON t2.id = m.team2 WHERE match_id=%s AND finish = 0", (lastest['id']))
-    return render_template('stream/comment_preduction/preduction_match.html', preducts=preducts)
-
+    if preducts:
+        return render_template('stream/comment_preduction/preduction_match.html', preducts=preducts)
+    
+    return b'uwu'
+    
 @stream.route('/comment_match/<id>')
 def commentator_match_id(id:int):
     preducts = db.query_all(f"SELECT cp.commentator, tw.full_name, tw.flag_name, tw.id, st.user_id, st.username, cp.s_team1, cp.s_team2, t1.full_name AS `team1`, t2.full_name AS `team2` FROM `com_preducts` `cp` LEFT JOIN `staff` `st` ON st.id = cp.commentator LEFT JOIN `team` `tw` ON tw.id = cp.s_win LEFT JOIN `match` `m` ON m.id = cp.match_id LEFT JOIN `team` `t1` ON t1.id = m.team1 LEFT JOIN `team` `t2` ON t2.id = m.team2 WHERE match_id=%s", (id))
-    return render_template('stream/comment_preduction/preduction_match.html', preducts=preducts)
+    if preducts:
+        return render_template('stream/comment_preduction/preduction_match.html', preducts=preducts)
+    
+    return b'uwu'
 
 @stream.route('/incoming')
 def incoming_match():
     data = db.query_one("SELECT t1.json AS `t1`, t2.json AS `t2` FROM `match` LEFT JOIN `json_team` `t1` ON `t1`.`id`=`match`.`team1` LEFT JOIN `json_team` `t2` ON `t2`.`id`=`match`.`team2` WHERE DATE < NOW() ORDER BY match.id DESC LIMIT 1")
-    t1 = json.loads(data['t1'])
-    t2 = json.loads(data['t2'])
+    t1, t2 = json.loads(data['t1']), json.loads(data['t2'])
     return render_template('stream/incoming_match.html', t1=t1, t2=t2)
 
 @stream.route('/ingame')
