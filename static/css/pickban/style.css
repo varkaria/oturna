@@ -87,6 +87,7 @@ a {
     height: 90px !important;
     border: 0px;
     user-select: none;
+    cursor: pointer;
 }
 
 .mod-icon {
@@ -138,13 +139,14 @@ a {
 
 .b-block {
     width: 7vw;
-    height: 20vh;
+    height: 19vh;
     background: #00000075;
-    border-radius: 18px;
     transition: 0.1s ease;
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
+    border-radius: 10px;
 }
 
 .avatar-picture {
@@ -168,7 +170,7 @@ a {
 }
 
 .disabled {
-    opacity: 0.6;
+    opacity: 0.3;
     pointer-events: none;
 }
 
@@ -236,7 +238,7 @@ a {
 
 #modal {
     transition: 0.5s ease;
-    transition-delay: 5s;
+    transition-delay: 1s;
     pointer-events: none;
     opacity: 1;
 }
@@ -247,4 +249,85 @@ a {
 
 .ban-element {
     opacity: 0.3;
+}
+
+.b-block:hover {
+    z-index: 5;
+    opacity: 1;
+}
+
+.beatmap-block {
+    width: 360px;
+    height: 90px;
+    position: absolute;
+    background: white;
+    opacity: 0;
+    border-radius: 6px;
+    transition: 0.1s ease;
+}
+
+.b-block:hover .beatmap-block {
+    opacity: 1 !important;
+    transform: scale(1.05);
+}
+
+
+.mpmetadata-box {
+    width: calc(100% - 70px);
+    position: absolute;
+    left: 10px;
+    bottom: 10px
+}
+
+.mpmetadata {
+    color: white;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, .75);
+    margin: 0;
+}
+
+.mpmetadata.title {
+    font-size: 16px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: normal
+}
+
+.mpmetadata.artist {
+    font-size: 14px
+}
+
+.mpmetadata-mods {
+    background: #000000b5;
+    text-align: center;
+    height: 22px;
+    width: 2vw;
+    font-size: 13px;
+    position: absolute;
+    left: 10px;
+    top: 6px;
+    color: white;
+    font-weight: 500;
+}
+
+.cursor {
+    position: absolute;
+    background: white;
+    width: 8px;
+    height: 122px;
+    left: 0px;
+    top: 72px;
+    transition: 0.5s ease;
+}
+
+.cur-1 {
+    transform: translateY(172px);
+}
+
+.cur-8 {
+    transform: translateX(-50px);
+}
+
+.mappool {
+    transition: 0.4s ease;
 }

@@ -315,11 +315,13 @@ class DB(object):
             r, b = o_score
             return [r + 1 - min(b, 1), b + 1 - min(r, 1)]
         team_1_score, team_2_score = calculate_point(o_score)
+        
         # Saving data in database       
-        self.query_one(f'UPDATE `tourney`.`match` SET `team2_score`="{team_2_score}" WHERE `id`={fulldata["id"]};')
-        self.query_one(f'UPDATE `tourney`.`match` SET `team1_score`="{team_1_score}" WHERE `id`={fulldata["id"]};')
+        self.query_one(f'UPDATE `tourney`.`match` SET `team2_score`="{o_score[1]}" WHERE `id`={fulldata["id"]};')
+        self.query_one(f'UPDATE `tourney`.`match` SET `team1_score`="{o_score[0]}" WHERE `id`={fulldata["id"]};')
 
-        if set == 1 and finish == True and fulldata['lock'] == 0:
+        if fulldata['lock'] == 0 and set == 1:
+            print('Locking about score')
             self.query_one(f'UPDATE `tourney`.`team` SET `points`=`points`+ {team_1_score} WHERE `id`={fulldata["team1"]["id"]};')
             self.query_one(f'UPDATE `tourney`.`team` SET `points`=`points`+ {team_2_score} WHERE `id`={fulldata["team2"]["id"]};')
             if o_score[0] == 2:
@@ -331,20 +333,14 @@ class DB(object):
             preducts = self.query_all(f'SELECT * FROM `tourney`.`com_preducts` WHERE `match_id`={fulldata["id"]} AND `finish`=0;')
             for p in preducts:
                 point = 0
-                parsed = f"{p['s_team1']} - {p['s_team2']}"
+                parsed = f"{p['s_team1']}{p['s_team2']}"
                 if o_score[0] == 2 and o_score[0] == p['s_team1']:
                     point = point + 3
-                    if o_score[1] == p['s_team2']:
-                        point = point + 2
-                    continue
                 elif o_score[1] == 2 and o_score[1] == p['s_team2']:
                     point = point + 3
-                    if o_score[0] == p['s_team1']:
-                        point = point + 2
-                    continue
-                elif parsed == f"{o_score[0]} - {o_score[1]}" or f"{o_score[1]} - {o_score[0]}":
+                if parsed == f"{o_score[0]}{o_score[1]}" or parsed == f"{o_score[1]}{o_score[0]}":
                     point = point + 2
-                    continue
+                print(f'Commentator {p["commentator"]} | got {point} points')
                 self.query_one(f'UPDATE `tourney`.`staff` SET `c_score`=`c_score` + {point} WHERE `id`={p["commentator"]};')
             self.query_one(f'UPDATE `tourney`.`com_preducts` SET `finish`=1 WHERE `match_id`={fulldata["id"]} AND `finish`=0;')
             self.query_one(f'UPDATE `tourney`.`team` SET `match_play`=`match_play` + 1 WHERE `id`={fulldata["team1"]["id"]};')
@@ -406,21 +402,7 @@ class DB(object):
 
         res = json.loads(res['json'])
         mappool = self.query_all(f"SELECT id, mods, json FROM json_mappool where `round_id`={res['round_id']}")
-
-        e = []
-
-        available_maps = []
-        for s in mappool:
-            d = json.loads(s['json'])
-            if str(d['beatmap_id']) in str(res['banpicks']) or str(d['mods']) == 'TB' or str(d['mods']) == 'TBS':
-                continue
-            else:
-                available_maps.append({
-                    'id': s['id'],
-                    'mods': s['mods'],
-                    'info': d
-                })
-
+        
         if res['banpicks']:
             t = len(res['banpicks'])
             if res['banpicks'][0]['from'] != None:
@@ -454,6 +436,31 @@ class DB(object):
                 self.query(f"UPDATE `tourney`.`match_sets` SET `finish_ban`='1' WHERE  `id`={res['set_id']};")
                 res['picker'] = None
                 res['picker_t'] = None
+
+        prohibited_ban = []
+         # checking it's sets 2?
+        prev = self.query_all("SELECT id FROM match_sets WHERE match_id=%s AND finish_ban=1", res['id'])
+        if prev:
+            if str(res['set_id']) != str(prev[0]['id']):
+                prevbanspicks = self.query_all("SELECT pb.map_id AS 'map_id' FROM match_sets ms LEFT JOIN `match_sets_banpick` pb ON pb.set_id = ms.id WHERE ms.id=%s AND pb.type='ban'", prev[0]['id'])
+                prohibited_ban = prevbanspicks
+
+        available_maps = []
+        for s in mappool:
+            d = json.loads(s['json'])
+            if str(d['beatmap_id']) in str(res['banpicks']) or str(d['mods']) == 'TB' or str(d['mods']) == 'TBS':
+                continue
+            else:
+                if res['status'] == 'ban' and str(d['beatmap_id']) in str(prohibited_ban):
+                    prohi = 1
+                else:
+                    prohi = 0
+                available_maps.append({
+                    'id': s['id'],
+                    'mods': s['mods'],
+                    'info': d,
+                    'prohi': prohi
+                })
 
         res['available_maps'] = available_maps
     

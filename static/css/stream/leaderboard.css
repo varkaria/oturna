@@ -346,7 +346,8 @@ p {
 }
 
 img {
-    filter: blur(0px)
+    filter: blur(0px);
+    transition: 0s ease !important;
 }
 
 section {

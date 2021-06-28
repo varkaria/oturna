@@ -25,6 +25,15 @@ def get_leaders_match(id):
 def index():
     return '<h1>Hi uwu</h1>'
 
+@pickban.route('/gusbell')
+def gusbell():
+    session.clear()
+    session.permanent = True
+    session['id'] = '11357248'
+    session['user_id'] = '11357248'
+    session['username'] = 'Gusbell'
+    return 'logged'
+
 @pickban.route('/<code>')
 @login_required
 def pickban_main(code):
@@ -61,6 +70,16 @@ def pickban_spec_recent():
     if set_match:
         session['match_set_id'] = set_match['id']
         return render_template('pickban/pickban_spec.html', match_code=code, match_set=set_match['id'])
+
+    return '<h1>Hi uwu 2</h1>'
+
+@pickban.route('/<code>/streamer')
+def pickban_stream(code):
+    set_match = db.query('SELECT id, match_id FROM match_sets WHERE `random`=%s',[code])
+    
+    if set_match:
+        session['match_set_id'] = set_match['id']
+        return render_template('pickban/pickban_stream.html', match_code=code, match_set=set_match['id'], match_data=db.get_full_match(id=set_match['match_id']))
 
     return '<h1>Hi uwu 2</h1>'
 
