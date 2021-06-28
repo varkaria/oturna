@@ -10,7 +10,9 @@
 {% endblock %}
 {% block content %}
 <div id="app">
-    <div id="modal" :class="'fixed z-10 inset-0 overflow-y-auto ' + (results.team1.online == 0 || results.team2.online == 0 ? 'unready-time':'ready-time')">
+
+    <div id="modal"
+        :class="'fixed z-10 inset-0 overflow-y-auto ' + (online[0] == 0 || online[1] == 0 ? 'unready-time':'ready-time')">
         <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
             <div class="fixed inset-0 bg-gray-800 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
             <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true"></span>
@@ -20,23 +22,30 @@
                     <div class="sm:flex sm:items-center justify-center">
                         <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                             <div class="mt-2">
-                                <h1
-                                class="text-center text-white text-xl mb-1 font-semibold">
-                                <span v-if="results.team1.online == 0 || results.team2.online == 0" >Waiting for ready leaders</span>
-                                <span v-else>Ban & Pick Will Starting Soon</span>
+                                <h1 class="text-center text-white text-xl mb-1 font-semibold">
+                                    <span v-if="online[0] == 0 || online[1] == 0">Waiting for ready leaders</span>
+                                    <span v-else>Ban & Pick Will Starting Soon</span>
                                 </h1>
                                 <div class="flex">
                                     <div class="p-8">
-                                        <img :class="'w-20 h-20 mx-auto mb-4 rounded-full border-2 transition-all ' + (results.team1.online == 1 ? 'border-green-600':'border-red-600')"
+                                        <img :class="'w-20 h-20 mx-auto mb-4 rounded-full border-2 transition-all ' + (online[0] == 1 ? 'border-green-600':'border-red-600')"
                                             :src="'https://a.ppy.sh/' + results.team1.leader_id">
-                                        <h3 class="text-xl mb-1 font-semibold font-heading text-white text-center"><% results.team1.leader_name %></h3>
-                                        <p class="text-sm text-white text-center">Leader of <% results.team1.full_name %></p>
+                                        <h3 class="text-xl mb-1 font-semibold font-heading text-white text-center">
+                                            <% results.team1.leader_name %>
+                                        </h3>
+                                        <p class="text-sm text-white text-center">Leader of <% results.team1.full_name
+                                                %>
+                                        </p>
                                     </div>
                                     <div class="p-8">
-                                        <img :class="'w-20 h-20 mx-auto mb-4 rounded-full border-2 transition-all ' + (results.team2.online == 1 ? 'border-green-600':'border-red-600')"
-                                        :src="'https://a.ppy.sh/' + results.team2.leader_id">
-                                        <h3 class="text-xl mb-1 font-semibold font-heading text-white text-center"><% results.team2.leader_name %></h3>
-                                        <p class="text-sm text-white text-center">Leader of <% results.team2.full_name %></p>
+                                        <img :class="'w-20 h-20 mx-auto mb-4 rounded-full border-2 transition-all ' + (online[1] == 1 ? 'border-green-600':'border-red-600')"
+                                            :src="'https://a.ppy.sh/' + results.team2.leader_id">
+                                        <h3 class="text-xl mb-1 font-semibold font-heading text-white text-center">
+                                            <% results.team2.leader_name %>
+                                        </h3>
+                                        <p class="text-sm text-white text-center">Leader of <% results.team2.full_name
+                                                %>
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -64,249 +73,274 @@
 
     <section id="pickban" class="px-10 py-10">
         <div class="flex flex-col space-y-8">
-            <div v-if="results.reverse == 1">
-                <div id="team1" class="flex flex-row justify-start">
-                    <div class="flex flex-col justify-center w-1/9 overflow-hidden">
+            <div id="team1" class="flex flex-row justify-start">
+                <div class="flex flex-col justify-center w-1/9">
+                    <template v-if='results.reverse == 1'>
                         <img :src="'https://a.ppy.sh/' + results.team2.leader_id" class="avatar-picture">
-                        <h1 class="text-white text-xl mt-2"><% results.team2.leader_name %></h1>
-                    </div>
-                    <div class="w-1/9 overflow-hidden">
-                        <div v-if="results.banpicks[0].info != null" :class="'b-block ' + (results.banpicks[0].info != null ? 'border-4 border-red-700 ban-element':'')"
-                            :style="'background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(https://assets.ppy.sh/beatmaps/'+ results.banpicks[0].info.beatmapset_id +'/covers/cover.jpg);'">
-                            <a class="mods">
-                                <% results.banpicks[0].mods %>
-                            </a>
-                        </div>
-                        <div v-else :class="'b-block ' + (results.banpicks[0].info == null ? 'banning':'')"></div>
-                    </div>
-    
-                    <div class="w-1/9 overflow-hidden blank-block">
-                    </div>
-    
-                    <div class="w-1/9 overflow-hidden blank-block">
-                    </div>
-    
-                    <div class="w-1/9 overflow-hidden">
-                        <div v-if="results.banpicks[3]" class="b-block" :class="'b-block ' + (results.banpicks[3] ? 'border-4 border-blue-700':'')"
-                            :style="'background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(https://assets.ppy.sh/beatmaps/'+ results.banpicks[3].info.beatmapset_id +'/covers/cover.jpg);'">
-                            <a class="mods">
-                                <% results.banpicks[3].mods %>
-                            </a>
-                        </div>
-                        <div v-else :class="'b-block ' + (results.banpicks[2] ? 'picking':'')"></div>
-                    </div>
-    
-                    <div class="w-1/9 overflow-hidden blank-block">
-                    </div>
-    
-                    <div class="w-1/9 overflow-hidden">
-                        <div v-if="results.banpicks[5]" class="b-block" :class="'b-block ' + (results.banpicks[5] ? 'border-4 border-red-700 ban-element':'')"
-                            :style="'background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(https://assets.ppy.sh/beatmaps/'+ results.banpicks[5].info.beatmapset_id +'/covers/cover.jpg);'">
-                            <a class="mods">
-                                <% results.banpicks[5].mods %>
-                            </a>
-                        </div>
-                        <div v-else :class="'b-block ' + (results.banpicks[4] ? 'banning':'')"></div>
-                    </div>
-    
-                    <div class="w-1/9 overflow-hidden">
-                        <div v-if="results.banpicks[6]" class="b-block" :class="'b-block ' + (results.banpicks[6] ? 'border-4 border-blue-700':'')"
-                            :style="'background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(https://assets.ppy.sh/beatmaps/'+ results.banpicks[6].info.beatmapset_id +'/covers/cover.jpg);'">
-                            <a class="mods">
-                                <% results.banpicks[6].mods %>
-                            </a>
-                        </div>
-                        <div v-else :class="'b-block ' + (results.banpicks[5] ? 'picking':'')"></div>
-                    </div>
-                    <div class="w-1/9 overflow-hidden blank-block">
-                    </div>
-                </div>
-                <div id="team2" class="flex flex-wrap overflow-hidden justify-start">
-                    <div class="flex flex-col justify-center w-1/9 overflow-hidden">
+                        <h1 class="text-white text-center text-xl mt-2">
+                            <% results.team2.leader_name %>
+                        </h1>
+                    </template>
+                    <template v-if='results.reverse == 0'>
                         <img :src="'https://a.ppy.sh/' + results.team1.leader_id" class="avatar-picture">
-                        <h1 class="text-white text-xl mt-2"><% results.team1.leader_name %></h1>
-                    </div>
-                    <div class="w-1/9 overflow-hidden blank-block">
-                    </div>
-    
-                    <div class="w-1/9 overflow-hidden">
-                        <div v-if="results.banpicks[1]" class="b-block" :class="'b-block ' + (results.banpicks[1] ? 'border-4 border-red-700 ban-element':'')"
-                            :style="'background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(https://assets.ppy.sh/beatmaps/'+ results.banpicks[1].info.beatmapset_id +'/covers/cover.jpg);'">
-                            <a class="mods">
-                                <% results.banpicks[1].mods %>
-                            </a>
+                        <h1 class="text-white text-center text-xl mt-2">
+                            <% results.team1.leader_name %>
+                        </h1>
+                    </template>
+                </div>
+                <div class="w-1/9">
+                    <div v-if="results.banpicks[0].info != null"
+                        :class="'b-block ' + (results.banpicks[0].info != null ? 'border-4 border-red-700 ban-element':'')"
+                        :style="converturl(results.banpicks[0].info.beatmapset_id)">
+                        <a class="mods">
+                            <% results.banpicks[0].mods %>
+                        </a>
+                        <div class="beatmap-block" :style="converturl(results.banpicks[0].info.beatmapset_id)">
+                            <div class="mpmetadata-mods">
+                                <% results.banpicks[0].mods %>
+                            </div>
+                            <div class="mpmetadata-box">
+                                <h1 class="mpmetadata title">
+                                    <% results.banpicks[0].info.title %>
+                                        [<% results.banpicks[0].info.version %>]
+                                </h1>
+                                <h2 class="mpmetadata artist">
+                                    <% results.banpicks[0].info.artist %>
+                                </h2>
+                            </div>
                         </div>
-                        <div v-else :class="'b-block ' + (results.banpicks[0].info ? 'banning':'')"></div>
                     </div>
-    
-                    <div class="w-1/9 overflow-hidden">
-                        <div v-if="results.banpicks[2]" class="b-block" :class="'b-block ' + (results.banpicks[2] ? 'border-4 border-blue-700':'')"
-                            :style="'background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(https://assets.ppy.sh/beatmaps/'+ results.banpicks[2].info.beatmapset_id +'/covers/cover.jpg);'">
-                            <a class="mods">
-                                <% results.banpicks[2].mods %>
-                            </a>
+                    <div v-else :class="'b-block ' + (results.banpicks[0].info == null ? 'banning':'')"></div>
+                </div>
+
+                <div class="w-1/9 blank-block">
+                </div>
+
+                <div class="w-1/9 blank-block">
+                </div>
+
+                <div class="w-1/9">
+                    <div v-if="results.banpicks[3]" class="b-block"
+                        :class="'b-block ' + (results.banpicks[3] ? 'border-4 border-blue-700':'')"
+                        :style="converturl(results.banpicks[3].info.beatmapset_id)">
+                        <a class="mods">
+                            <% results.banpicks[3].mods %>
+                        </a>
+                        <div class="beatmap-block" :style="converturl(results.banpicks[3].info.beatmapset_id)">
+                            <div class="mpmetadata-mods">
+                                <% results.banpicks[3].mods %>
+                            </div>
+                            <div class="mpmetadata-box">
+                                <h1 class="mpmetadata title">
+                                    <% results.banpicks[3].info.title %>
+                                        [<% results.banpicks[3].info.version %>]
+                                </h1>
+                                <h2 class="mpmetadata artist">
+                                    <% results.banpicks[3].info.artist %>
+                                </h2>
+                            </div>
                         </div>
-                        <div v-else :class="'b-block ' + (results.banpicks[1] ? 'picking':'')"></div>
                     </div>
-    
-                    <div class="w-1/9 overflow-hidden blank-block">
-                    </div>
-    
-                    <div class="w-1/9 overflow-hidden">
-                        <div v-if="results.banpicks[4]" class="b-block" :class="'b-block ' + (results.banpicks[4] ? 'border-4 border-red-700 ban-element':'')"
-                            :style="'background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(https://assets.ppy.sh/beatmaps/'+ results.banpicks[4].info.beatmapset_id +'/covers/cover.jpg);'">
-                            <a class="mods">
-                                <% results.banpicks[4].mods %>
-                            </a>
+                    <div v-else :class="'b-block ' + (results.banpicks[2] ? 'picking':'')"></div>
+                </div>
+
+                <div class="w-1/9 blank-block">
+                </div>
+
+                <div class="w-1/9">
+                    <div v-if="results.banpicks[5]" class="b-block"
+                        :class="'b-block ' + (results.banpicks[5] ? 'border-4 border-red-700 ban-element':'')"
+                        :style="converturl(results.banpicks[5].info.beatmapset_id)">
+                        <a class="mods">
+                            <% results.banpicks[5].mods %>
+                        </a>
+                        <div class="beatmap-block" :style="converturl(results.banpicks[5].info.beatmapset_id)">
+                            <div class="mpmetadata-mods">
+                                <% results.banpicks[5].mods %>
+                            </div>
+                            <div class="mpmetadata-box">
+                                <h1 class="mpmetadata title">
+                                    <% results.banpicks[5].info.title %>
+                                        [<% results.banpicks[5].info.version %>]
+                                </h1>
+                                <h2 class="mpmetadata artist">
+                                    <% results.banpicks[5].info.artist %>
+                                </h2>
+                            </div>
                         </div>
-                        <div v-else :class="'b-block ' + (results.banpicks[3] ? 'banning':'')"></div>
                     </div>
-    
-                    <div class="w-1/9 overflow-hidden blank-block">
-                    </div>
-    
-                    <div class="w-1/9 overflow-hidden blank-block">
-                    </div>
-    
-                    <div class="w-1/9 overflow-hidden">
-                        <div v-if="results.banpicks[7]" class="b-block" :class="'b-block ' + (results.banpicks[7] ? 'border-4 border-blue-700':'')"
-                            :style="'background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(https://assets.ppy.sh/beatmaps/'+ results.banpicks[7].info.beatmapset_id +'/covers/cover.jpg);'">
-                            <a class="mods">
-                                <% results.banpicks[7].mods %>
-                            </a>
+                    <div v-else :class="'b-block ' + (results.banpicks[4] ? 'banning':'')"></div>
+                </div>
+
+                <div class="w-1/9">
+                    <div v-if="results.banpicks[6]" class="b-block"
+                        :class="'b-block ' + (results.banpicks[6] ? 'border-4 border-blue-700':'')"
+                        :style="converturl(results.banpicks[6].info.beatmapset_id)">
+                        <a class="mods">
+                            <% results.banpicks[6].mods %>
+                        </a>
+                        <div class="beatmap-block" :style="converturl(results.banpicks[6].info.beatmapset_id)">
+                            <div class="mpmetadata-mods">
+                                <% results.banpicks[6].mods %>
+                            </div>
+                            <div class="mpmetadata-box">
+                                <h1 class="mpmetadata title">
+                                    <% results.banpicks[6].info.title %>
+                                        [<% results.banpicks[6].info.version %>]
+                                </h1>
+                                <h2 class="mpmetadata artist">
+                                    <% results.banpicks[6].info.artist %>
+                                </h2>
+                            </div>
                         </div>
-                        <div v-else :class="'b-block ' + (results.banpicks[6] ? 'picking':'')"></div>
                     </div>
+                    <div v-else :class="'b-block ' + (results.banpicks[5] ? 'picking':'')"></div>
+                </div>
+                <div class="w-1/9 blank-block">
                 </div>
             </div>
-            <div v-else>
-                <div id="team1" class="flex flex-row justify-start">
-                    <div class="flex flex-col justify-center w-1/9 overflow-hidden">
+            <div id="team2" class="flex flex-wrap justify-start">
+                <div class="flex flex-col justify-center w-1/9">
+                    <template v-if='results.reverse == 1'>
                         <img :src="'https://a.ppy.sh/' + results.team1.leader_id" class="avatar-picture">
-                        <h1 class="text-white text-xl mt-2"><% results.team1.leader_name %></h1>
-                    </div>
-                    <div class="w-1/9 overflow-hidden">
-                        <div v-if="results.banpicks[0].info != null" :class="'b-block ' + (results.banpicks[0].info != null ? 'border-4 border-red-700 ban-element':'')"
-                            :style="'background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(https://assets.ppy.sh/beatmaps/'+ results.banpicks[0].info.beatmapset_id +'/covers/cover.jpg);'">
-                            <a class="mods">
-                                <% results.banpicks[0].mods %>
-                            </a>
-                        </div>
-                        <div v-else :class="'b-block ' + (results.banpicks[0].info == null ? 'banning':'')"></div>
-                    </div>
-    
-                    <div class="w-1/9 overflow-hidden blank-block">
-                    </div>
-    
-                    <div class="w-1/9 overflow-hidden blank-block">
-                    </div>
-    
-                    <div class="w-1/9 overflow-hidden">
-                        <div v-if="results.banpicks[3]" class="b-block" :class="'b-block ' + (results.banpicks[3] ? 'border-4 border-blue-700':'')"
-                            :style="'background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(https://assets.ppy.sh/beatmaps/'+ results.banpicks[3].info.beatmapset_id +'/covers/cover.jpg);'">
-                            <a class="mods">
-                                <% results.banpicks[3].mods %>
-                            </a>
-                        </div>
-                        <div v-else :class="'b-block ' + (results.banpicks[2] ? 'picking':'')"></div>
-                    </div>
-    
-                    <div class="w-1/9 overflow-hidden blank-block">
-                    </div>
-    
-                    <div class="w-1/9 overflow-hidden">
-                        <div v-if="results.banpicks[5]" class="b-block" :class="'b-block ' + (results.banpicks[5] ? 'border-4 border-red-700 ban-element':'')"
-                            :style="'background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(https://assets.ppy.sh/beatmaps/'+ results.banpicks[5].info.beatmapset_id +'/covers/cover.jpg);'">
-                            <a class="mods">
-                                <% results.banpicks[5].mods %>
-                            </a>
-                        </div>
-                        <div v-else :class="'b-block ' + (results.banpicks[4] ? 'banning':'')"></div>
-                    </div>
-    
-                    <div class="w-1/9 overflow-hidden">
-                        <div v-if="results.banpicks[6]" class="b-block" :class="'b-block ' + (results.banpicks[6] ? 'border-4 border-blue-700':'')"
-                            :style="'background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(https://assets.ppy.sh/beatmaps/'+ results.banpicks[6].info.beatmapset_id +'/covers/cover.jpg);'">
-                            <a class="mods">
-                                <% results.banpicks[6].mods %>
-                            </a>
-                        </div>
-                        <div v-else :class="'b-block ' + (results.banpicks[5] ? 'picking':'')"></div>
-                    </div>
-                    <div class="w-1/9 overflow-hidden blank-block">
-                    </div>
-                </div>
-                <div id="team2" class="flex flex-wrap overflow-hidden justify-start">
-                    <div class="flex flex-col justify-center w-1/9 overflow-hidden">
+                        <h1 class="text-white text-xl mt-2">
+                            <% results.team1.leader_name %>
+                        </h1>
+                    </template>
+                    <template v-if='results.reverse == 0'>
                         <img :src="'https://a.ppy.sh/' + results.team2.leader_id" class="avatar-picture">
-                        <h1 class="text-white text-xl mt-2"><% results.team2.leader_name %></h1>
-                    </div>
-                    <div class="w-1/9 overflow-hidden blank-block">
-                    </div>
-    
-                    <div class="w-1/9 overflow-hidden">
-                        <div v-if="results.banpicks[1]" class="b-block" :class="'b-block ' + (results.banpicks[1] ? 'border-4 border-red-700 ban-element':'')"
-                            :style="'background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(https://assets.ppy.sh/beatmaps/'+ results.banpicks[1].info.beatmapset_id +'/covers/cover.jpg);'">
-                            <a class="mods">
+                        <h1 class="text-white text-center text-xl mt-2">
+                            <% results.team2.leader_name %>
+                        </h1>
+                    </template>
+                </div>
+                <div class="w-1/9 blank-block">
+                </div>
+
+                <div class="w-1/9">
+                    <div v-if="results.banpicks[1]" class="b-block"
+                        :class="'b-block ' + (results.banpicks[1] ? 'border-4 border-red-700 ban-element':'')"
+                        :style="converturl(results.banpicks[1].info.beatmapset_id)">
+                        <a class="mods">
+                            <% results.banpicks[1].mods %>
+                        </a>
+                        <div class="beatmap-block" :style="converturl(results.banpicks[1].info.beatmapset_id)">
+                            <div class="mpmetadata-mods">
                                 <% results.banpicks[1].mods %>
-                            </a>
+                            </div>
+                            <div class="mpmetadata-box">
+                                <h1 class="mpmetadata title">
+                                    <% results.banpicks[1].info.title %>
+                                        [<% results.banpicks[1].info.version %>]
+                                </h1>
+                                <h2 class="mpmetadata artist">
+                                    <% results.banpicks[1].info.artist %>
+                                </h2>
+                            </div>
                         </div>
-                        <div v-else :class="'b-block ' + (results.banpicks[0].info ? 'banning':'')"></div>
                     </div>
-    
-                    <div class="w-1/9 overflow-hidden">
-                        <div v-if="results.banpicks[2]" class="b-block" :class="'b-block ' + (results.banpicks[2] ? 'border-4 border-blue-700':'')"
-                            :style="'background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(https://assets.ppy.sh/beatmaps/'+ results.banpicks[2].info.beatmapset_id +'/covers/cover.jpg);'">
-                            <a class="mods">
+                    <div v-else :class="'b-block ' + (results.banpicks[0].info ? 'banning':'')"></div>
+                </div>
+
+                <div class="w-1/9">
+                    <div v-if="results.banpicks[2]" class="b-block"
+                        :class="'b-block ' + (results.banpicks[2] ? 'border-4 border-blue-700':'')"
+                        :style="converturl(results.banpicks[2].info.beatmapset_id)">
+                        <a class="mods">
+                            <% results.banpicks[2].mods %>
+                        </a>
+                        <div class="beatmap-block" :style="converturl(results.banpicks[2].info.beatmapset_id)">
+                            <div class="mpmetadata-mods">
                                 <% results.banpicks[2].mods %>
-                            </a>
+                            </div>
+                            <div class="mpmetadata-box">
+                                <h1 class="mpmetadata title">
+                                    <% results.banpicks[2].info.title %>
+                                        [<% results.banpicks[2].info.version %>]
+                                </h1>
+                                <h2 class="mpmetadata artist">
+                                    <% results.banpicks[2].info.artist %>
+                                </h2>
+                            </div>
                         </div>
-                        <div v-else :class="'b-block ' + (results.banpicks[1] ? 'picking':'')"></div>
                     </div>
-    
-                    <div class="w-1/9 overflow-hidden blank-block">
-                    </div>
-    
-                    <div class="w-1/9 overflow-hidden">
-                        <div v-if="results.banpicks[4]" class="b-block" :class="'b-block ' + (results.banpicks[4] ? 'border-4 border-red-700 ban-element':'')"
-                            :style="'background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(https://assets.ppy.sh/beatmaps/'+ results.banpicks[4].info.beatmapset_id +'/covers/cover.jpg);'">
-                            <a class="mods">
+                    <div v-else :class="'b-block ' + (results.banpicks[1] ? 'picking':'')"></div>
+                </div>
+
+                <div class="w-1/9 blank-block">
+                </div>
+
+                <div class="w-1/9">
+                    <div v-if="results.banpicks[4]" class="b-block"
+                        :class="'b-block ' + (results.banpicks[4] ? 'border-4 border-red-700 ban-element':'')"
+                        :style="converturl(results.banpicks[4].info.beatmapset_id)">
+                        <a class="mods">
+                            <% results.banpicks[4].mods %>
+                        </a>
+                        <div class="beatmap-block" :style="converturl(results.banpicks[4].info.beatmapset_id)">
+                            <div class="mpmetadata-mods">
                                 <% results.banpicks[4].mods %>
-                            </a>
+                            </div>
+                            <div class="mpmetadata-box">
+                                <h1 class="mpmetadata title">
+                                    <% results.banpicks[4].info.title %>
+                                        [<% results.banpicks[4].info.version %>]
+                                </h1>
+                                <h2 class="mpmetadata artist">
+                                    <% results.banpicks[4].info.artist %>
+                                </h2>
+                            </div>
                         </div>
-                        <div v-else :class="'b-block ' + (results.banpicks[3] ? 'banning':'')"></div>
                     </div>
-    
-                    <div class="w-1/9 overflow-hidden blank-block">
-                    </div>
-    
-                    <div class="w-1/9 overflow-hidden blank-block">
-                    </div>
-    
-                    <div class="w-1/9 overflow-hidden">
-                        <div v-if="results.banpicks[7]" class="b-block" :class="'b-block ' + (results.banpicks[7] ? 'border-4 border-blue-700':'')"
-                            :style="'background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(https://assets.ppy.sh/beatmaps/'+ results.banpicks[7].info.beatmapset_id +'/covers/cover.jpg);'">
-                            <a class="mods">
+                    <div v-else :class="'b-block ' + (results.banpicks[3] ? 'banning':'')"></div>
+                </div>
+
+                <div class="w-1/9 blank-block">
+                </div>
+
+                <div class="w-1/9 blank-block">
+                </div>
+
+                <div class="w-1/9">
+                    <div v-if="results.banpicks[7]" class="b-block"
+                        :class="'b-block ' + (results.banpicks[7] ? 'border-4 border-blue-700':'')"
+                        :style="converturl(results.banpicks[7].info.beatmapset_id)">
+                        <a class="mods">
+                            <% results.banpicks[7].mods %>
+                        </a>
+                        <div class="beatmap-block" :style="converturl(results.banpicks[7].info.beatmapset_id)">
+                            <div class="mpmetadata-mods">
                                 <% results.banpicks[7].mods %>
-                            </a>
+                            </div>
+                            <div class="mpmetadata-box">
+                                <h1 class="mpmetadata title">
+                                    <% results.banpicks[7].info.title %>
+                                        [<% results.banpicks[7].info.version %>]
+                                </h1>
+                                <h2 class="mpmetadata artist">
+                                    <% results.banpicks[7].info.artist %>
+                                </h2>
+                            </div>
                         </div>
-                        <div v-else :class="'b-block ' + (results.banpicks[6] ? 'picking':'')"></div>
                     </div>
+                    <div v-else :class="'b-block ' + (results.banpicks[6] ? 'picking':'')"></div>
                 </div>
             </div>
-            <div class="flex justify-center items-center">
-                <h1 class="text-3xl text-white" v-if='results.picker'>Team <% results.picker_t %>
-                        <% results.status %>
-                </h1>
-                <h1 v-else class="text-3xl text-white">Ban & Pick was finished. You can close this and continue your match in game. Goodluck!!</h1>
-            </div>
+            <div :class="'cursor cur-' + lick"></div>
+        </div>
+        <div class="flex justify-center mt-12 items-center">
+            <h1 class="text-3xl text-white" v-if='results.picker'>Team <% results.picker_t %>
+                    <% results.status %>
+            </h1>
+            <h1 v-else class="text-3xl text-white">Ban & Pick was finished. You can close this and continue your match
+                in game. Goodluck!!</h1>
         </div>
     </section>
-    <section id="mappool" class="h-screen mx-auto pt-8 pr-20 pl-20" v-if='once == 0'>
+    <section id="mappool" :class="'h-screen mx-auto pt-8 pr-20 pl-20 ' + (once == 0 ? '':'disabled')">
         <div class="flex flex-wrap justify-center gap-4">
-            <div id="mapsel" :class="'card bg-dark map-card text-start ' + (results.picker != userid ? 'disabled':'')"
-                v-for="(item, index) in results.available_maps" :key="item.id"
+            <div id="mapsel" v-for="(item, index) in results.available_maps" :key="item.id"
                 @click="pickban(results.set_id, item.info.beatmap_id, results.status)"
+                :class="'card bg-dark map-card text-start ' + (results.picker != userid ? 'disabled ':'') + (item.prohi != 0 ? 'disabled':'')"
                 :style="'background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(https://assets.ppy.sh/beatmaps/'+ item.info.info.beatmapset_id +'/covers/cover.jpg);'">
                 <div class="card-img-overlay dark-background">
                     <div class="flex">
@@ -341,25 +375,43 @@
             results: {},
             userid: Number('{{ session.user_id }}'),
             setid: Number('{{ match_set }}'),
+            online: [0, 0],
+            lick: 0,
             once: 0
         },
         created: function () {
             userid = this.userid
             setid = this.setid
             socket.on('connect', msg => {
-                socket.emit('ready', {userid, setid})
+                socket.emit('ready', { userid, setid })
             })
 
             socket.on('disconnect', function () {
-                socket.emit('ready', {userid, setid})
+                socket.emit('ready', { userid, setid })
             });
 
             socket.on(`data_result_${setid}`, msg => {
                 this.results = msg
+                this.online[0] = msg.team1.online
+                this.online[1] = msg.team2.online
             })
 
             socket.on(`new_result_${setid}`, msg => {
                 this.results = msg
+                if (msg != 'connect') {
+                    this.online[0] = msg.team1.online
+                    this.online[1] = msg.team2.online
+                    console.log(msg)
+                    if (msg.banpicks[0].mods == null) {
+                        this.lick = 0
+                    } else if ([4,6,7].includes(msg.banpicks.length+1)) {
+                        this.lick = 0
+                    } else if ([9].includes(msg.banpicks.length+1)) {
+                        this.lick = 8
+                    } else {
+                        this.lick = 1
+                    }
+                }
                 this.once = 0
             })
         },
@@ -367,6 +419,9 @@
             pickban(set, map, type) {
                 this.once = 1
                 socket.emit('pickban', { set, map, type })
+            },
+            converturl(code) {
+                return 'background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(https://assets.ppy.sh/beatmaps/'+ code +'/covers/cover.jpg);'
             }
         }
     });

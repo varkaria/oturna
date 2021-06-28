@@ -558,10 +558,10 @@ p {
 .header {
     display: flex;
     position: absolute;
-    width: 723px;
+    width: 735px;
     height: 37px;
     top: 0px;
-    left: 321px;
+    left: 314px;
     background-color: rgba(0, 0, 0, 0.46000000834465027);
     overflow: hidden;
 }
@@ -573,7 +573,7 @@ p {
     width: 541px;
     height: 19px;
     top: 9px;
-    left: 29px;
+    left: 35px;
     color: rgba(255, 255, 255, 1);
     font-family: 'DB Helvethaica X';
     font-weight: 400;
@@ -676,4 +676,16 @@ p {
 }
 .red-movable-block.stage-8 {
     transform: translateY(455px);
+}
+
+.blue-movable-block.stage-9 {
+    transform: translateY(440px) translateX(-50px);
+}
+
+.red-movable-block.stage-9 {
+    transform: translateY(455px) translateX(50px);
+}
+
+.ban {
+    opacity: 0.2;
 }

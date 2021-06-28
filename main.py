@@ -49,7 +49,8 @@ def handle_dis():
         db.query("UPDATE `tourney`.`player` SET `online`='0' WHERE `user_id`=%s;", session['user_id'])
     except KeyError:
         print("Someone disconnecting socket with Anonymous person")
-    emit(f'new_result_{session["match_set_id"]}', 'disconnected', broadcast=True)
+    print('disconnect activated')
+    emit(f'new_result_{session["match_set_id"]}', db.get_match_sets_ban_pick_full(session["match_set_id"]), broadcast=True)
 
 @socketio.on('connect', namespace='/pickban')
 def handle_dis():

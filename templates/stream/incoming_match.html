@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Incoming Round</title>
+    <link rel="stylesheet" href="/static/css/stream/fonts/stylesheet.css">
+    <link rel="stylesheet" href="/static/css/stream/background.css">
+    <link rel="stylesheet" href="/static/css/stream/incoming-match.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reconnecting-websocket/1.0.0/reconnecting-websocket.min.js"></script>
+</head>
+
+<body class="fhe-body">
+    <div class="fhe-mainFrame">
+        <div class="imcoming_sample"></div>
+        <div class="round_title"><span class="round_title-1">L</span>eague <span class="round_title-1">P</span>hase <span class="round_title-1">O</span>ne</div>
+        <div class="team-info" id='one'>
+            <div class="info-team2">
+                <div class="team-info-ava02" style="background-image: url(/team_flag/{{ t2.id }});"></div>
+                <div class="team-info-name02">{{ t2.full_name }}</div>
+            </div>
+            <div class="info-team1">
+                <div class="team-info-ava01" style="background-image: url(/team_flag/{{ t1.id }});"></div>
+                <div class="team-info-name01">{{ t1.full_name }}</div>
+            </div>
+        </div>
+        <div class="player-info" id='two'>
+            <div class="players-team2">
+                <div class="players-team2-info">
+                    <div class="player-team-info-ava02" style="background-image: url(/team_flag/{{ t2.id }});"></div>
+                    <div class="player-team-info-name02">{{ t2.full_name }}</div>
+                </div>
+                <div class="player2-team1">
+                    <div class="a04" style="background-image: url(https://a.ppy.sh/{{ t2.players[1].user_id }});"></div>
+                    <div class="n04">{{ t2.players[1].username }}</div>
+                </div>
+                <div class="player1-team1">
+                    <div class="a03" style="background-image: url(https://a.ppy.sh/{{ t2.players[0].user_id }});"></div>
+                    <div class="n03">{{ t2.players[0].username }}</div>
+                </div>
+            </div>
+            <div class="players-team1">
+                <div class="players-team1-info">
+                    <div class="player-team-info-ava01" style="background-image: url(/team_flag/{{ t1.id }});"></div>
+                    <div class="player-team-info-name01">{{ t1.full_name }}</div>
+                </div>
+                <div class="player1-team2">
+                    <div class="a02" style="background-image: url(https://a.ppy.sh/{{ t1.players[0].user_id }});"></div>
+                    <div class="n02">{{ t1.players[0].username }}</div>
+                </div>
+                <div class="player2-team2">
+                    <div class="a01" style="background-image: url(https://a.ppy.sh/{{ t1.players[1].user_id }});"></div>
+                    <div class="n01">{{ t1.players[1].username }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="song-display">
+            <div class="title">Now Playing</div>
+            <div class="song-data">...</div>
+        </div>
+    </div>
+    <script src="/static/js/stream/incoming.js"></script>
+    <script src="/static/js/stream/background.js"></script>
+</body>
+
+</html>
