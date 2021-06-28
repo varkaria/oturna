@@ -63,3 +63,7 @@ def incoming_match():
     t1 = json.loads(data['t1'])
     t2 = json.loads(data['t2'])
     return render_template('stream/incoming_match.html', t1=t1, t2=t2)
+
+@stream.route('/ingame')
+def ingame_match():
+    return render_template('stream/ingame_match.html')

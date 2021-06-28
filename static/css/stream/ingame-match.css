@@ -1,0 +1,441 @@
+p {
+    margin: 0;
+    padding: 0;
+}
+
+.fhe-body {
+    margin: 0;
+    background-color: rgba(0, 0, 0, 0);
+    height: 768px;
+}
+
+.fhe-mainFrame {
+    background-color: rgb(0 0 0);
+    height: 768px;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.p2 {
+    display: flex;
+    position: absolute;
+    width: 680px;
+    height: 512px;
+    top: 109px;
+    left: 683px;
+    background-color: rgba(0, 0, 0, 0);
+    overflow: hidden;
+}
+
+.p1 {
+    position: absolute;
+    width: 680px;
+    height: 512px;
+    left: 0px;
+    top: 109px;
+    overflow: hidden;
+}
+
+.ur-c {
+    display: flex;
+    position: absolute;
+    width: 77px;
+    height: 54px;
+    top: 435px;
+    left: 27px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ud {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 75px;
+    height: 43px;
+    top: 0px;
+    left: 0px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 48px;
+    text-align: center;
+    align-items: flex-end;
+    line-height: 43.19999694824219px;
+}
+
+.ut {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 80px;
+    height: 16px;
+    top: 38px;
+    left: 0px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 18px;
+    text-align: center;
+    align-items: flex-end;
+    line-height: 16.19999885559082px;
+}
+
+.judge {
+    display: flex;
+    position: absolute;
+    width: 82px;
+    height: 132px;
+    top: 216px;
+    left: 20px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.ju01 {
+    display: flex;
+    position: absolute;
+    width: 82px;
+    height: 22px;
+    top: 0px;
+    left: 0px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.t01 {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 28px;
+    height: 22px;
+    top: 0px;
+    left: 0px;
+    color: rgba(131, 247, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 24px;
+    text-align: LEFT;
+    align-items: flex-end;
+    line-height: 21px;
+}
+
+.j01 {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 64px;
+    height: 22px;
+    top: 0px;
+    left: 18px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 24px;
+    text-align: RIGHT;
+    align-items: flex-end;
+    line-height: 21px;
+    justify-content: flex-end;
+    font-weight: 600;
+}
+
+.ju02 {
+    display: flex;
+    position: absolute;
+    width: 82px;
+    height: 22px;
+    top: 22px;
+    left: 0px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.t02 {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 28px;
+    height: 22px;
+    top: 0px;
+    left: 0px;
+    color: rgba(131, 247, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 24px;
+    text-align: LEFT;
+    align-items: flex-end;
+    line-height: 21px;
+}
+
+.j02 {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 64px;
+    height: 22px;
+    top: 0px;
+    left: 18px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 24px;
+    text-align: RIGHT;
+    align-items: flex-end;
+    line-height: 21px;
+    justify-content: flex-end;
+    font-weight: 600;
+}
+
+.ju03 {
+    display: flex;
+    position: absolute;
+    width: 82px;
+    height: 22px;
+    top: 44px;
+    left: 0px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.t03 {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 28px;
+    height: 22px;
+    top: 0px;
+    left: 0px;
+    color: rgba(149, 255, 132, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 24px;
+    text-align: LEFT;
+    align-items: flex-end;
+    line-height: 21px;
+}
+
+.j03 {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 64px;
+    height: 22px;
+    top: 0px;
+    left: 18px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 24px;
+    text-align: RIGHT;
+    align-items: flex-end;
+    line-height: 21px;
+    justify-content: flex-end;
+    font-weight: 600;
+}
+
+.ju04 {
+    display: flex;
+    position: absolute;
+    width: 82px;
+    height: 22px;
+    top: 66px;
+    left: 0px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.t04 {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 28px;
+    height: 22px;
+    top: 0px;
+    left: 0px;
+    color: rgba(149, 255, 132, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 24px;
+    text-align: LEFT;
+    align-items: flex-end;
+    line-height: 21px;
+}
+
+.j04 {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 64px;
+    height: 22px;
+    top: 0px;
+    left: 18px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 24px;
+    text-align: RIGHT;
+    align-items: flex-end;
+    line-height: 21px;
+    justify-content: flex-end;
+    font-weight: 600;
+}
+
+.ju05 {
+    display: flex;
+    position: absolute;
+    width: 82px;
+    height: 22px;
+    top: 88px;
+    left: 0px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.t05 {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 19px;
+    height: 22px;
+    top: 0px;
+    left: 0px;
+    color: rgba(255, 205, 132, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 24px;
+    text-align: LEFT;
+    align-items: flex-end;
+    line-height: 21px;
+}
+
+.j05 {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 64px;
+    height: 22px;
+    top: 0px;
+    left: 18px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 24px;
+    text-align: RIGHT;
+    align-items: flex-end;
+    line-height: 21px;
+    justify-content: flex-end;
+    font-weight: 600;
+}
+
+.ju06 {
+    display: flex;
+    position: absolute;
+    width: 82px;
+    height: 22px;
+    top: 110px;
+    left: 0px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.t06 {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 25px;
+    height: 22px;
+    top: 0px;
+    left: 0px;
+    color: rgba(255, 132, 132, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 24px;
+    text-align: LEFT;
+    align-items: flex-end;
+    line-height: 21px;
+}
+
+.j06 {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 64px;
+    height: 22px;
+    top: 0px;
+    left: 18px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 24px;
+    text-align: RIGHT;
+    align-items: flex-end;
+    line-height: 21px;
+    justify-content: flex-end;
+    font-weight: 600;
+}
+
+.noti-v {
+    display: flex;
+    position: absolute;
+    width: 367px;
+    height: 51px;
+    top: 19px;
+    left: 20px;
+    background-color: rgba(220, 65, 81, 1);
+    overflow: hidden;
+    transition: 0.5s ease;
+    transform: translateY(-100px);
+}
+
+.noti-bg {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 437px;
+    height: 86px;
+    top: -7px;
+    left: -50px;
+    font-family: 'DB Helvethaica X';
+    font-weight: 300;
+    font-size: 183px;
+    text-align: center;
+    align-items: flex-end;
+    line-height: 86px;
+    color: #ffffff14;
+}
+
+.noti-p {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 333px;
+    height: 32px;
+    top: 10px;
+    left: 17px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 600;
+    font-size: 36px;
+    text-align: LEFT;
+    align-items: flex-end;
+    line-height: 32px;
+}
+
+.noti-warn {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 333px;
+    height: 32px;
+    top: 10px;
+    left: 17px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 36px;
+    text-align: RIGHT;
+    align-items: flex-end;
+    line-height: 32px;
+    justify-content: flex-end;
+}
+
+.songSelect .judge {
+    transform: translateX(-150px);
+}
+
+.songSelect .ur-c {
+    transform: translateY(50px);
+}
