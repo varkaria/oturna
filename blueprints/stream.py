@@ -34,7 +34,8 @@ def greeting_host():
 
 @stream.route('/countdown')
 def countdown():
-    return render_template('stream/countdown.html')
+    next = db.query_one("SELECT date FROM `match` WHERE DATE > NOW() ORDER BY id DESC LIMIT 1")
+    return render_template('stream/countdown.html', date=next['date'])
 
 @stream.route('/leaderboard')
 def leaderboard():
