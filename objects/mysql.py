@@ -359,7 +359,7 @@ class DB(object):
             query = self.query_one('select * from staff where id = %s and active = 1', (staff_id,))
             return query
 
-        va = 'WHERE s.active = 1 ORDER BY s.active, s.id' if not viewall else 'ORDER BY s.id'
+        va = 'WHERE s.active = 1 ORDER BY s.active, s.group_id' if not viewall else 'ORDER BY s.id'
 
         query = self.query_all('SELECT s.id, s.user_id, s.username, s.privileges, s.active, g.* FROM staff s INNER JOIN `group` g ON g.id = s.group_id ' + va)
         if not format:
