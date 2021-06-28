@@ -75,8 +75,8 @@ def dashboard():
     if reg_end > currentDate:
         colour = 'text-green'
         
-    next_data = []
-    last_data = []
+    #next_data = []
+    #last_data = []
 
     next_match = db.query_one("""SELECT m.id, t1.full_name AS `team1_name`, t2.full_name AS `team2_name`, 
     t1.flag_name AS `team1_flag`, t2.flag_name AS `team2_flag`, m.date
@@ -84,6 +84,9 @@ def dashboard():
     LEFT JOIN `team` `t1` ON t1.id = m.team1
     LEFT JOIN `team` `t2` ON t2.id = m.team2
     WHERE m.date > NOW()""")
+    next_data = {
+        'n_team1_flag': ''
+        }
     if next_match:
         next_data = {
         'n_team1_flag': next_match['team1_flag'],
@@ -99,8 +102,8 @@ def dashboard():
         date_sr = pd.to_datetime(pd.Series(orignal_date))
         change_format = date_sr.dt.strftime('%d/%m/%Y')
         next_data['n_match_time'] = str(change_format).replace('dtype: object', '')[2:] + time
-
-        if next_data['n_team1_name'] == []:
+    else:
+        if next_data['n_team1_flag'] == '':
             next_data['nodata'] = True
 
     last_match = db.query_one("""SELECT m.id, t1.full_name AS `team1_name`, t2.full_name AS `team2_name`, 
@@ -108,7 +111,10 @@ def dashboard():
     FROM `match` `m`
     LEFT JOIN `team` `t1` ON t1.id = m.team1
     LEFT JOIN `team` `t2` ON t2.id = m.team2
-    WHERE m.date <= NOW()""")
+    WHERE m.date <= NOW() ORDER BY m.id DESC""")
+    last_data = {
+        'l_team1_flag': ''
+        }
     if last_match:
         last_data = {
         'stats': int(last_match['stats']),
@@ -127,8 +133,8 @@ def dashboard():
         date_sr = pd.to_datetime(pd.Series(orignal_date))
         change_format = date_sr.dt.strftime('%d/%m/%Y')
         last_data['l_match_time'] = str(change_format).replace('dtype: object', '')[2:] + time
-
-        if last_data['l_team1_name'] == []:
+    else:
+        if last_data['l_team1_flag'] == '':
             last_data['nodata'] = True
 
         if last_data['stats'] == 1: # match not cancelled
