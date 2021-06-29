@@ -112,7 +112,17 @@ Dashboard:
                     <p class="text-2xl">Data Analysis</p><br>
                 </div>
                 <div class="card-body">
+                    {% if analysis_data.nodata %}
                     <div id="analysis" style="width: 12.95rem; height: 12.95rem"></div>
+                    {% else %}
+                    <div class="flex flex-col justify-center items-start gap-y-4">
+                        <p class="text-black text-xl">Total upcoming match : <b class="text-blue">{{ analysis_data.total_match }}</b></p>
+                        <p class="text-black text-xl">Highest points team : <b class="text-blue">{{ analysis_data.highest_team }}</b></p>
+                        <p class="text-black text-xl">Lowest points team : <b class="text-blue">{{ analysis_data.lowest_team }}</b></p>
+                        <p class="text-black text-xl">Highest prediction score : <b class="text-blue">{{ analysis_data.predict_high }}</b></p>
+                        <p class="text-black text-xl">Lowest prediction score : <b class="text-blue">{{ analysis_data.predict_low }}</b></p>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
