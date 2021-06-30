@@ -141,17 +141,19 @@ Dashboard:
                             </div>
                         {% else %}
                         <div class="flex flex-col">
-                            <div class="flex flex-row justify-between items-center gap-x-20">
-                                <img src="{{ next_data.n_team1_flag | flag_url }}" alt="" height="80" width="80">
-                                <p class="text-2xl"><b>VS</b></p>
-                                <img src="{{ next_data.n_team2_flag | flag_url }}" alt="" height="80" width="80">
-                            </div>
-                            <div class="flex flex-row justify-between items-center">
-                                <p class="text-xl">{{ next_data.n_team1_name }}</p>
-                                <p class="text-xl">{{ next_data.n_team2_name }}</p>
-                            </div>
-                            <div class="flex flex-row justify-center items-center pt-2">
-                                <p class="text-lg"><b>{{ next_data.n_match_time }}</b></p>
+                            <div class="flex flex-row justify-between items-center gap-x-8">
+                                <div class="team1 flex flex-column items-center">
+                                    <img class="rounded mb-2" src="{{ next_data.n_team1_flag | flag_url }}" height="80" width="80">
+                                    <p class="text-xl">{{ next_data.n_team1_name }}</p>
+                                </div>
+                                <div class="infomation flex flex-column items-center">
+                                    <p class="text-2xl"><b>VS</b></p>
+                                    <p class="text-s text-center mt-2"><b>{{ next_data.n_match_time }}</b></p>
+                                </div>
+                                <div class="team2 flex flex-column items-center">
+                                    <img class="rounded mb-2" src="{{ next_data.n_team2_flag | flag_url }}" height="80" width="80">
+                                    <p class="text-xl">{{ next_data.n_team2_name }}</p>
+                                </div>
                             </div>
                         </div>
                         {% endif %}
@@ -170,23 +172,25 @@ Dashboard:
                             </div>
                         {% else %}
                         <div class="flex flex-col">
-                            <div class="flex flex-row justify-between items-center gap-x-16">
-                                <img src="{{ last_data.l_team1_flag | flag_url }}" alt="" height="80" width="80">
-                                <p class="text-2xl"><b>VS</b></p>
-                                <img src="{{ last_data.l_team2_flag | flag_url }}" alt="" height="80" width="80">
-                            </div>
-                            <div class="flex flex-row justify-between items-center">
-                                <p class="text-xl">{{ last_data.l_team1_name }}</p>
-                                <p class="text-xl">{{ last_data.l_team2_name }}</p>
-                            </div>
-                            <div class="flex flex-row justify-between items-center pt-2 pl-8 pr-8">
-                                <p class="text-3xl text-blue"><b>{{ last_data.team1_score }}</b></p>
+                            <div class="flex flex-row justify-between items-center gap-x-8">
+                                <div class="team1 flex flex-column items-center">
+                                    <img class="rounded mb-2" src="{{ last_data.l_team1_flag | flag_url }}" height="80" width="80">
+                                    <p class="text-xl">{{ last_data.l_team1_name }}</p>
+                                    <p class="text-3xl text-blue"><b>{{ last_data.team1_score }}</b></p>
+                                </div>
+                                <div class="infomation flex flex-column items-center">
+                                    <p class="text-2xl"><b>VS</b></p>
                                 {% if last_data.cancel %}
                                     <p class="text-xl text-red"><b>Cancelled</b></p>
                                 {% else %}
-                                    <p class="text-lg"><b>{{ last_data.l_match_time }}</b></p>
+                                    <p class="text-s text-center mt-2"><b>{{ last_data.l_match_time }}</b></p>
                                 {% endif %}
-                                <p class="text-3xl text-blue"><b>{{ last_data.team2_score }}</b></p>
+                                </div>
+                                <div class="team2 flex flex-column items-center">
+                                    <img class="rounded mb-2" src="{{ last_data.l_team2_flag | flag_url }}" height="80" width="80">
+                                    <p class="text-xl">{{ last_data.l_team2_name }}</p>
+                                    <p class="text-3xl text-blue"><b>{{ last_data.team2_score }}</b></p>
+                                </div>
                             </div>
                         </div>
                         {% endif %}
@@ -198,18 +202,6 @@ Dashboard:
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/progressbar.js/1.1.0/progressbar.min.js"></script>
 <script>
-    
-    var bar2 = new ProgressBar.Circle("#analysis", {
-        strokeWidth: 1.2,
-        easing: "easeInOut",
-        duration: 1700,
-        color: "#206bc4",
-        trailColor: "#eee",
-        trailWidth: 1,
-        svgStyle: null,
-    });
-    bar2.animate(1);
-
     var current_prog = "{{ progress_data.current_progress }}";
     var bar = new ProgressBar.Line("#progress-container", {
         strokeWidth: 0.8,
