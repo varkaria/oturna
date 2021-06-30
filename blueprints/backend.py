@@ -74,9 +74,6 @@ def dashboard():
         colour = 'text-red'
     if reg_end > currentDate:
         colour = 'text-green'
-        
-    #next_data = []
-    #last_data = []
 
     next_match = db.query_one("""SELECT m.id, t1.full_name AS `team1_name`, t2.full_name AS `team2_name`, 
     t1.flag_name AS `team1_flag`, t2.flag_name AS `team2_flag`, m.date
@@ -133,9 +130,6 @@ def dashboard():
         date_sr = pd.to_datetime(pd.Series(orignal_date))
         change_format = date_sr.dt.strftime('%d/%m/%Y')
         last_data['l_match_time'] = str(change_format).replace('dtype: object', '')[2:] + time
-    else:
-        if last_data['l_team1_flag'] == '':
-            last_data['nodata'] = True
 
         if last_data['stats'] == 1: # match not cancelled
             pass
@@ -143,6 +137,9 @@ def dashboard():
             last_data['cancel'] = True
             last_data['team1_score'] = ''
             last_data['team2_score'] = ''
+    else:
+        if last_data['l_team1_flag'] == '':
+            last_data['nodata'] = True
 
     progress = {
         'start': 0,
