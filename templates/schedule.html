@@ -19,10 +19,10 @@
 </div>
 {% endif %}
 {% for m in matchs %}
-<div class="row bg-dark rounded m-2 p-2 text-nowrap">
+<div class="row bg-dark rounded m-2 p-2 text-nowrap {% if m.stats == 1 %}finished{% endif %}">
     <div class="col-12 col-xl-6">
         <div class="row align-items-center justify-content-center">
-            <div class="col btn btn-outline-secondary">
+            <div class="col btn">
                 <a>
                     <div class="row align-items-center justify-content-center">
                         <div class="col-auto d-none d-md-block">
@@ -40,7 +40,7 @@
                     <div class="m-0">{{ m.date }}</div>
                 </div>
             </div>
-            <div class="col btn btn-outline-secondary">
+            <div class="col btn">
                 <a>
                     <div class="row align-items-center justify-content-center">
                         <div class="col text-center text-truncate">
@@ -67,12 +67,12 @@
             </div>
             <div class="col d-none d-md-block">
                 <span>Commentator</span><br>
-                <span class="overflow-hidden">{{ m.commentator.username }}{% if m.commentator2.username %}, {{ m.commentator2.username }}{% endif %}</span>
+                <span class="overflow-hidden"><small>{{ m.commentator.username }}{% if m.commentator2.username %}, {{ m.commentator2.username }}{% endif %}</small></span>
             </div>
             <div class="col-12 col-xl-2 text-end user-select-none">
-                <a {% if m.live and m.streamer.username and not m.stats %}href="{{ tourney.live_link }}" target="_blank"{% endif %}><span class="badge {% if m.live and m.streamer.username and not m.stats %}bg-danger{% else %}bg-secondary{% endif %}">Live</span></a><br>
-                <a {% if m.mp_link %}href="{{ m.mp_link }}" target="_blank"{% endif %}><span class="badge {% if m.mp_link %}bg-primary{% else %}bg-secondary{% endif %}">MP Link</span></a><br>
-                <a {% if m.video_link %}href="{{ m.video_link }}" target="_blank"{% endif %}><span class="badge {% if m.video_link %}bg-warning text-dark{% else %}bg-secondary{% endif %}">Replay</span></a>
+                <a {% if m.live and m.streamer.username and not m.stats %}href="{{ tourney.live_link }}" target="_blank"{% endif %}><span class="badge {% if m.live and m.streamer.username and not m.stats %}bg-danger{% else %}bg-gone{% endif %}">Live</span></a><br>
+                <a {% if m.mp_link %}href="{{ m.mp_link }}" target="_blank"{% endif %}><span class="badge {% if m.mp_link %}bg-primary{% else %}bg-gone{% endif %}">MP Link</span></a><br>
+                <a {% if m.video_link %}href="{{ m.video_link }}" target="_blank"{% endif %}><span class="badge {% if m.video_link %}bg-warning text-dark{% else %}bg-gone{% endif %}">Replay</span></a>
             </div>
             {% else %}
             <div class="col d-none d-md-block">
