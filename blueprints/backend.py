@@ -159,8 +159,32 @@ def dashboard():
         'ended': tour_end
     }
 
+    analysis_data = {
+            'total_match': '',
+            'highest_team': '',
+            'lowest_team': '',
+            'predict_high': '',
+            'predict_low':  '',
+            'nodata': False 
+        }
+    try:
+        analysis_upcoming = db.query_one("""SELECT count(m.id) as count, m.date FROM `match` `m` WHERE m.date > NOW()""")
+        analysis_points_high = db.query_one("""SELECT t.full_name AS `team_name`, t.points FROM `team` `t` WHERE t.points = (SELECT MAX(t.points) FROM `team` `t`)""")
+        analysis_points_low = db.query_one("""SELECT t.full_name AS `team_name`, t.points FROM `team` `t` WHERE t.points = (SELECT MIN(t.points) FROM `team` `t`)""")
+        analysis_predict_high = db.query_one("""SELECT s.username AS `staff_name`, s.c_score FROM `staff` `s` WHERE s.c_score = (SELECT MAX(s.c_score) FROM `staff` `s`)""")
+        analysis_predict_low = db.query_one("""SELECT s.username AS `staff_name`, s.group_id, s.c_score FROM `staff` `s` WHERE s.c_score = (SELECT MIN(s.c_score) FROM `staff` `s` WHERE s.c_score > 0)""")
+        analysis_data = {
+            'total_match': int(analysis_upcoming['count']),
+            'highest_team': str(analysis_points_high['team_name']),
+            'lowest_team': str(analysis_points_low['team_name']),
+            'predict_high': str(analysis_predict_high['staff_name']),
+            'predict_low':  str(analysis_predict_low['staff_name']),
+        }
+    except:
+        analysis_data['nodata'] = True
+
     return render_template('manager/dashboard.html', players=players, time_delta=time_delta.strip('-'), colour=colour, 
-                           next_data=next_data, last_data=last_data, progress_data=progress_data)
+                           next_data=next_data, last_data=last_data, progress_data=progress_data, analysis_data=analysis_data)
 
 @backend.route('/planning/')
 @login_required
