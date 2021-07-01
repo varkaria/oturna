@@ -168,7 +168,7 @@ def dashboard():
             'nodata': False 
         }
     try:
-        analysis_upcoming = int(db.query_one("""SELECT count(m.id) as count, m.date FROM `match` `m` WHERE m.date > """)['count'])
+        analysis_upcoming = int(db.query_one("""SELECT count(m.id) as count, m.date FROM `match` `m` WHERE m.date > NOW()""")['count'])
         analysis_points_high = str(db.query_one("""SELECT t.full_name AS `team_name`, t.points FROM `team` `t` WHERE t.points = (SELECT MAX(t.points) FROM `team` `t`)""")['team_name'])
         analysis_points_low = str(db.query_one("""SELECT t.full_name AS `team_name`, t.points FROM `team` `t` WHERE t.points = (SELECT MIN(t.points) FROM `team` `t`)""")['team_name'])
         analysis_predict_high = str(db.query_one("""SELECT s.username AS `staff_name`, s.c_score FROM `staff` `s` WHERE s.c_score = (SELECT MAX(s.c_score) FROM `staff` `s`)""")['staff_name'])
