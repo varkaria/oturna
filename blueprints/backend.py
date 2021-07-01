@@ -168,20 +168,21 @@ def dashboard():
             'nodata': False 
         }
     try:
-        analysis_upcoming = db.query_one("""SELECT count(m.id) as count, m.date FROM `match` `m` WHERE m.date > NOW()""")
-        analysis_points_high = db.query_one("""SELECT t.full_name AS `team_name`, t.points FROM `team` `t` WHERE t.points = (SELECT MAX(t.points) FROM `team` `t`)""")
-        analysis_points_low = db.query_one("""SELECT t.full_name AS `team_name`, t.points FROM `team` `t` WHERE t.points = (SELECT MIN(t.points) FROM `team` `t`)""")
-        analysis_predict_high = db.query_one("""SELECT s.username AS `staff_name`, s.c_score FROM `staff` `s` WHERE s.c_score = (SELECT MAX(s.c_score) FROM `staff` `s`)""")
-        analysis_predict_low = db.query_one("""SELECT s.username AS `staff_name`, s.group_id, s.c_score FROM `staff` `s` WHERE s.c_score = (SELECT MIN(s.c_score) FROM `staff` `s` WHERE s.c_score > 0)""")
+        analysis_upcoming = int(db.query_one("""SELECT count(m.id) as count, m.date FROM `match` `m` WHERE m.date > """)['count'])
+        analysis_points_high = str(db.query_one("""SELECT t.full_name AS `team_name`, t.points FROM `team` `t` WHERE t.points = (SELECT MAX(t.points) FROM `team` `t`)""")['team_name'])
+        analysis_points_low = str(db.query_one("""SELECT t.full_name AS `team_name`, t.points FROM `team` `t` WHERE t.points = (SELECT MIN(t.points) FROM `team` `t`)""")['team_name'])
+        analysis_predict_high = str(db.query_one("""SELECT s.username AS `staff_name`, s.c_score FROM `staff` `s` WHERE s.c_score = (SELECT MAX(s.c_score) FROM `staff` `s`)""")['staff_name'])
+        analysis_predict_low = str(db.query_one("""SELECT s.username AS `staff_name`, s.group_id, s.c_score FROM `staff` `s` WHERE s.c_score = (SELECT MIN(s.c_score) FROM `staff` `s` WHERE s.c_score > 0)""")['staff_name'])
         analysis_data = {
-            'total_match': int(analysis_upcoming['count']),
-            'highest_team': str(analysis_points_high['team_name']),
-            'lowest_team': str(analysis_points_low['team_name']),
-            'predict_high': str(analysis_predict_high['staff_name']),
-            'predict_low':  str(analysis_predict_low['staff_name']),
+            'total_match': analysis_upcoming,
+            'highest_team': analysis_points_high,
+            'lowest_team': analysis_points_low,
+            'predict_high': analysis_predict_high,
+            'predict_low':  analysis_predict_low
         }
     except:
         analysis_data['nodata'] = True
+        print(analysis_data['nodata'])
 
     return render_template('manager/dashboard.html', players=players, time_delta=time_delta.strip('-'), colour=colour, 
                            next_data=next_data, last_data=last_data, progress_data=progress_data, analysis_data=analysis_data)

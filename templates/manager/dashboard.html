@@ -113,7 +113,9 @@ Dashboard:
                 </div>
                 <div class="card-body">
                     {% if analysis_data.nodata %}
-                    <div id="analysis" style="width: 12.95rem; height: 12.95rem"></div>
+                    <div style="width: 12.95rem; height: 12.95rem" class="flex justify-center items-center">
+                        <p class="text-black text-2xl">No Data</p>
+                    </div>
                     {% else %}
                     <div class="flex flex-col justify-center items-start gap-y-4">
                         <p class="text-black text-xl">Total upcoming match : <b class="text-blue">{{ analysis_data.total_match }}</b></p>
