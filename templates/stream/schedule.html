@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/stream/schedule.css">
+    <link rel="stylesheet" href="/static/css/stream/background.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reconnecting-websocket/1.0.0/reconnecting-websocket.min.js"></script>
+    <script src="http://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+</head>
+
+<body class="fhe-body">
+    <div class="fhe-mainFrame">
+        <div class="main-base"></div>
+        <div class="main-bigclock" id="timer-sec"></div>
+        <div class="main-clock" id="timer"></div>
+        <div class="main-round">
+            <span class="main-round-1">L</span>eague
+            <span class="main-round-1">P</span>hase
+            <span class="main-round-1">O</span>ne
+        </div>
+        <div class="main-title">Upcoming Next</div>
+        <div class="main-logo"></div>
+        <div class="match">
+            {% for m in matchs %}
+            <div class="m-main {% if m['stats'] == 1 %} finish {% endif %}">
+                <div class="c-base"></div>
+                <div class="c-team1-a" style="background-image: url(/team_flag/{{ m['team1'] }});"></div>
+                <div class="c-team1-u">{{ m['team1_name']}}</div>
+                <div class="c-team2-a" style="background-image: url(/team_flag/{{ m['team2'] }});"></div>
+                <div class="c-team2-u">{{ m['team2_name']}}</div>
+                <div class="c-time">{{ m['time'] }}</div>
+                <div class="c-match">Match <b>{{ loop.index }}</b></div>
+                {% if m['stats'] == 1 %}
+                    <div class="c-score-1">{{ m.team1_score }}</div>
+                    <div class="c-score-2">{{ m.team2_score }}</div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        <div class="song-display">
+            <div class="title">Now Playing</div>
+            <div class="song-data">...</div>
+        </div>
+        <div id="particles-js"></div>
+    </div>
+    <script>// Set the date we're counting down to
+        var countDownDate = new Date("{{ count }}").getTime();
+    </script>
+    <script src="/static/js/stream/background.js"></script>
+    <script src="/static/js/stream/schedule.js"></script>
+</body>
+
+</html>

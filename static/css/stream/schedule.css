@@ -1,0 +1,266 @@
+p {
+    margin: 0;
+    padding: 0;
+}
+
+.fhe-body {
+    margin: 0;
+    background-color: rgba(0, 0, 0, 0);
+    height: 768px;
+}
+
+.fhe-mainFrame {
+    background-color: rgba(0, 0, 0, 0);
+    height: 768px;
+    width: 1366px;
+    position: relative;
+    overflow: hidden;
+    background: #2C2D2C;
+}
+
+.main-base {
+    display: flex;
+    position: absolute;
+    box-sizing: border-box;
+    width: 1366px;
+    height: 768px;
+    top: 0px;
+    left: 0px;
+    background-image: url("/static/img/stream/schedule_sam.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    z-index: 5;
+}
+
+.main-bigclock {
+    position: absolute;
+    flex-flow: row;
+    width: 814px;
+    height: 1228px;
+    top: -238px;
+    left: 580px;
+    font-family: 'DB Helvethaica X';
+    font-weight: 800;
+    font-size: 1024px;
+    text-align: center;
+    align-items: flex-end;
+    line-height: 1200px;
+    color: transparent;
+    -webkit-text-stroke: 2px #BE2040; /* width and color */
+    filter: blur(4px);
+}
+
+.main-clock {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 518px;
+    height: 345px;
+    top: 212px;
+    left: 745px;
+    font-family: 'DB Helvethaica X';
+    font-weight: 800;
+    font-size: 288px;
+    text-align: center;
+    align-items: flex-end;
+    line-height: 337.5px;
+    background: -webkit-linear-gradient(#B7375C, #F55A5F);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.main-round-1 {
+    font-family: 'DB Helvethaica X';
+    font-weight: 700;
+}
+
+.main-round {
+    position: absolute;
+    width: 441px;
+    height: 36px;
+    top: 105px;
+    left: 64px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 31px;
+    text-align: LEFT;
+    align-items: flex-start;
+    line-height: 36.328125px;
+}
+
+.main-title {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 441px;
+    height: 82px;
+    top: 39px;
+    left: 64px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 72px;
+    text-align: LEFT;
+    align-items: flex-start;
+    line-height: 84.375px;
+}
+
+.main-logo {
+    display: flex;
+    position: absolute;
+    box-sizing: border-box;
+    width: 167px;
+    height: 150px;
+    top: 48px;
+    left: 1134px;
+    background-image: url("/static/img/stream/logo.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.match {
+    position: absolute;
+    top: 161px;
+    left: 64px;
+    background-color: rgba(0, 0, 0, 0);
+    z-index: 10;
+}
+
+.m-main {
+    width: 423px;
+    height: 118px;
+    top: 0px;
+    left: 0px;
+    position: relative;
+    background-color: rgba(0, 0, 0, 0);
+    margin-bottom: 20px;
+}
+
+.c-base {
+    display: flex;
+    box-sizing: border-box;
+    width: 423px;
+    height: 118px;
+    top: 0px;
+    left: 0px;
+    background-image: url("/static/img/stream/schedule_com.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.c-team1-a {
+    display: flex;
+    position: absolute;
+    width: 49px;
+    height: 49px;
+    top: 34px;
+    left: 72px;
+    background-color: rgba(0, 0, 0, 0);
+    overflow: hidden;
+    background-size: cover;
+    border-radius: 6px;
+}
+
+.c-team1-u {
+    position: absolute;
+    flex-flow: row;
+    width: 300px;
+    height: 22px;
+    top: 83px;
+    left: -53px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 18px;
+    text-align: center;
+    align-items: flex-end;
+    line-height: 21.09375px;
+}
+
+.c-team2-a {
+    display: flex;
+    position: absolute;
+    width: 49px;
+    height: 49px;
+    top: 34px;
+    left: 301px;
+    background-color: rgba(0, 0, 0, 0);
+    overflow: hidden;
+    background-size: cover;
+    border-radius: 6px;
+}
+
+.c-team2-u {
+    position: absolute;
+    flex-flow: row;
+    width: 300px;
+    height: 22px;
+    top: 83px;
+    left: 176px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 18px;
+    text-align: center;
+    align-items: flex-end;
+    line-height: 21.09375px;
+}
+
+.c-time {
+    position: absolute;
+    flex-flow: row;
+    width: 42px;
+    height: 14px;
+    top: 11px;
+    left: 240px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 18px;
+    text-align: center;
+    align-items: flex-start;
+    line-height: 13.747148513793945px;
+}
+
+.c-match {
+    position: absolute;
+    flex-flow: row;
+    width: 62px;
+    height: 18px;
+    top: 8px;
+    left: 146px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 24px;
+    text-align: center;
+    align-items: flex-start;
+    line-height: 18.329530715942383px;
+}
+
+.c-score-1 {
+    position: absolute;
+    color: white;
+    font-family: 'DB Helvethaica X';
+    font-weight: 600;
+    font-size: 36px;
+    left: 46px;
+    top: 38px;
+    text-align: center;
+}
+
+.c-score-2 {
+    position: absolute;
+    color: white;
+    font-family: 'DB Helvethaica X';
+    font-weight: 600;
+    font-size: 36px;
+    right: 46px;
+    top: 38px;
+    text-align: center;
+}
+
+.finish {
+    opacity: 0.5;
+}

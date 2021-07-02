@@ -20,7 +20,7 @@ body {
     overflow: hidden;
 }
 
-.p2 {
+.gameplay-overlay .p2 {
     display: flex;
     position: absolute;
     width: 680px;
@@ -31,7 +31,7 @@ body {
     overflow: hidden;
 }
 
-.p1 {
+.gameplay-overlay .p1 {
     position: absolute;
     width: 680px;
     height: 512px;
@@ -40,7 +40,7 @@ body {
     overflow: hidden;
 }
 
-.ur-c {
+.gameplay-overlay .ur-c {
     display: flex;
     position: absolute;
     width: 77px;
@@ -50,7 +50,7 @@ body {
     background-color: rgba(0, 0, 0, 0);
 }
 
-.ud {
+.gameplay-overlay .ud {
     position: absolute;
     display: flex;
     flex-flow: row;
@@ -64,10 +64,10 @@ body {
     font-size: 48px;
     text-align: center;
     align-items: flex-end;
-    line-height: 43.19999694824219px;
+    line-height: 43.gameplay-overlay .19999694824219px;
 }
 
-.ut {
+.gameplay-overlay .ut {
     position: absolute;
     display: flex;
     flex-flow: row;
@@ -81,10 +81,10 @@ body {
     font-size: 18px;
     text-align: center;
     align-items: flex-end;
-    line-height: 16.19999885559082px;
+    line-height: 16.gameplay-overlay .19999885559082px;
 }
 
-.judge {
+.gameplay-overlay .judge {
     display: flex;
     position: absolute;
     width: 82px;
@@ -94,7 +94,7 @@ body {
     background-color: rgba(0, 0, 0, 0);
 }
 
-.ju01 {
+.gameplay-overlay .ju01 {
     display: flex;
     position: absolute;
     width: 82px;
@@ -104,7 +104,7 @@ body {
     background-color: rgba(0, 0, 0, 0);
 }
 
-.t01 {
+.gameplay-overlay .t01 {
     position: absolute;
     display: flex;
     flex-flow: row;
@@ -121,7 +121,7 @@ body {
     line-height: 21px;
 }
 
-.j01 {
+.gameplay-overlay .j01 {
     position: absolute;
     display: flex;
     flex-flow: row;
@@ -140,7 +140,7 @@ body {
     font-weight: 600;
 }
 
-.ju02 {
+.gameplay-overlay .ju02 {
     display: flex;
     position: absolute;
     width: 82px;
@@ -150,7 +150,7 @@ body {
     background-color: rgba(0, 0, 0, 0);
 }
 
-.t02 {
+.gameplay-overlay .t02 {
     position: absolute;
     display: flex;
     flex-flow: row;
@@ -167,7 +167,7 @@ body {
     line-height: 21px;
 }
 
-.j02 {
+.gameplay-overlay .j02 {
     position: absolute;
     display: flex;
     flex-flow: row;
@@ -186,7 +186,7 @@ body {
     font-weight: 600;
 }
 
-.ju03 {
+.gameplay-overlay .ju03 {
     display: flex;
     position: absolute;
     width: 82px;
@@ -196,7 +196,7 @@ body {
     background-color: rgba(0, 0, 0, 0);
 }
 
-.t03 {
+.gameplay-overlay .t03 {
     position: absolute;
     display: flex;
     flex-flow: row;
@@ -213,7 +213,7 @@ body {
     line-height: 21px;
 }
 
-.j03 {
+.gameplay-overlay .j03 {
     position: absolute;
     display: flex;
     flex-flow: row;
@@ -232,7 +232,7 @@ body {
     font-weight: 600;
 }
 
-.ju04 {
+.gameplay-overlay .ju04 {
     display: flex;
     position: absolute;
     width: 82px;
@@ -242,7 +242,7 @@ body {
     background-color: rgba(0, 0, 0, 0);
 }
 
-.t04 {
+.gameplay-overlay .t04 {
     position: absolute;
     display: flex;
     flex-flow: row;
@@ -259,7 +259,7 @@ body {
     line-height: 21px;
 }
 
-.j04 {
+.gameplay-overlay .j04 {
     position: absolute;
     display: flex;
     flex-flow: row;
@@ -278,7 +278,7 @@ body {
     font-weight: 600;
 }
 
-.ju05 {
+.gameplay-overlay .ju05 {
     display: flex;
     position: absolute;
     width: 82px;
@@ -288,7 +288,7 @@ body {
     background-color: rgba(0, 0, 0, 0);
 }
 
-.t05 {
+.gameplay-overlay .t05 {
     position: absolute;
     display: flex;
     flex-flow: row;
@@ -305,7 +305,7 @@ body {
     line-height: 21px;
 }
 
-.j05 {
+.gameplay-overlay .j05 {
     position: absolute;
     display: flex;
     flex-flow: row;
@@ -324,7 +324,7 @@ body {
     font-weight: 600;
 }
 
-.ju06 {
+.gameplay-overlay .ju06 {
     display: flex;
     position: absolute;
     width: 82px;
@@ -334,7 +334,7 @@ body {
     background-color: rgba(0, 0, 0, 0);
 }
 
-.t06 {
+.gameplay-overlay .t06 {
     position: absolute;
     display: flex;
     flex-flow: row;
@@ -351,7 +351,7 @@ body {
     line-height: 21px;
 }
 
-.j06 {
+.gameplay-overlay .j06 {
     position: absolute;
     display: flex;
     flex-flow: row;
@@ -370,7 +370,7 @@ body {
     font-weight: 600;
 }
 
-.noti-v {
+.gameplay-overlay .noti-v {
     display: flex;
     position: absolute;
     width: 367px;
@@ -379,11 +379,11 @@ body {
     left: 20px;
     background-color: rgba(220, 65, 81, 1);
     overflow: hidden;
-    transition: 0.5s ease;
+    transition: 0.gameplay-overlay .5s ease;
     transform: translateY(-100px);
 }
 
-.noti-bg {
+.gameplay-overlay .noti-bg {
     position: absolute;
     display: flex;
     flex-flow: row;
@@ -400,7 +400,7 @@ body {
     color: #ffffff14;
 }
 
-.noti-p {
+.gameplay-overlay .noti-p {
     position: absolute;
     display: flex;
     flex-flow: row;
@@ -417,7 +417,7 @@ body {
     line-height: 32px;
 }
 
-.noti-warn {
+.gameplay-overlay .noti-warn {
     position: absolute;
     display: flex;
     flex-flow: row;
@@ -435,10 +435,524 @@ body {
     justify-content: flex-end;
 }
 
-.songSelect .judge {
+.gameplay-overlay .songSelect .gameplay-overlay .judge {
     transform: translateX(-150px);
 }
 
-.songSelect .ur-c {
+.gameplay-overlay .songSelect .gameplay-overlay .ur-c {
     transform: translateY(100px);
+}
+
+
+.next-map {
+    display: flex;
+    position: absolute;
+    width: 1366px;
+    height: 514px;
+    top: 108px;
+    left: 0px;
+    background-color: rgba(0, 0, 0, 0);
+    overflow: hidden;
+    opacity: 0;
+}
+
+.next-map .background-part {
+    display: flex;
+    position: absolute;
+    width: 1366px;
+    height: 514px;
+    top: 0px;
+    left: 0px;
+    background-color: rgba(0, 0, 0, 0);
+    overflow: hidden;
+}
+
+.next-map .bg-mask-l {
+    display: flex;
+    position: absolute;
+    box-sizing: border-box;
+    width: 683px;
+    height: 514px;
+    top: 0px;
+    left: 0px;
+    background-color: rgba(44, 44, 44, 1);
+}
+
+.next-map .bg-mask-r {
+    display: flex;
+    position: absolute;
+    box-sizing: border-box;
+    width: 683px;
+    height: 514px;
+    top: 0px;
+    left: 683px;
+    background-color: rgba(44, 44, 44, 1);
+}
+
+.next-map .background-texts {
+    display: flex;
+    position: absolute;
+    width: 2546px;
+    height: 1868px;
+    top: -595px;
+    left: -546px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.next-map .background-text-01 {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 2355px;
+    height: 992px;
+    top: 0px;
+    left: 0px;
+    font-family: 'DB Helvethaica X';
+    font-weight: 800;
+    font-size: 512px;
+    text-align: LEFT;
+    align-items: flex-end;
+    line-height: 600px;
+    -webkit-text-stroke: 4px #BE2040; /* width and color */
+    color:transparent;
+    opacity: 0.1;
+}
+
+.next-map .background-text-02 {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 2234px;
+    height: 972px;
+    top: 308.328491px;
+    left: 244.408203125px;
+    font-family: 'DB Helvethaica X';
+    font-weight: 800;
+    font-size: 512px;
+    text-align: LEFT;
+    align-items: flex-end;
+    line-height: 600px;
+    -webkit-text-stroke: 4px #BE2040; /* width and color */
+    color:transparent;
+    opacity: 0.1;
+}
+
+.next-map .background-text-03 {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 2478px;
+    height: 1014px;
+    top: 577.031982421875px;
+    left: 67.42822265625px;
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 512px;
+    text-align: LEFT;
+    align-items: flex-end;
+    line-height: 600px;
+}
+
+.next-map .background-text-04 {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 2263px;
+    height: 977px;
+    top: 891.468994140625px;
+    left: 200.4091796875px;
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 512px;
+    text-align: LEFT;
+    align-items: flex-end;
+    line-height: 600px;
+}
+
+.next-map .text-anim {
+    position: absolute;
+    width: 173px;
+    height: 3212px;
+    top: -2642px;
+    left: -335px;
+    color: rgba(190, 32, 64, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 800;
+    font-size: 144px;
+    text-align: LEFT;
+    align-items: flex-end;
+    transform: rotate(90deg);
+}
+
+.next-map .pick-result {
+    display: flex;
+    position: absolute;
+    width: 1037px;
+    height: 310px;
+    top: 102px;
+    left: 56px;
+    background-color: rgba(0, 0, 0, 0);
+    opacity: 0;
+}
+
+.next-map .win-01 {
+    display: flex;
+    position: absolute;
+    width: 192px;
+    height: 48px;
+    top: 0px;
+    left: 0px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.next-map .w-teamava {
+    display: flex;
+    position: absolute;
+    box-sizing: border-box;
+    width: 48px;
+    height: 48px;
+    top: 0px;
+    left: 0px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 5px;
+}
+
+.next-map .w-team {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 317px;
+    height: 29px;
+    top: 5px;
+    left: 59px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 600;
+    font-size: 24px;
+    text-align: LEFT;
+    align-items: flex-end;
+    line-height: 28.next-map .125px;
+}
+
+.next-map .w-info {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 85px;
+    height: 17px;
+    top: 25px;
+    left: 59px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 14px;
+    text-align: LEFT;
+    align-items: flex-end;
+    line-height: 16.next-map .40625px;
+}
+
+.next-map .win-02 {
+    display: flex;
+    position: absolute;
+    width: 192px;
+    height: 48px;
+    top: 262px;
+    left: 136px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.next-map .win-03 {
+    display: flex;
+    position: absolute;
+    width: 192px;
+    height: 48px;
+    top: 0px;
+    left: 396px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.next-map .win-04 {
+    display: flex;
+    position: absolute;
+    width: 192px;
+    height: 48px;
+    top: 262px;
+    left: 531px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.next-map .win-05 {
+    display: flex;
+    position: absolute;
+    width: 192px;
+    height: 48px;
+    top: 49px;
+    left: 845px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.next-map .pick-info {
+    display: flex;
+    position: absolute;
+    width: 1327px;
+    height: 692px;
+    top: -88px;
+    left: 39px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.next-map .pb-list {
+    display: flex;
+    position: absolute;
+    width: 1130px;
+    height: 692px;
+    top: 0px;
+    left: 0px;
+    background-color: rgba(0, 0, 0, 0);
+    opacity: 0;
+}
+
+.next-map .pr-01 {
+    display: flex;
+    position: absolute;
+    width: 285px;
+    height: 80px;
+    top: 251px;
+    left: 0px;
+    background-color: rgba(0, 0, 0, 0);
+    overflow: hidden;
+    background: #444444;
+}
+
+.next-map .pr-mods {
+    display: flex;
+    position: absolute;
+    box-sizing: border-box;
+    width: 53px;
+    height: 53px;
+    top: 13px;
+    left: 222px;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.next-map .pr-title {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 268px;
+    height: 29px;
+    top: 44px;
+    left: 17px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 24px;
+    text-align: LEFT;
+    align-items: flex-end;
+    line-height: 28.125px;
+}
+
+.next-map .pr-artist {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 268px;
+    height: 14px;
+    top: 36px;
+    left: 17px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 12px;
+    text-align: LEFT;
+    align-items: flex-end;
+    line-height: 14.0625px;
+}
+
+.next-map .pr-02 {
+    display: flex;
+    position: absolute;
+    width: 285px;
+    height: 80px;
+    top: 251px;
+    left: 396px;
+    background-color: rgba(0, 0, 0, 0);
+    overflow: hidden;
+    background: #444444;
+}
+
+.next-map .pr-03 {
+    display: flex;
+    position: absolute;
+    width: 285px;
+    height: 80px;
+    top: 359px;
+    left: 136px;
+    background-color: rgba(0, 0, 0, 0);
+    overflow: hidden;
+    background: #444444;
+}
+
+.next-map .pr-04 {
+    display: flex;
+    position: absolute;
+    width: 285px;
+    height: 80px;
+    top: 359px;
+    left: 532px;
+    background-color: rgba(0, 0, 0, 0);
+    overflow: hidden;
+    background: #444444;
+}
+
+.next-map .pr-05 {
+    display: flex;
+    position: absolute;
+    width: 285px;
+    height: 80px;
+    top: 299px;
+    left: 845px;
+    background-color: rgba(0, 0, 0, 0);
+    overflow: hidden;
+    background: #444444;
+}
+
+.next-map .bg-w {
+    display: flex;
+    position: absolute;
+    width: 421px;
+    height: 692px;
+    top: 0;
+    left: 39px;
+    background-color: rgba(0, 0, 0, 0);
+    overflow: hidden;
+    object-fit: cover;
+}
+
+.next-map .pb-part {
+    display: flex;
+    position: absolute;
+    width: 879px;
+    height: 113px;
+    top: 464px;
+    left: 448px;
+    background-color: rgba(0, 0, 0, 0);
+    opacity: 0;
+}
+
+.next-map .pb-ava {
+    display: flex;
+    position: absolute;
+    width: 81px;
+    height: 81px;
+    top: 32px;
+    left: 0px;
+    background-color: rgba(0, 0, 0, 0);
+    overflow: hidden;
+}
+
+.next-map .pb-teamname {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 781px;
+    height: 58px;
+    top: 48px;
+    left: 0px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 36px;
+    text-align: LEFT;
+    align-items: flex-end;
+    line-height: 56.25px;
+}
+
+.next-map .pb-title {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 81px;
+    height: 29px;
+    top: 0px;
+    left: 0px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 24px;
+    text-align: LEFT;
+    align-items: flex-end;
+    line-height: 28.125px;
+}
+
+.next-map .pi-part {
+    display: flex;
+    position: absolute;
+    width: 879px;
+    height: 185px;
+    top: 140px;
+    left: 448px;
+    background-color: rgba(0, 0, 0, 0);
+    opacity: 0;
+}
+
+.next-map .pi-01 {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 879px;
+    height: 58px;
+    top: 0px;
+    left: 0px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 800;
+    font-size: 48px;
+    text-align: LEFT;
+    align-items: flex-end;
+    line-height: 56.25px;
+}
+
+.next-map .pi-02 {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 879px;
+    height: 115px;
+    top: 40px;
+    left: 0px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 96px;
+    text-align: LEFT;
+    align-items: flex-end;
+    line-height: 112.5px;
+}
+
+.next-map .pi-03 {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 879px;
+    height: 58px;
+    top: 127px;
+    left: 0px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 48px;
+    text-align: LEFT;
+    align-items: flex-end;
+    line-height: 56.25px;
+}
+
+.pr-01, .pr-02 {
+    border: 2px solid #ff2e2e;
+}
+
+.pr-03, .pr-04 {
+    border: 2px solid #2e70ff;
 }

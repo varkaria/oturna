@@ -8,10 +8,11 @@
     <link rel="stylesheet" href="/static/css/stream/fonts/stylesheet.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/reconnecting-websocket/1.0.0/reconnecting-websocket.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
 </head>
 
 <body class="fhe-body">
-    <div class="fhe-mainFrame">
+    <!--<div class="gameplay-overlay">
         <div class="p1">
             <div class="ur-c">
                 <div class="ud" id="ur"></div>
@@ -86,7 +87,36 @@
                 <div class="noti-warn">Got first break</div>
             </div>
         </div>
+    </div>-->
+    <div class="next-map">
+        <div class="background-part">
+            <div class="bg-mask-l"></div>
+            <div class="bg-mask-r"></div>
+            <div class="background-texts">
+                <div class="background-text-01">OMTHPL2021</div>
+                <div class="background-text-02">PROLEAGUE</div>
+            </div>
+            <div class="text-anim">OMTHPL2021OMTHPL2021OMTHPL2021OMTHPL2021OMTHPL2021</div>
+        </div>
+        <div class="pick-result"></div>
+        <div class="pick-info">
+            <div class="pb-list"></div>
+            <div class="pb-part">
+                <!--<div class="pb-ava"></div>-->
+                <div class="pb-teamname">Next maps</div>
+                <!--<div class="pb-title">Pick by</div>-->
+            </div>-
+            <div class="pi-part">
+                <div class="pi-01"></div>
+                <div class="pi-02"></div>
+                <div class="pi-03"></div>
+            </div>
+        </div>
+        <img class="bg-w">
     </div>
+    <script> 
+        var currentset = {{ set }}
+    </script>
     <script src="/static/js/stream/ingame.js"></script>
 </body>
 

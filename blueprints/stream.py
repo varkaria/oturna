@@ -1,3 +1,4 @@
+from blueprints.frontend import matchs
 from flask import Blueprint, render_template, request
 from objects import mysql
 import json
@@ -72,4 +73,11 @@ def incoming_match():
 
 @stream.route('/ingame')
 def ingame_match():
-    return render_template('stream/ingame_match.html')
+    lastest = db.query_one("SELECT `match_sets`.id FROM `match_sets` LEFT JOIN `match` ON `match`.id=`match_sets`.match_id WHERE DATE < NOW() AND finish_ban=0 ORDER BY id DESC LIMIT 1")
+    return render_template('stream/ingame_match.html', set=lastest['id'])
+
+@stream.route('/schedule')
+def schedule():
+    next = db.query_one("SELECT date FROM `match` WHERE DATE > NOW() ORDER BY id DESC LIMIT 1")
+    list = db.query_all("SELECT team1, team2, DATE_FORMAT(`match`.`date`,'%H:%i') AS `time`, `stats`, team1_score, team2_score, `t1`.full_name AS `team1_name` , `t2`.full_name AS `team2_name` FROM `match` LEFT JOIN `team` `t1` ON `t1`.id = `match`.`team1` LEFT JOIN `team` `t2` ON `t2`.id = `match`.`team2` WHERE DATE(`date`) = DATE(CURDATE())")
+    return render_template('stream/schedule.html', matchs=list, count=next['date'])
