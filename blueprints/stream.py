@@ -67,9 +67,12 @@ def commentator_match_id(id:int):
 
 @stream.route('/incoming')
 def incoming_match():
-    data = db.query_one("SELECT t1.json AS `t1`, t2.json AS `t2` FROM `match` LEFT JOIN `json_team` `t1` ON `t1`.`id`=`match`.`team1` LEFT JOIN `json_team` `t2` ON `t2`.`id`=`match`.`team2` WHERE DATE < NOW() ORDER BY match.id DESC LIMIT 1")
-    t1, t2 = json.loads(data['t1']), json.loads(data['t2'])
-    return render_template('stream/incoming_match.html', t1=t1, t2=t2)
+    data = db.query_one("SELECT t1.json AS `t1`, t2.json AS `t2` FROM `match` LEFT JOIN `json_team` `t1` ON `t1`.`id`=`match`.`team1` LEFT JOIN `json_team` `t2` ON `t2`.`id`=`match`.`team2` WHERE DATE < NOW() AND stats=0 ORDER BY match.id DESC LIMIT 1")
+    if data:
+        t1, t2 = json.loads(data['t1']), json.loads(data['t2'])
+        return render_template('stream/incoming_match.html', t1=t1, t2=t2)
+
+    return 'uwu'
 
 @stream.route('/ingame')
 def ingame_match():
