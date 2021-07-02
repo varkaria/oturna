@@ -84,3 +84,9 @@ def schedule():
     next = db.query_one("SELECT date FROM `match` WHERE DATE > NOW() ORDER BY id DESC LIMIT 1")
     list = db.query_all("SELECT team1, team2, DATE_FORMAT(`match`.`date`,'%H:%i') AS `time`, `stats`, team1_score, team2_score, `t1`.full_name AS `team1_name` , `t2`.full_name AS `team2_name` FROM `match` LEFT JOIN `team` `t1` ON `t1`.id = `match`.`team1` LEFT JOIN `team` `t2` ON `t2`.id = `match`.`team2` WHERE DATE(`date`) = DATE(CURDATE())")
     return render_template('stream/schedule.html', matchs=list, count=next['date'])
+
+@stream.route('/match_result')
+def match_result():
+    lastest = db.query_one("SELECT id FROM `match` WHERE DATE < NOW() ORDER BY id DESC LIMIT 1")
+    e = db.get_full_match(id=lastest['id'])
+    return render_template('stream/match_result.html', d=e)

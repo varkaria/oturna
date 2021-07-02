@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Result</title>
+    <link rel="stylesheet" href="/static/css/stream/match-result.css">
+</head>
+
+<body class="fhe-body">
+    <div class="fhe-mainFrame">
+        <div class="base"></div>
+        <div class="set-01">
+            {% if d['sets'][0]['pick'] %}
+            {% for w in d['sets'][0]['pick'] %}
+            <div class="main {% if not w['winner'] %}nomore{% endif %}"
+                style="background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(https://assets.ppy.sh/beatmaps/{{ w['info']['beatmapset_id'] }}/covers/cover.jpg);">
+                <div class="main-title">{{ w['info']['title'] }}</div>
+                <div class="main-artist">{{ w['info']['artist'] }}</div>
+                <div class="mods-main">
+                    <div class="mods-w">{{ w['mods'] }}</div>
+                </div>
+                <div class="pick-from t-{{ loop.index }}"></div>
+                {% if w['winner'] %}
+                <div class="teamw-ava" style="background-image: url(https://a.ppy.sh/{{ w['winner']['user_id'] }});">
+                </div>
+                <div class="win-title">
+                    {{ w['winner']['teamname'] }} <span class="win-title-6">Wins</span>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="main">
+            </div>
+            {% endif %}
+        </div>
+        <div class="set-02">
+            {% if d['sets'][1]['pick'] %}
+            {% for w in d['sets'][1]['pick'] %}
+            <div class="main {% if not w['winner'] %}nomore{% endif %}"
+                style="background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(https://assets.ppy.sh/beatmaps/{{ w['info']['beatmapset_id'] }}/covers/cover.jpg);">
+                <div class="main-title">{{ w['info']['title'] }}</div>
+                <div class="main-artist">{{ w['info']['artist'] }}</div>
+                <div class="mods-main">
+                    <div class="mods-w">{{ w['mods'] }}</div>
+                </div>
+                <div class="pick-from t-{{ loop.index }}"></div>
+                {% if w['winner'] %}
+                <div class="teamw-ava" style="background-image: url(https://a.ppy.sh/{{ w['winner']['user_id'] }});">
+                </div>
+                <div class="win-title">
+                    {{ w['winner']['teamname'] }} <span class="win-title-6">Wins</span>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="main">
+            </div>
+            {% endif %}
+        </div>
+        <div class="set-03">
+            {% if d['sets'][2] %}
+            {% for w in d['sets'][2]['pick'] %}
+            <div class="main {% if not w['winner'] %}nomore{% endif %}"
+                style="background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(https://assets.ppy.sh/beatmaps/{{ w['info']['beatmapset_id'] }}/covers/cover.jpg);">
+                <div class="main-title">{{ w['info']['title'] }}</div>
+                <div class="main-artist">{{ w['info']['artist'] }}</div>
+                <div class="mods-main">
+                    <div class="mods-w">{{ w['mods'] }}</div>
+                </div>
+                <div class="pick-from t-{{ loop.index }}"></div>
+                {% if w['winner'] %}
+                <div class="teamw-ava" style="background-image: url(https://a.ppy.sh/{{ w['winner']['user_id'] }});">
+                </div>
+                <div class="win-title">
+                    {{ w['winner']['teamname'] }} <span class="win-title-6">Wins</span>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="main">
+            </div>
+            {% endif %}
+        </div>
+        {% if d['score'][0] == 2 %}
+        <div class="win">{{ d['team1']['full_name'] }}</div>
+        <div class="lose">{{ d['team2']['full_name'] }}</div>
+        {% elif d['score'][1] == 2 %}
+        <div class="win">{{ d['team2']['full_name'] }}</div>
+        <div class="lose">{{ d['team1']['full_name'] }}</div>
+        {% else %}
+        <div class="win">...</div>
+        <div class="lose">...</div>
+        {% endif %}
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,329 @@
+p {
+    margin: 0;
+    padding: 0;
+}
+
+.fhe-body {
+    margin: 0;
+    background-color: rgba(44, 45, 44, 1);
+    height: 768px;
+}
+
+.fhe-mainFrame {
+    background-color: rgba(44, 45, 44, 1);
+    height: 768px;
+    width: 100%;
+    position: relative;
+    overflow: hidden
+}
+
+.base {
+    display: flex;
+    position: absolute;
+    box-sizing: border-box;
+    width: 1366px;
+    height: 768px;
+    top: 0px;
+    left: 0px;
+    background-image: url("/static/img/stream/matchresult_sam.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.set-01 {
+    position: absolute;
+    width: 377px;
+    height: 534px;
+    top: 169px;
+    left: 64px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.main {
+    display: flex;
+    position: relative;
+    width: 377px;
+    height: 98px;
+    top: 0px;
+    margin-top: 10px;
+    left: 0px;
+    background-color: rgb(29 29 29 / 19%);
+    overflow: hidden;
+}
+
+.main-title {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 361px;
+    height: 43px;
+    top: 54px;
+    left: 16px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 30px;
+    text-align: LEFT;
+    align-items: flex-start;
+    line-height: 42.1875px;
+    z-index: 5;
+}
+
+.main-artist {
+    position: absolute;
+    display: flex;
+    flex-flow: row;
+    width: 360px;
+    height: 22px;
+    top: 4px;
+    left: 52px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 18px;
+    text-align: LEFT;
+    align-items: flex-start;
+    line-height: 21.09375px;
+    z-index: 5;
+}
+
+.mods-main {
+    display: flex;
+    position: absolute;
+    width: 32px;
+    height: 14px;
+    top: 9px;
+    left: 17px;
+    background-color: rgba(179, 51, 51, 1);
+}
+
+.mods-w {
+    position: absolute;
+    flex-flow: row;
+    width: 16px;
+    height: 14px;
+    top: 1px;
+    left: 7px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 12px;
+    text-align: center;
+    align-items: flex-start;
+    line-height: 14.0625px;
+    z-index: 20;
+}
+
+.pick-from {
+    display: flex;
+    position: absolute;
+    box-sizing: border-box;
+    width: 8px;
+    height: 98px;
+    top: 0px;
+    left: 0px;
+    background-color: rgba(190, 32, 64, 1);
+}
+
+.win-title-5 {
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 24px;
+}
+
+.win-title-6 {
+    font-size: 24px;
+}
+
+.win-title {
+    position: absolute;
+    flex-flow: row;
+    width: 232px;
+    height: 29px;
+    top: 34px;
+    left: 67px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 24px;
+    text-align: RIGHT;
+    align-items: flex-start;
+    line-height: 28.125px;
+    z-index: 5;
+}
+
+.win-title-5 {
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 24px;
+}
+
+.win-title-6 {
+    font-size: 24px;
+}
+
+.win-title-5 {
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 24px;
+}
+
+.win-title-6 {
+    font-size: 24px;
+}
+
+.win-title-5 {
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 24px;
+}
+
+.win-title-6 {
+    font-size: 24px;
+}
+
+.win-title-5 {
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 24px;
+}
+
+.win-title-6 {
+    font-size: 24px;
+}
+
+.set-02 {
+    position: relative;
+    width: 377px;
+    height: 534px;
+    top: 169px;
+    left: 494px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.win-title-5 {
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 24px;
+}
+
+.win-title-6 {
+    font-size: 24px;
+}
+
+.win-title-5 {
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 24px;
+}
+
+.win-title-6 {
+    font-size: 24px;
+}
+
+.win-title-5 {
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 24px;
+}
+
+.win-title-6 {
+    font-size: 24px;
+}
+
+.win-title-5 {
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 24px;
+}
+
+.win-title-6 {
+    font-size: 24px;
+}
+
+.win-title-5 {
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 24px;
+}
+
+.win-title-6 {
+    font-size: 24px;
+}
+
+.set-03 {
+    position: absolute;
+    width: 377px;
+    height: 100px;
+    top: 169px;
+    left: 924px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.win-title-5 {
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 24px;
+}
+
+.win-title-6 {
+    font-size: 21px;
+    font-weight: 500;
+}
+
+.win {
+    position: absolute;
+    flex-flow: row;
+    width: 584px;
+    height: 43px;
+    top: 85px;
+    left: 64px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 36px;
+    text-align: LEFT;
+    align-items: flex-start;
+    line-height: 42.1875px;
+}
+
+.lose {
+    position: absolute;
+    flex-flow: row;
+    width: 562px;
+    height: 43px;
+    top: 85px;
+    left: 740px;
+    color: rgba(255, 255, 255, 1);
+    font-family: 'DB Helvethaica X';
+    font-weight: 400;
+    font-size: 36px;
+    text-align: RIGHT;
+    align-items: flex-start;
+    line-height: 42.1875px;
+}
+
+.nomore {
+    opacity: 0.3;
+}
+
+.teamw-ava {
+    display: flex;
+    position: absolute;
+    width: 54px;
+    height: 54px;
+    top: 22px;
+    left: 309px;
+    background-color: rgb(255 255 255 / 46%);
+    overflow: hidden;
+    border-radius: 8px;
+    background-size: cover;
+}
+
+.t-1, .t-3 {
+    background-color: rgb(32 149 190);
+}
+
+.set-03 .t-1 {
+    background-color: rgb(152 152 152);
+}
