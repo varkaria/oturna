@@ -90,3 +90,7 @@ def match_result():
     lastest = db.query_one("SELECT id FROM `match` WHERE DATE < NOW() ORDER BY id DESC LIMIT 1")
     e = db.get_full_match(id=lastest['id'])
     return render_template('stream/match_result.html', d=e)
+
+@stream.route('/matchapi/<id>/')
+def refree_helper_api(id:int):
+    return db.get_full_match(id=int(id))

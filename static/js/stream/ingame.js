@@ -37,7 +37,7 @@ socket.onmessage = event => {
             
             if (once == 0) {
                 once = 1
-                fetch(`http://localhost:5000/manager/matchapi/${currentset}/`)
+                fetch(`https://omthpl.varkaria.tech/manager/matchapi/${currentset}/`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.sets[`${data.currentround[0]}`].finish == false) {
