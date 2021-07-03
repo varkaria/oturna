@@ -856,7 +856,7 @@ def json_download():
 @backend.route('/stream/json/download/<path:filename>')
 def download(filename):
     file = str(pathlib.Path('.data/brackets/')) + '/' + filename
-    response = send_file(file, mimetype='application/json', attachment_filename='brackets.json', as_attachment=True)
+    response = send_file(file, mimetype='application/json', attachment_filename='bracket.json', as_attachment=True)
     return response
 
 @backend.route('/stream/download_pic/')
