@@ -210,7 +210,7 @@ class DB(object):
 
 
         for s in l_sets:
-            score, points_to_win, state, finish = [0,0], 4, 1, False
+            score, points_to_win, state, finish = [0,0], 3, 1, False
             pickbans = self.query_all("""SELECT m.id, m.map_id, m.from, m.type, p.info, p.mods, p.code 
                                       FROM match_sets_banpick `m` LEFT JOIN `mappool` `p` ON p.beatmap_id = m.map_id 
                                       WHERE set_id=%s""", [s['id']])
@@ -406,21 +406,21 @@ class DB(object):
         if res['banpicks']:
             t = len(res['banpicks'])
             if res['banpicks'][0]['from'] != None:
-                if t in [0,1,5,6]:
+                if t in [0,1,4,5]:
                     res['status'] = 'ban'
                 else:
                     res['status'] = 'pick'
                 
                 reverse = self.query("SELECT reverse FROM `match_sets` WHERE `finish_ban`=0 LIMIT 1")
                 if reverse['reverse'] == 1:
-                    if t in [0,3,6,7,9]:
+                    if t in [0,3,5,6]:
                         res['picker'] = res['team2']['leader_id']
                         res['picker_t'] = res['team2']['full_name']
                     else:
                         res['picker'] = res['team1']['leader_id']
                         res['picker_t'] = res['team1']['full_name']
                 else:
-                    if t in [0,3,6,7,9]:
+                    if t in [0,3,5,6]:
                         res['picker'] = res['team1']['leader_id']
                         res['picker_t'] = res['team1']['full_name']
                     else:
