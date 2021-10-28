@@ -66,31 +66,43 @@
                         <div class="picking-text">Picking</div>
                     </div>
                 </div>
-                <div class="banpick-5 ban">
-                    <div v-if="results.banpicks[4]">
-                        <div class="mods-block">
+                <div class="banpick-5">
+                    <div v-if="results.banpicks[3]">
+                        <div class="mods-block red-b">
                             <div class="mods-text"><% results.banpicks[4].mods %></div>
                         </div>
                         <div class="song-title"><% results.banpicks[4].info.title %></div>
                         <div class="song-artist"><% results.banpicks[4].info.artist %></div>
                     </div>
-                    <div v-else-if="results.banpicks[3]">
-                        <div class="picking-text">Banning</div>
+                    <div v-else-if="results.banpicks[2]">
+                        <div class="picking-text">Picking</div>
                     </div>
                 </div>
                 <div class="banpick-6 ban">
-                    <div v-if="results.banpicks[5]">
-                        <div class="mods-block red-b">
+                    <div v-if="results.banpicks[4]">
+                        <div class="mods-block">
                             <div class="mods-text"><% results.banpicks[5].mods %></div>
                         </div>
                         <div class="song-title"><% results.banpicks[5].info.title %></div>
                         <div class="song-artist"><% results.banpicks[5].info.artist %></div>
                     </div>
+                    <div v-else-if="results.banpicks[3]">
+                        <div class="picking-text">Banning</div>
+                    </div>
+                </div>
+                <div class="banpick-7 ban">
+                    <div v-if="results.banpicks[5]">
+                        <div class="mods-block red-b">
+                            <div class="mods-text"><% results.banpicks[6].mods %></div>
+                        </div>
+                        <div class="song-title"><% results.banpicks[6].info.title %></div>
+                        <div class="song-artist"><% results.banpicks[6].info.artist %></div>
+                    </div>
                     <div v-else-if="results.banpicks[4]">
                         <div class="picking-text">Banning</div>
                     </div>
                 </div>
-                <div class="banpick-7">
+                <div class="banpick-8">
                     <div v-if="results.banpicks[6]">
                         <div class="mods-block red-b">
                             <div class="mods-text"><% results.banpicks[6].mods %></div>
@@ -102,13 +114,25 @@
                         <div class="picking-text">Picking</div>
                     </div>
                 </div>
-                <div class="banpick-8">
+                <div class="banpick-9">
                     <div v-if="results.banpicks[7]">
                         <div class="mods-block">
                             <div class="mods-text"><% results.banpicks[7].mods %></div>
                         </div>
                         <div class="song-title"><% results.banpicks[7].info.title %></div>
                         <div class="song-artist"><% results.banpicks[7].info.artist %></div>
+                    </div>
+                    <div v-else-if="results.banpicks[6]">
+                        <div class="picking-text">Picking</div>
+                    </div>
+                </div>
+                <div class="banpick-10">
+                    <div v-if="results.banpicks[7]">
+                        <div class="mods-block">
+                            <div class="mods-text"><% results.banpicks[8].mods %></div>
+                        </div>
+                        <div class="song-title"><% results.banpicks[8].info.title %></div>
+                        <div class="song-artist"><% results.banpicks[8].info.artist %></div>
                     </div>
                     <div v-else-if="results.banpicks[6]">
                         <div class="picking-text">Picking</div>
