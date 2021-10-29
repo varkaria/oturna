@@ -34,6 +34,10 @@ def pickban_main(code):
         session['match_set_id'] = set_match['id']
         if str(session['user_id']) not in str(get_leaders_match(set_match['match_id'])):
             return "you aren't being the leader of this match"
+
+        if set_match['id'] > 98:
+            return render_template('pickban/championship/pickban.html', match_code=code, match_set=set_match['id'])
+
         return render_template('pickban/pickban.html', match_code=code, match_set=set_match['id'] )
 
     return '<h1>Hi uwu 2</h1>'
@@ -44,6 +48,10 @@ def pickban_spec(code):
     
     if set_match:
         session['match_set_id'] = set_match['id']
+
+        if set_match['id'] > 98:
+            return render_template('pickban/championship/pickban_spec.html', match_code=code, match_set=set_match['id'])
+
         return render_template('pickban/pickban_spec.html', match_code=code, match_set=set_match['id'])
 
     return '<h1>Hi uwu 2</h1>'
@@ -60,6 +68,10 @@ def pickban_spec_recent():
     
     if set_match:
         session['match_set_id'] = set_match['id']
+
+        if set_match['id'] > 98:
+            return render_template('pickban/championship/pickban_stream.html', match_code=code, match_set=set_match['id'], match_data=db.get_full_match_championship(id=set_match['match_id']))
+
         return render_template('pickban/pickban_spec.html', match_code=code, match_set=set_match['id'])
 
     return '<h1>Hi uwu 2</h1>'
@@ -70,6 +82,10 @@ def pickban_stream(code):
     
     if set_match:
         session['match_set_id'] = set_match['id']
+
+        if set_match['id'] > 98:
+            return render_template('pickban/championship/pickban_stream.html', match_code=code, match_set=set_match['id'], match_data=db.get_full_match_championship(id=set_match['match_id']))
+
         return render_template('pickban/pickban_stream.html', match_code=code, match_set=set_match['id'], match_data=db.get_full_match(id=set_match['match_id']))
 
     return '<h1>Hi uwu 2</h1>'
@@ -86,6 +102,10 @@ def pickban_stream_recent():
     
     if set_match:
         session['match_set_id'] = set_match['id']
+
+        if set_match['id'] > 98:
+            return render_template('pickban/championship/pickban_stream.html', match_code=code, match_set=set_match['id'], match_data=db.get_full_match_championship(id=set_match['match_id']))
+
         return render_template('pickban/pickban_stream.html', match_code=code, match_set=set_match['id'], match_data=db.get_full_match(id=findcode['id']))
 
     return '<h1>Hi uwu 2</h1>'

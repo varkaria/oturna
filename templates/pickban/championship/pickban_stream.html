@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>banpick_streamer</title>
+    <link rel="stylesheet" href="/static/css/stream/background.css">
+    <link rel="stylesheet" href="/static/css/stream/pickban-stream-champ.css">
+    <link rel="stylesheet" href="/static/css/stream/fonts/stylesheet.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+</head>
+
+<body class="fhe-body">
+    <div id="app">
+        <div class="fhe-mainFrame">
+            <div class="header">
+                <div class="header-title"><% results.team1.full_name %> vs <% results.team2.full_name %></div>
+                <div class="header-sub">Ban Pick Screen</div>
+            </div>
+            <div class="ban-elements">
+                <div class="banpick-1 ban">
+                    <div v-if="results.banpicks[0].info != null">
+                        <div class="mods-block red-b">
+                            <div class="mods-text"><% results.banpicks[0].mods %></div>
+                        </div>
+                        <div class="song-title"><% results.banpicks[0].info.title %></div>
+                        <div class="song-artist"><% results.banpicks[0].info.artist %></div>
+                    </div>
+                    <div v-else>
+                        <div class="picking-text">Banning</div>
+                    </div>
+                </div>
+                <div class="banpick-2 ban">
+                    <div v-if="results.banpicks[1]">
+                        <div class="mods-block">
+                            <div class="mods-text"><% results.banpicks[1].mods %></div>
+                        </div>
+                        <div class="song-title"><% results.banpicks[1].info.title %></div>
+                        <div class="song-artist"><% results.banpicks[1].info.artist %></div>
+                    </div>
+                    <div v-else-if="results.banpicks[0].info != null">
+                        <div class="picking-text">Banning</div>
+                    </div>
+                </div>
+                <div class="banpick-3">
+                    <div v-if="results.banpicks[2]">
+                        <div class="mods-block">
+                            <div class="mods-text"><% results.banpicks[2].mods %></div>
+                        </div>
+                        <div class="song-title"><% results.banpicks[2].info.title %></div>
+                        <div class="song-artist"><% results.banpicks[2].info.artist %></div>
+                    </div>
+                    <div v-else-if="results.banpicks[1]">
+                        <div class="picking-text">Picking</div>
+                    </div>
+                </div>
+                <div class="banpick-4">
+                    <div v-if="results.banpicks[3]">
+                        <div class="mods-block red-b">
+                            <div class="mods-text"><% results.banpicks[3].mods %></div>
+                        </div>
+                        <div class="song-title"><% results.banpicks[3].info.title %></div>
+                        <div class="song-artist"><% results.banpicks[3].info.artist %></div>
+                    </div>
+                    <div v-else-if="results.banpicks[2]">
+                        <div class="picking-text">Picking</div>
+                    </div>
+                </div>
+                <div class="banpick-5">
+                    <div v-if="results.banpicks[3]">
+                        <div class="mods-block red-b">
+                            <div class="mods-text"><% results.banpicks[4].mods %></div>
+                        </div>
+                        <div class="song-title"><% results.banpicks[4].info.title %></div>
+                        <div class="song-artist"><% results.banpicks[4].info.artist %></div>
+                    </div>
+                    <div v-else-if="results.banpicks[2]">
+                        <div class="picking-text">Picking</div>
+                    </div>
+                </div>
+                <div class="banpick-6 ban">
+                    <div v-if="results.banpicks[4]">
+                        <div class="mods-block">
+                            <div class="mods-text"><% results.banpicks[5].mods %></div>
+                        </div>
+                        <div class="song-title"><% results.banpicks[5].info.title %></div>
+                        <div class="song-artist"><% results.banpicks[5].info.artist %></div>
+                    </div>
+                    <div v-else-if="results.banpicks[3]">
+                        <div class="picking-text">Banning</div>
+                    </div>
+                </div>
+                <div class="banpick-7 ban">
+                    <div v-if="results.banpicks[5]">
+                        <div class="mods-block red-b">
+                            <div class="mods-text"><% results.banpicks[6].mods %></div>
+                        </div>
+                        <div class="song-title"><% results.banpicks[6].info.title %></div>
+                        <div class="song-artist"><% results.banpicks[6].info.artist %></div>
+                    </div>
+                    <div v-else-if="results.banpicks[4]">
+                        <div class="picking-text">Banning</div>
+                    </div>
+                </div>
+                <div class="banpick-8">
+                    <div v-if="results.banpicks[6]">
+                        <div class="mods-block red-b">
+                            <div class="mods-text"><% results.banpicks[6].mods %></div>
+                        </div>
+                        <div class="song-title"><% results.banpicks[6].info.title %></div>
+                        <div class="song-artist"><% results.banpicks[6].info.artist %></div>
+                    </div>
+                    <div v-else-if="results.banpicks[5]">
+                        <div class="picking-text">Picking</div>
+                    </div>
+                </div>
+                <div class="banpick-9">
+                    <div v-if="results.banpicks[7]">
+                        <div class="mods-block">
+                            <div class="mods-text"><% results.banpicks[7].mods %></div>
+                        </div>
+                        <div class="song-title"><% results.banpicks[7].info.title %></div>
+                        <div class="song-artist"><% results.banpicks[7].info.artist %></div>
+                    </div>
+                    <div v-else-if="results.banpicks[6]">
+                        <div class="picking-text">Picking</div>
+                    </div>
+                </div>
+                <div class="banpick-10">
+                    <div v-if="results.banpicks[7]">
+                        <div class="mods-block">
+                            <div class="mods-text"><% results.banpicks[8].mods %></div>
+                        </div>
+                        <div class="song-title"><% results.banpicks[8].info.title %></div>
+                        <div class="song-artist"><% results.banpicks[8].info.artist %></div>
+                    </div>
+                    <div v-else-if="results.banpicks[6]">
+                        <div class="picking-text">Picking</div>
+                    </div>
+                </div>
+            </div>
+            <div class="team1-main">
+                <div class="team1-req02 red-b"></div>
+                <div class="team1-req01 red-b"></div>
+                <div class="team1-avatar" v-if='results.reverse == 0' style="background-image:url(http://omthpl.varkaria.tech/team_flag/{{ match_data['team1']['id'] }})"></div>
+                <div class="team1-avatar" v-if='results.reverse == 1' style="background-image:url(http://omthpl.varkaria.tech/team_flag/{{ match_data['team2']['id'] }})"></div>
+                <div class="team1-name-block">
+                    <div class="team1-name red-t" v-if='results.reverse == 0'><% results.team1.full_name %></div>
+                    <div class="team1-name red-t" v-if='results.reverse == 1'><% results.team2.full_name %></div>
+                </div>
+                <div class="scores" v-if='results.reverse == 0'>
+                    <div class="score-circle {% if match_data['score'][0] >= 1 %} pop{% endif %}"></div>
+                    <div class="score-circle {% if match_data['score'][0] >= 2 %} pop{% endif %}"></div>
+                </div>
+                <div class="scores" v-if='results.reverse == 1'>
+                    <div class="score-circle {% if match_data['score'][1] >= 1 %} pop{% endif %}"></div>
+                    <div class="score-circle {% if match_data['score'][1] >= 2 %} pop{% endif %}"></div>
+                </div>
+            </div>
+            <div class="team2-main">
+                <div class="team2-req02 blue-b"></div>
+                <div class="team2-req01 blue-b"></div>
+                <div class="team2-avatar" v-if='results.reverse == 0' style="background-image:url(http://omthpl.varkaria.tech/team_flag/{{ match_data['team2']['id'] }})"></div>
+                <div class="team2-avatar" v-if='results.reverse == 1' style="background-image:url(http://omthpl.varkaria.tech/team_flag/{{ match_data['team1']['id'] }})"></div>
+                <div class="team2-name-block">
+                    <div class="team2-name blue-t" v-if='results.reverse == 0'><% results.team2.full_name %></div>
+                    <div class="team2-name blue-t" v-if='results.reverse == 1'><% results.team1.full_name %></div>
+                </div>
+                <div class="scores" v-if='results.reverse == 0'>
+                    <div class="score-circle {% if match_data['score'][1] >= 1 %} pop{% endif %}"></div>
+                    <div class="score-circle {% if match_data['score'][1] >= 2 %} pop{% endif %}"></div>
+                </div>
+                <div class="scores" v-if='results.reverse == 1'>
+                    <div class="score-circle {% if match_data['score'][0] >= 1 %} pop{% endif %}"></div>
+                    <div class="score-circle {% if match_data['score'][0] >= 2 %} pop{% endif %}"></div>
+                </div>
+            </div>
+            <div :class="`red-movable-block blue-b stage-${results.banpicks.length + 1}`"></div>
+            <div :class="`blue-movable-block red-b stage-${results.banpicks.length + 1}`"></div>
+            <div class="picker-text">
+                <div v-if='results.picker == null'><span class="picker-text-6">Ban Pick was Finished. Good Luck!</span></div>
+                <div v-else><span class="picker-text-6">Team <% results.picker_t %></span> <span class="picker-text-5"><% results.status %></span></div>
+            </div>
+            <section id="wave-background">
+                <div class="wave"></div>
+            </section>
+        </div>
+    </div>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+<script type="text/javascript" charset="utf-8">
+    const socket = io('/pickban');
+
+    new Vue({
+        el: '#app',
+        delimiters: ["<%", "%>"],
+        data: {
+            results: {},
+            userid: Number('{{ session.user_id }}'),
+            setid: Number('{{ match_set }}'),
+            once: 0
+        },
+        created: function () {
+            userid = this.userid
+            setid = this.setid
+            socket.on('connect', msg => {
+                socket.emit('ready', {userid, setid})
+            })
+
+            socket.on('disconnect', function () {
+                socket.emit('ready', {userid, setid})
+            });
+
+            socket.on(`data_result_${setid}`, msg => {
+                this.results = msg
+            })
+
+            socket.on(`new_result_${setid}`, msg => {
+                this.results = msg
+                this.once = 0
+                console.log(msg)
+            })
+        },
+        methods: {
+            pickban(set, map, type) {
+                this.once = 1
+                socket.emit('pickban', { set, map, type })
+            },
+            converturl(code) {
+                return 'background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(https://assets.ppy.sh/beatmaps/'+ code +'/covers/cover.jpg);'
+            }
+        }
+    });
+</script>
+</html>
