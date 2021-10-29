@@ -151,7 +151,9 @@ a {
 
 .avatar-picture {
     height: 12vh;
+    width: 12vh;
     border-radius: 56px;
+    margin: auto;
 }
 
 @media only screen and (max-width: 1140px) {
@@ -330,4 +332,8 @@ a {
 
 .mappool {
     transition: 0.4s ease;
+}
+
+.w-1\/11 {
+    width: 9.090909090909091%;
 }

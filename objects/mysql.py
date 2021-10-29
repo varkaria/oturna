@@ -497,6 +497,8 @@ class DB(object):
 
         res = json.loads(res['json'])
         mappool = self.query_all(f"SELECT id, mods, json FROM json_mappool where `round_id`={res['round_id']}")
+
+        res['suck'] = 'dick'
         
         if res['banpicks']:
             t = len(res['banpicks'])
@@ -527,7 +529,7 @@ class DB(object):
                 res['picker_t'] = res['team1']['full_name']
                 res['status'] = 'ban'
 
-            if t == 8:
+            if t == 10:
                 self.query(f"UPDATE `tourney`.`match_sets` SET `finish_ban`='1' WHERE  `id`={res['set_id']};")
                 res['picker'] = None
                 res['picker_t'] = None

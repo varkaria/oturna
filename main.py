@@ -27,7 +27,9 @@ socketio = SocketIO(app)
 # Pick ban Socket.io
 @socketio.on('firstdata', namespace='/pickban')
 def handle_data(d):
-    emit(f'data_result_{session["match_set_id"]}', db.get_match_sets_ban_pick_full(session["match_set_id"]))
+    if session["match_set_id"] > 98:
+     return emit(f'data_result_{session["match_set_id"]}', db.get_match_sets_ban_pick_full_championship(session["match_set_id"]))
+    return emit(f'data_result_{session["match_set_id"]}', db.get_match_sets_ban_pick_full(session["match_set_id"]))
 
 @socketio.on('pickban', namespace='/pickban')
 def handle_data(d):
@@ -35,13 +37,19 @@ def handle_data(d):
         return emit('new_result', 'You are not login yet?')
     t_data = db.query('SELECT team as id FROM player WHERE user_id=%s', session['user_id'])
     db.query('INSERT INTO match_sets_banpick (`set_id`, `map_id`, `from`, `type`) VALUES (%s, %s, %s, %s);', [d['set'], d['map'], t_data['id'], d['type']])
-    emit(f'new_result_{session["match_set_id"]}', db.get_match_sets_ban_pick_full(session["match_set_id"]), broadcast=True)
+
+    if session["match_set_id"] > 98:
+        return emit(f'new_result_{session["match_set_id"]}', db.get_match_sets_ban_pick_full_championship(session["match_set_id"]), broadcast=True)
+    return emit(f'new_result_{session["match_set_id"]}', db.get_match_sets_ban_pick_full(session["match_set_id"]), broadcast=True)
 
 @socketio.on('ready', namespace='/pickban')
 def handle_data(d):
     if not session:
         return emit('new_result', 'You are not login yet?')
-    emit(f'new_result_{session["match_set_id"]}', db.get_match_sets_ban_pick_full(session["match_set_id"]), broadcast=True)
+
+    if session["match_set_id"] > 98:
+        return emit(f'new_result_{session["match_set_id"]}', db.get_match_sets_ban_pick_full_championship(session["match_set_id"]), broadcast=True)
+    return emit(f'new_result_{session["match_set_id"]}', db.get_match_sets_ban_pick_full(session["match_set_id"]), broadcast=True)
 
 @socketio.on('disconnect', namespace='/pickban')
 def handle_dis():
@@ -50,7 +58,9 @@ def handle_dis():
     except KeyError:
         print("Someone disconnecting socket with Anonymous person")
     print('disconnect activated')
-    emit(f'new_result_{session["match_set_id"]}', db.get_match_sets_ban_pick_full(session["match_set_id"]), broadcast=True)
+    if session["match_set_id"] > 98:
+        return emit(f'new_result_{session["match_set_id"]}', db.get_match_sets_ban_pick_full_championship(session["match_set_id"]), broadcast=True)
+    return emit(f'new_result_{session["match_set_id"]}', db.get_match_sets_ban_pick_full(session["match_set_id"]), broadcast=True)
 
 @socketio.on('connect', namespace='/pickban')
 def handle_dis():
@@ -58,7 +68,9 @@ def handle_dis():
         db.query("UPDATE `tourney`.`player` SET `online`='1' WHERE `user_id`=%s;", session['user_id'])
     except KeyError:
         print("Someone connecting socket with Anonymous person")
-    emit(f'new_result_{session["match_set_id"]}', 'connect', broadcast=True)
+    if session["match_set_id"] > 98:
+        return emit(f'new_result_{session["match_set_id"]}', db.get_match_sets_ban_pick_full_championship(session["match_set_id"]), broadcast=True)
+    return emit(f'new_result_{session["match_set_id"]}', db.get_match_sets_ban_pick_full(session["match_set_id"]), broadcast=True)
 # End of Pick ban Socket.io
 
 from blueprints.stream import stream
