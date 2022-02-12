@@ -788,8 +788,8 @@ def refree_helper_lock(id:int):
     if not match:
         flash("Couldn't found match did you put it", 'danger')
         return redirect(url_for('backend.matchs'))
-
-    db.get_full_match(id=int(id),set=1)
+    
+    db.get_full_match(id=int(id),set=0)
 
     flash("This Match is finished!! Thanks you for refree this match (i luv you)", 'success')
     return redirect(url_for('backend.matchs'))
@@ -868,3 +868,152 @@ def team_pic():
             z.write(f_name)
     file.seek(0)
     return send_file(file, mimetype='application/zip', attachment_filename='team_picture.zip', as_attachment=True)
+
+from PIL import Image, ImageFont, ImageDraw, ImageOps
+
+def serve_pil_image(pil_img):
+    img_io = io.BytesIO()
+    pil_img.save(img_io, 'PNG', quality=70)
+    img_io.seek(0)
+    return send_file(img_io, mimetype='image/png')
+
+@backend.route('/pillow/leaderboard/')
+@login_required
+def image_leaderboard():
+    im = Image.open("pillow/leaderboard/background.png")
+    draw = ImageDraw.Draw(im)
+
+    default = ImageFont.truetype("pillow/fonts/med.ttf", 48)
+    bold = ImageFont.truetype("pillow/fonts/black.ttf", 48)
+
+    margin = 110
+    teams = 6
+
+    data = db.query_all("SELECT * FROM `tourney`.`team` ORDER BY `points` DESC;")
+
+    for i in range(teams):
+        try:
+            sample = Image.open(f".data/team_pics/{data[i]['id']}.jpg")
+        except:
+            sample = Image.open(f"pillow/leaderboard/team_sample.png")
+            
+        sample = sample.resize((201,201), Image.ANTIALIAS)
+        sample = ImageOps.crop(sample, (0,72,0,65))
+        mask = Image.open("pillow/leaderboard/team_mask.png").resize(sample.size).convert('L')
+        im.paste(sample, (334,258+(margin*i)), mask=mask)
+
+        # Drawing some text
+        draw.text((562, 262+(margin*i)), f"{data[i]['full_name']}", font=default)
+        draw.text((1360, 302+(margin*i)), f"{data[i]['match_play']}", font=default, anchor='ms')
+        draw.text((1503, 302+(margin*i)), f"{data[i]['win']} - {data[i]['lose']}", font=default, anchor='ms')
+        draw.text((1645, 302+(margin*i)), f"{data[i]['points']}", font=bold, anchor='ms')
+
+    return serve_pil_image(im)
+
+@backend.route('/pillow/match_schedule/')
+@login_required
+def image_match_schedule():
+    bg = Image.open("pillow/match_schedule/match_background.png")
+    draw = ImageDraw.Draw(bg)
+    title = ImageFont.truetype("pillow/fonts/med.ttf", 24)
+
+    draw.text((38,65), "Regular Season Phase I | Week 2", font=title)
+
+    def match_component():
+        im = Image.open("pillow/match_schedule/match_compoment.png")
+        draw = ImageDraw.Draw(im)
+
+        player_title = ImageFont.truetype("pillow/fonts/med.ttf", 18)
+        team_title = ImageFont.truetype("pillow/fonts/black.ttf", 36)
+        clock = ImageFont.truetype("pillow/fonts/black.ttf", 24)
+        score = ImageFont.truetype("pillow/fonts/black.ttf", 48)
+
+        # Making Team Picture
+        sample = Image.open("pillow/match_schedule/team_sample.png") # Team 1
+        sample2 = Image.open("pillow/match_schedule/team_sample.png") # Team 2
+        sample = sample.resize((88,88), Image.ANTIALIAS)
+        sample2 = sample.resize((88,88), Image.ANTIALIAS)
+        mask = Image.open("pillow/match_schedule/team_mask.png").resize(sample.size).convert('L')
+        im.paste(sample, (72,60), mask=mask)
+        im.paste(sample2, (665,60), mask=mask)
+
+        # Drawing some text
+        draw.text((379,9), "1", font=team_title) # Match of
+        draw.text((520,28), "18", font=clock, anchor='ms') # Clock 1
+        draw.text((520,46), "00", font=clock, anchor='ms') # Clock 2
+        draw.text((179,60), "SimpGura", font=team_title) # Team title | Team 1
+        draw.text((179,104), "- Yudachi", font=player_title) # Player 1 | Team 1
+        draw.text((179,126), "Iambossize", font=player_title) # Player 1 | Team 1
+
+        draw.text((646,82), "Tomyam", font=team_title, anchor='rm') # Team title | Team 1
+        draw.text((646,115), "- Yudachi", font=player_title, anchor='rm') # Player 1 | Team 1
+        draw.text((646,137), "Iambossize", font=player_title, anchor='rm') # Player 1 | Team 1
+
+        draw.text((413,116), "VS", font=score, anchor='ms') # Score
+
+        return im
+
+    for i in range(3):
+        margin = 229
+        match = match_component()
+        bg.paste(match, (87,180+(margin*i)), match)
+
+    return serve_pil_image(bg)
+
+@backend.route('/pillow/match_result/')
+@login_required
+def image_match_result():
+    bg = Image.open("pillow/match_result/match_background.png")
+    draw = ImageDraw.Draw(bg)
+    title = ImageFont.truetype("pillow/fonts/med.ttf", 24)
+
+    draw.text((38,65), "Regular Season Phase I | Week 2", font=title)
+
+    def match_component():
+        im = Image.open("pillow/match_result/match_compoment.png")
+        draw = ImageDraw.Draw(im)
+
+        player_title = ImageFont.truetype("pillow/fonts/med.ttf", 18)
+        team_title = ImageFont.truetype("pillow/fonts/black.ttf", 36)
+        clock = ImageFont.truetype("pillow/fonts/black.ttf", 24)
+        score = ImageFont.truetype("pillow/fonts/black.ttf", 48)
+
+        # Making Team Picture
+        sample = Image.open("pillow/match_result/team_sample.png") # Team 1
+        sample2 = Image.open("pillow/match_result/team_sample.png") # Team 2
+        sample = sample.resize((88,88), Image.ANTIALIAS)
+        sample2 = sample.resize((88,88), Image.ANTIALIAS)
+        mask = Image.open("pillow/match_result/team_mask.png").resize(sample.size).convert('L')
+        im.paste(sample, (72,60), mask=mask)
+        im.paste(sample2, (665,60), mask=mask)
+
+        for i in range(3):
+            i = i + 1
+            margin = 52
+            sets = Image.open(f"pillow/match_result/sets-block/set-blank-{i}.png")
+            im.paste(sets, (288+(margin*i),115), sets)
+            draw.text((308+(margin*i),150), "1 - 0", font=player_title, anchor='ms')
+
+        # Drawing some text
+        draw.text((379,9), "1", font=team_title) # Match of
+        draw.text((520,28), "18", font=clock, anchor='ms') # Clock 1
+        draw.text((520,46), "00", font=clock, anchor='ms') # Clock 2
+        draw.text((179,60), "SimpGura", font=team_title) # Team title | Team 1
+        draw.text((179,104), "- Yudachi", font=player_title) # Player 1 | Team 1
+        draw.text((179,126), "Iambossize", font=player_title) # Player 1 | Team 1
+
+        draw.text((646,82), "Tomyam", font=team_title, anchor='rm') # Team title | Team 1
+        draw.text((646,115), "- Yudachi", font=player_title, anchor='rm') # Player 1 | Team 1
+        draw.text((646,137), "Iambossize", font=player_title, anchor='rm') # Player 1 | Team 1
+
+        draw.text((413,106), "0 - 0", font=score, anchor='ms') # Score
+
+        return im
+
+    for i in range(3):
+        margin = 229
+        match = match_component()
+        bg.paste(match, (87,180+(margin*i)), match)
+        
+    return serve_pil_image(bg)
+    
